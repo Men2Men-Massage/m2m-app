@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Massage Center Payment Calculator</title>
+    
+    <!-- Meta tags per PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Payment Calc">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="manifest" href="/manifest.json">
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -109,10 +117,73 @@
             color: #d32f2f;
             font-weight: bold;
         }
+
+        .install-banner {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        #android-banner {
+            background-color: #e8f5e9;
+            border: 2px solid #4CAF50;
+        }
+
+        #ios-banner {
+            background-color: #fff3e0;
+            border: 2px solid #ff9800;
+        }
+
+        .install-banner button {
+            background: none;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #android-banner button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #ios-banner button {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .close-banner {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Banner di installazione -->
+        <div id="ios-banner" class="install-banner" style="display: none;">
+            <div>
+                📲 Install this app: Tap <img src="share-icon.png" style="height:18px; vertical-align:middle"> 
+                then "Add to Home Screen"
+            </div>
+            <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
+        </div>
+
+        <div id="android-banner" class="install-banner" style="display: none;">
+            <div>📲 Install this app for better experience</div>
+            <button id="install-button">Install</button>
+            <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
+        </div>
+
         <h1>Massage Center Payment Calculator</h1>
         
         <div class="instructions">
@@ -183,6 +254,46 @@
                 if (e.key === 'Enter') calculatePayment();
             });
         });
+
+        // Aggiunta: PWA Installation logic
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('android-banner').style.display = 'flex';
+        });
+
+        document.getElementById('install-button').addEventListener('click', async () => {
+            if(deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if(outcome === 'accepted') {
+                    document.getElementById('android-banner').style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        // Aggiunta: Rilevamento iOS
+        const isIos = () => {
+            const userAgent = navigator.userAgent.toLowerCase();
+            return /iphone|ipad|ipod/.test(userAgent);
+        };
+
+        const isInStandaloneMode = () => 
+            ('standalone' in window.navigator) && (window.navigator.standalone);
+
+        if (isIos() && !isInStandaloneMode()) {
+            document.getElementById('ios-banner').style.display = 'flex';
+        }
+
+        // Registrazione Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
     </script>
 </body>
 </html>
