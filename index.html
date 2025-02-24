@@ -19,6 +19,48 @@
             margin: 20px auto;
             padding: 20px;
             background-color: #f5f5f5;
+            position: relative;
+        }
+
+        /* Aggiunte per l'autenticazione */
+        #auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #auth-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        #auth-box input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        #user-name {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: none;
         }
 
         .container {
@@ -26,6 +68,7 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         h1 {
@@ -90,7 +133,7 @@
             border: 2px solid #ff5252;
         }
 
-        .payment-receivable {
+        .payment-recevable {
             background-color: #e8f5e9;
             border: 2px solid #4CAF50;
         }
@@ -168,7 +211,23 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="auth-overlay" style="display: none;">
+        <div id="auth-box">
+            <h2>Welcome to M2M Calculator</h2>
+            <div id="code-section">
+                <input type="password" id="access-code" placeholder="Enter access code">
+                <button onclick="checkCode()">Continue</button>
+            </div>
+            <div id="name-section" style="display: none;">
+                <input type="text" id="user-name-input" placeholder="Enter your name">
+                <button onclick="saveName()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="user-name"></div>
+
+    <div class="container" style="display: none;">
         <!-- Banner di installazione -->
         <div id="ios-banner" class="install-banner" style="display: none;">
             <div>
@@ -218,6 +277,94 @@
     </div>
 
     <script>
+        // Sistema di autenticazione
+        const AUTH_CODE = "1228";
+        let authStep = 1;
+
+        function checkAuth() {
+            const savedCode = localStorage.getItem('m2m_access');
+            const userName = localStorage.getItem('m2m_name');
+            
+            if(savedCode === AUTH_CODE && userName) {
+                showApp(userName);
+                return true;
+            }
+            document.getElementById('auth-overlay').style.display = 'flex';
+            return false;
+        }
+
+        function checkCode() {
+            const codeInput = document.getElementById('access-code');
+            if(codeInput.value === AUTH_CODE) {
+                document.getElementById('code-section').style.display = 'none';
+                document.getElementById('name-section').style.display = 'block';
+                authStep = 2;
+            } else {
+                alert('Invalid access code');
+            }
+        }
+
+        function saveName() {
+            const nameInput = document.getElementById('user-name-input');
+            if(nameInput.value.trim().length > 0) {
+                localStorage.setItem('m2m_access', AUTH_CODE);
+                localStorage.setItem('m2m_name', nameInput.value.trim());
+                showApp(nameInput.value.trim());
+            } else {
+                alert('Please enter a valid name');
+            }
+        }
+
+        function showApp(userName) {
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('user-name').textContent = `Hello ${userName}`;
+            document.getElementById('user-name').style.display = 'block';
+            document.querySelector('.container').style.display = 'block';
+            showInstallBanners();
+        }
+
+        // Mostra i banner di installazione
+        function showInstallBanners() {
+            // Logica per Android
+            let deferredPrompt;
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('android-banner').style.display = 'flex';
+            });
+
+            document.getElementById('install-button').addEventListener('click', async () => {
+                if(deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if(outcome === 'accepted') {
+                        document.getElementById('android-banner').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                }
+            });
+
+            // Logica per iOS
+            const isIos = () => {
+                const userAgent = navigator.userAgent.toLowerCase();
+                return /iphone|ipad|ipod/.test(userAgent);
+            };
+
+            const isInStandaloneMode = () => 
+                ('standalone' in window.navigator) && (window.navigator.standalone);
+
+            if (isIos() && !isInStandaloneMode()) {
+                document.getElementById('ios-banner').style.display = 'flex';
+            }
+        }
+
+        // Controllo iniziale
+        if(!checkAuth()) {
+            document.getElementById('auth-overlay').style.display = 'flex';
+        }
+
+        // Resto del codice...
         function calculatePayment() {
             const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
             const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
@@ -248,45 +395,12 @@
             document.getElementById('result').style.display = 'none';
         }
 
-        // Add Enter key support for both inputs
+        // Supporto tasto Enter
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') calculatePayment();
             });
         });
-
-        // Aggiunta: PWA Installation logic
-        let deferredPrompt;
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('android-banner').style.display = 'flex';
-        });
-
-        document.getElementById('install-button').addEventListener('click', async () => {
-            if(deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if(outcome === 'accepted') {
-                    document.getElementById('android-banner').style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
-
-        // Aggiunta: Rilevamento iOS
-        const isIos = () => {
-            const userAgent = navigator.userAgent.toLowerCase();
-            return /iphone|ipad|ipod/.test(userAgent);
-        };
-
-        const isInStandaloneMode = () => 
-            ('standalone' in window.navigator) && (window.navigator.standalone);
-
-        if (isIos() && !isInStandaloneMode()) {
-            document.getElementById('ios-banner').style.display = 'flex';
-        }
 
         // Registrazione Service Worker
         if ('serviceWorker' in navigator) {
