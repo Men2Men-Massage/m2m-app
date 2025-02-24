@@ -52,16 +52,17 @@
             font-size: 16px;
         }
 
-        #user-name {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            display: none;
-        }
+#user-name {
+    position: fixed; /* Cambiato da absolute a fixed */
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    display: none; /* Inizialmente nascosto */
+    z-index: 1000; /* Assicurati che sia sopra tutto */
+}
 
         .container {
             background-color: white;
