@@ -16,13 +16,12 @@
         body {
             font-family: Arial, sans-serif;
             max-width: 800px;
-            margin: 20px auto;
+            margin: 60px auto 20px;
             padding: 20px;
             background-color: #f5f5f5;
             position: relative;
         }
 
-        /* Aggiunte per l'autenticazione */
         #auth-overlay {
             position: fixed;
             top: 0;
@@ -52,28 +51,34 @@
             font-size: 16px;
         }
 
-#user-name {
-    position: fixed; /* Rimane fisso anche durante lo scrolling */
-    top: 20px;
-    right: 20px;
-    background: #4CAF50;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 20px;
-    display: none; /* Inizialmente nascosto */
-    z-index: 1000; /* Assicurati che sia sopra tutto */
-    font-size: 16px; /* Aggiungi una dimensione del font */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Ombreggiatura per un effetto visivo migliore */
-}
+        #user-name {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: none;
+            z-index: 1000;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #user-name:hover {
+            background-color: #45a049;
+        }
 
         .container {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    position: relative; /* Aggiungi questa proprietà */
-    margin-top: 60px; /* Lascia spazio per il nome utente in alto */
-}
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-top: 60px;
+        }
 
         h1 {
             color: #333;
@@ -229,10 +234,9 @@
         </div>
     </div>
 
-    <div id="user-name"></div>
+    <div id="user-name" onclick="logout()"></div>
 
     <div class="container" style="display: none;">
-        <!-- Banner di installazione -->
         <div id="ios-banner" class="install-banner" style="display: none;">
             <div>
                 📲 Install this app: Tap <img src="icons/share-icon.png" style="height:18px; vertical-align:middle"> 
@@ -252,8 +256,8 @@
         <div class="instructions">
             <p>How to use:</p>
             <ol>
-                <li>Enter <span class="highlight">regular payments</span> (cash/card payments handled by therapist)</li>
-                <li>Enter <span class="highlight">gift card payments</span> (processed by the center)</li>
+                <li>Enter <span class="highlight">regular payments</span></li>
+                <li>Enter <span class="highlight">gift card payments</span></li>
                 <li>Click Calculate to see net amount</li>
                 <li>Positive amount = Payment to Center</li>
                 <li>Negative amount = Payment to Therapist</li>
@@ -281,9 +285,22 @@
     </div>
 
     <script>
-        // Sistema di autenticazione
         const AUTH_CODE = "1228";
-        let authStep = 1;
+
+        // Funzione di logout
+        function logout() {
+            if(confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem('m2m_access');
+                localStorage.removeItem('m2m_name');
+                document.querySelector('.container').style.display = 'none';
+                document.getElementById('user-name').style.display = 'none';
+                document.getElementById('auth-overlay').style.display = 'flex';
+                document.getElementById('access-code').value = '';
+                document.getElementById('user-name-input').value = '';
+                document.getElementById('code-section').style.display = 'block';
+                document.getElementById('name-section').style.display = 'none';
+            }
+        }
 
         function checkAuth() {
             const savedCode = localStorage.getItem('m2m_access');
@@ -302,7 +319,6 @@
             if(codeInput.value === AUTH_CODE) {
                 document.getElementById('code-section').style.display = 'none';
                 document.getElementById('name-section').style.display = 'block';
-                authStep = 2;
             } else {
                 alert('Invalid access code');
             }
@@ -327,11 +343,8 @@
             showInstallBanners();
         }
 
-        // Mostra i banner di installazione
         function showInstallBanners() {
-            // Logica per Android
             let deferredPrompt;
-
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
@@ -349,30 +362,20 @@
                 }
             });
 
-            // Logica per iOS
-            const isIos = () => {
-                const userAgent = navigator.userAgent.toLowerCase();
-                return /iphone|ipad|ipod/.test(userAgent);
-            };
-
-            const isInStandaloneMode = () => 
-                ('standalone' in window.navigator) && (window.navigator.standalone);
-
+            const isIos = () => /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+            const isInStandaloneMode = () => ('standalone' in window.navigator) && window.navigator.standalone;
             if (isIos() && !isInStandaloneMode()) {
                 document.getElementById('ios-banner').style.display = 'flex';
             }
         }
 
-        // Controllo iniziale
         if(!checkAuth()) {
             document.getElementById('auth-overlay').style.display = 'flex';
         }
 
-        // Resto del codice...
         function calculatePayment() {
             const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
             const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
-
             const toCenter = regular * 0.4;
             const toTherapist = giftcard * 0.6;
             const netAmount = toCenter - toTherapist;
@@ -399,14 +402,10 @@
             document.getElementById('result').style.display = 'none';
         }
 
-        // Supporto tasto Enter
         document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') calculatePayment();
-            });
+            input.addEventListener('keypress', e => { if(e.key === 'Enter') calculatePayment() });
         });
 
-        // Registrazione Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js');
