@@ -1,4 +1,4 @@
-       const AUTH_CODE = "1228";
+    const AUTH_CODE = "1228";
     let currentPaymentAmount = 0;
     let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
     let currentCalendarMonth = new Date().getMonth();
@@ -225,6 +225,7 @@
 
                     (function(currentDateStringForEvent) {
                         cell.addEventListener('click', () => {
+                            console.log("Calendar cell clicked, dateString:", currentDateStringForEvent); // NUOVA LINEA
                             showDailyPayments(currentDateStringForEvent);
                         });
                     })(currentDateString);
@@ -237,8 +238,8 @@
     }
             // Function to display payments for a specific day
     function showDailyPayments(dateString) {
+        console.log("showDailyPayments: dateString received:", dateString); // NUOVA LINEA
         document.getElementById('daily-payments-section').style.display = 'block';
-        // Usa direttamente dateString senza formattare nuovamente
         document.getElementById('selected-date').textContent = dateString;
         const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
         dailyPaymentsListDiv.innerHTML = '';
