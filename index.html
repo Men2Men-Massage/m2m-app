@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M2M Payment Calculator</title>
+    
+    <!-- Meta tags per PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Payment Calc">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="manifest" href="/manifest.json">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 60px auto 20px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            position: relative;
+        }
+
+        #auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #auth-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        #auth-box input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        #user-name {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: none;
+            z-index: 1000;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #user-name:hover {
+            background-color: #45a049;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-top: 60px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .input-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .input-group {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input {
+            padding: 12px;
+            font-size: 16px;
+            width: 250px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background-color: #376FE9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .payment-due {
+            background-color: #ffebee;
+            border: 2px solid #ff5252;
+        }
+
+        .payment-receivable {
+            background-color: #e8f5e9;
+            border: 2px solid #4CAF50;
+        }
+
+        .result-line {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .instructions {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .highlight {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .install-banner {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        #android-banner {
+            background-color: #e8f5e9;
+            border: 2px solid #4CAF50;
+        }
+
+        #ios-banner {
+            background-color: #fff3e0;
+            border: 2px solid #ff9800;
+        }
+
+        .install-banner button {
+            background: none;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #android-banner button {
+            background-color: #376FE9;
+            color: white;
+        }
+
+        #ios-banner button {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .close-banner {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div id="auth-overlay" style="display: none;">
+        <div id="auth-box">
+            <h2>Welcome to M2M Calculator</h2>
+            <div id="code-section">
+                <input type="password" id="access-code" placeholder="Enter access code">
+                <button onclick="checkCode()">Continue</button>
+            </div>
+            <div id="name-section" style="display: none;">
+                <input type="text" id="user-name-input" placeholder="Enter your name">
+                <button onclick="saveName()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="user-name" onclick="logout()"></div>
+
+    <div class="container" style="display: none;">
+        <div id="ios-banner" class="install-banner" style="display: none;">
+            <div>
+                📲 Install this app: Tap <img src="icons/share-icon.png" style="height:18px; vertical-align:middle"> 
+                then "Add to Home Screen"
+            </div>
+            <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
+        </div>
+
+        <div id="android-banner" class="install-banner" style="display: none;">
+            <div>📲 Install this app for better experience</div>
+            <button id="install-button">Install</button>
+            <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
+        </div>
+
+        <h1>M2M Payment Calculator</h1>
+        
+        <div class="instructions">
+            <p>How to use:</p>
+            <ol>
+                <li>Enter <span class="highlight">regular payments</span> (cash/card payments handled by therapist)</li>
+                <li>Enter <span class="highlight">gift card payments</span> (processed by the center)</li>
+                <li>Click Calculate to see net amount</li>
+                <li>Positive amount = Payment to Center</li>
+                <li>Negative amount = Payment to Therapist</li>
+            </ol>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="regular-payments">Regular Payments (€):</label>
+                <input type="number" id="regular-payments" placeholder="Enter amount" step="0.01" min="0">
+            </div>
+
+            <div class="input-group">
+                <label for="giftcard-payments">Gift Card Payments (€):</label>
+                <input type="number" id="giftcard-payments" placeholder="Enter amount" step="0.01" min="0">
+            </div>
+
+            <div style="text-align: center">
+                <button onclick="calculatePayment()">Calculate</button>
+                <button onclick="resetAll()">Reset</button>
+            </div>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const AUTH_CODE = "1228";
+
+        // Funzione di logout
+        function logout() {
+            if(confirm("Are you sure you want to log out?")) {
+                localStorage.removeItem('m2m_access');
+                localStorage.removeItem('m2m_name');
+                document.querySelector('.container').style.display = 'none';
+                document.getElementById('user-name').style.display = 'none';
+                document.getElementById('auth-overlay').style.display = 'flex';
+                document.getElementById('access-code').value = '';
+                document.getElementById('user-name-input').value = '';
+                document.getElementById('code-section').style.display = 'block';
+                document.getElementById('name-section').style.display = 'none';
+            }
+        }
+
+        function checkAuth() {
+            const savedCode = localStorage.getItem('m2m_access');
+            const userName = localStorage.getItem('m2m_name');
+            
+            if(savedCode === AUTH_CODE && userName) {
+                showApp(userName);
+                return true;
+            }
+            document.getElementById('auth-overlay').style.display = 'flex';
+            return false;
+        }
+
+        function checkCode() {
+            const codeInput = document.getElementById('access-code');
+            if(codeInput.value === AUTH_CODE) {
+                document.getElementById('code-section').style.display = 'none';
+                document.getElementById('name-section').style.display = 'block';
+            } else {
+                alert('Invalid access code');
+            }
+        }
+
+        function saveName() {
+            const nameInput = document.getElementById('user-name-input');
+            if(nameInput.value.trim().length > 0) {
+                localStorage.setItem('m2m_access', AUTH_CODE);
+                localStorage.setItem('m2m_name', nameInput.value.trim());
+                showApp(nameInput.value.trim());
+            } else {
+                alert('Please enter a valid name');
+            }
+        }
+
+        function showApp(userName) {
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('user-name').textContent = `Hello ${userName}`;
+            document.getElementById('user-name').style.display = 'block';
+            document.querySelector('.container').style.display = 'block';
+            showInstallBanners();
+        }
+
+        function showInstallBanners() {
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('android-banner').style.display = 'flex';
+            });
+
+            document.getElementById('install-button').addEventListener('click', async () => {
+                if(deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if(outcome === 'accepted') {
+                        document.getElementById('android-banner').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                }
+            });
+
+            const isIos = () => /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+            const isInStandaloneMode = () => ('standalone' in window.navigator) && window.navigator.standalone;
+            if (isIos() && !isInStandaloneMode()) {
+                document.getElementById('ios-banner').style.display = 'flex';
+            }
+        }
+
+        if(!checkAuth()) {
+            document.getElementById('auth-overlay').style.display = 'flex';
+        }
+
+        function calculatePayment() {
+            const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
+            const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
+            const toCenter = regular * 0.4;
+            const toTherapist = giftcard * 0.6;
+            const netAmount = toCenter - toTherapist;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <div class="result-line">• Center keeps 40% of regular: €${toCenter.toFixed(2)}</div>
+                <div class="result-line">• Center owes 60% of gift cards: €${toTherapist.toFixed(2)}</div>
+                <hr>
+                <div class="total-amount ${netAmount >= 0 ? 'highlight' : ''}">
+                    ${netAmount >= 0 ? 
+                        `Payment to Center: €${netAmount.toFixed(2)}` : 
+                        `Payment to Therapist: €${Math.abs(netAmount).toFixed(2)}`}
+                </div>
+            `;
+
+            resultDiv.className = netAmount >= 0 ? 'payment-due' : 'payment-receivable';
+            resultDiv.style.display = 'block';
+        }
+
+        function resetAll() {
+            document.getElementById('regular-payments').value = '';
+            document.getElementById('giftcard-payments').value = '';
+            document.getElementById('result').style.display = 'none';
+        }
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', e => { if(e.key === 'Enter') calculatePayment() });
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
+    </script>
+</body>
+</html>
