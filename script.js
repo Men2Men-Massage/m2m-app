@@ -190,7 +190,7 @@
         });
 
         let tbody = calendarTable.createTBody();
-        let date = 1;
+        let date = 0;
         let dayOfWeekCounter = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
 
         for (let i = 0; i < 6; i++) {
@@ -199,15 +199,15 @@
                 if (i === 0 && j < dayOfWeekCounter) {
                     let cell = row.insertCell();
                     cell.textContent = '';
-                } else if (date > daysInMonth) {
+                } else if (date >= daysInMonth) {
                     break;
                 } else {
+                    date++;
                     let cell = row.insertCell();
                     cell.classList.add('day');
                     let dayNumber = document.createElement('div');
                     dayNumber.classList.add('day-number');
                     dayNumber.textContent = date;
-
                     const currentDate = new Date(year, month, date, 0, 0, 0, 0);
                     const currentDateString = currentDate.toISOString().split('T')[0];
 
@@ -227,7 +227,6 @@
                             showDailyPayments(currentDateStringForEvent);
                         });
                     })(currentDateString);
-                    date++;
                 }
             }
         }
