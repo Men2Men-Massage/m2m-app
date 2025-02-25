@@ -395,6 +395,3 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
-
-// Change "Back to Calculator" to "Back" and make it smaller
-document.getElementById('back-to-calculator-btn').textContent = "Back";
