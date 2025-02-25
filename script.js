@@ -244,8 +244,8 @@
             // Function to display payments for a specific day
     function showDailyPayments(dateString) {
         document.getElementById('daily-payments-section').style.display = 'block';
-        // Use the formatDate function!  This is the KEY FIX.
-        document.getElementById('selected-date').textContent = formatDate(dateString);
+        // Usa direttamente dateString senza formattare nuovamente
+        document.getElementById('selected-date').textContent = dateString;
         const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
         dailyPaymentsListDiv.innerHTML = '';
 
