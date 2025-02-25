@@ -343,16 +343,21 @@ button#reset-button:hover {
     margin-top: 20px;
 }
 
+ /*Modified styles*/
 .daily-payment-item {
-    margin-bottom: 12px;
+    position: relative; /* Needed for z-index to work */
+    z-index: 2;        /* Ensure payment details are above the delete button */
+    background-color: #f9f9f9; /* Set background explicitly */
+    transition: transform 0.2s ease; /* Smooth transition for swipe */
     padding: 15px;
     border: 1px solid #eee;
     border-radius: 8px;
-    background-color: #f9f9f9;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+     margin-bottom: 0px; /*remove the bottom margin*/
+
 }
 
 .payment-details {
@@ -360,7 +365,7 @@ button#reset-button:hover {
 }
 
 .payment-actions button {
-    margin-left: 10px;
+   /* margin-left: 10px; REMOVE THIS */
     padding: 7px 12px;
     font-size: 14px;
     border-radius: 5px;
@@ -405,6 +410,31 @@ button#reset-button:hover {
 
 .note-input-area button {
     margin: 0 5px;
+}
+
+/* Added styles for swipe-to-delete */
+.swipe-container {
+    position: relative;
+    overflow: hidden; /* Hide the off-screen delete button */
+    width: 100%;      /* Important for correct positioning */
+    margin-bottom: 12px; /* Add some space*/
+}
+
+.swipe-delete-button {
+    position: absolute;
+    top: 0;
+    right: 0; /* Initially off-screen to the right */
+    height: 100%;  /* Make the button fill the container vertically */
+    background-color: #f44336; /* Red background */
+    color: white;
+    border: none;
+    padding: 0 20px; /* Add some padding */
+    cursor: pointer;
+    z-index: 1;     /* Ensure the delete button is below payment details */
+      transition: transform 0.2s ease; /*smooth transition for delete*/
+}
+.swipe-delete-button:hover{
+   background-color: #d32f2f;
 }
 
 /* Added styles */
