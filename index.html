@@ -45,14 +45,14 @@
         }
 
         #auth-box input {
-            width: 100%; /* Take full width of auth-box */
+            width: 100%;
             margin: 10px 0;
             padding: 12px;
             font-size: 16px;
-            display: block; /* Ensure block display for margin auto to work */
-            margin-left: auto; /* Center horizontally */
-            margin-right: auto; /* Center horizontally */
-            box-sizing: border-box; /* Include padding and border in element's total width and height */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
         }
 
         #user-name {
@@ -99,7 +99,7 @@
 
         .input-group {
             margin: 15px 0;
-            text-align: center; /* Center the content of input-group */
+            text-align: center;
         }
 
         label {
@@ -112,15 +112,19 @@
         input {
             padding: 12px;
             font-size: 16px;
-            width: 100%; /* Take full width of input-group */
-            max-width: 250px; /* Limit max width */
+            width: 100%;
+            max-width: 250px;
             border: 1px solid #ddd;
             border-radius: 5px;
             margin: 5px 0;
-            display: block; /* Ensure block display for margin auto to work */
-            margin-left: auto; /* Center horizontally */
-            margin-right: auto; /* Center horizontally */
-            box-sizing: border-box; /* Include padding and border in element's total width and height */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+
+        .button-container {
+            text-align: center; /* Center buttons horizontally */
         }
 
         button {
@@ -139,12 +143,42 @@
             background-color: #45a049;
         }
 
+        button#reset-button {
+            background-color: #f44336; /* Red color for reset */
+            padding: 8px 15px; /* Smaller padding */
+            font-size: 14px; /* Smaller font size */
+            margin: 5px; /* Smaller margin */
+        }
+
+        button#reset-button:hover {
+            background-color: #d32f2f; /* Darker red on hover */
+        }
+
+
         #result {
             margin-top: 30px;
             padding: 20px;
             border-radius: 8px;
             display: none;
+            text-align: center; /* Center content in result area */
         }
+
+        #result button#save-payment-button {
+            background-color: #4CAF50; /* Green for save button */
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        #result button#save-payment-button:hover {
+            background-color: #45a049;
+        }
+
 
         .payment-due {
             background-color: #ffebee;
@@ -284,13 +318,15 @@
                 <input type="number" id="giftcard-payments" placeholder="Enter amount" step="0.01" min="0">
             </div>
 
-            <div style="text-align: center">
+            <div class="button-container">
                 <button onclick="calculatePayment()">Calculate</button>
-                <button onclick="resetAll()">Reset</button>
+                <button id="reset-button" onclick="resetAll()">Reset</button>
             </div>
         </div>
 
-        <div id="result"></div>
+        <div id="result">
+            <button id="save-payment-button" onclick="savePayment()" style="display: none;">Save Payment</button>
+        </div>
     </div>
 
     <script>
@@ -382,12 +418,15 @@
             document.getElementById('auth-overlay').style.display = 'flex';
         }
 
+        let currentPaymentAmount = 0; // Variable to store the calculated payment amount
+
         function calculatePayment() {
             const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
             const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
             const toCenter = regular * 0.4;
             const toTherapist = giftcard * 0.6;
-            const netAmount = toCenter - toTherapist;
+            currentPaymentAmount = toCenter - toTherapist; // Store the calculated amount
+            const netAmount = currentPaymentAmount;
 
             const resultDiv = document.getElementById('result');
             resultDiv.innerHTML = `
@@ -399,17 +438,37 @@
                         `Payment to Center: €${netAmount.toFixed(2)}` :
                         `Payment to Therapist: €${Math.abs(netAmount).toFixed(2)}`}
                 </div>
+                <button id="save-payment-button" onclick="savePayment()">Save Payment</button>
             `;
 
             resultDiv.className = netAmount >= 0 ? 'payment-due' : 'payment-receivable';
             resultDiv.style.display = 'block';
+            document.getElementById('save-payment-button').style.display = 'inline-block'; // Show Save Payment button
         }
 
         function resetAll() {
             document.getElementById('regular-payments').value = '';
             document.getElementById('giftcard-payments').value = '';
             document.getElementById('result').style.display = 'none';
+            document.getElementById('save-payment-button').style.display = 'none'; // Hide Save Payment button on reset
         }
+
+        function savePayment() {
+            const paymentDate = new Date().toLocaleDateString();
+            const paymentData = {
+                date: paymentDate,
+                amount: currentPaymentAmount
+            };
+
+            let savedPayments = localStorage.getItem('m2m_payments');
+            savedPayments = savedPayments ? JSON.parse(savedPayments) : [];
+            savedPayments.push(paymentData);
+            localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
+
+            alert(`Payment of €${Math.abs(currentPaymentAmount).toFixed(2)} ${currentPaymentAmount >= 0 ? 'to Center' : 'to Therapist'} saved for ${paymentDate}`);
+            document.getElementById('save-payment-button').style.display = 'none'; // Hide Save Payment button after saving
+        }
+
 
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('keypress', e => { if(e.key === 'Enter') calculatePayment() });
