@@ -246,6 +246,8 @@ function generateCalendar(month, year) {
     calendarContainer.appendChild(calendarTable);
 }
 
+
+
 // Function to display payments for a specific day
 function showDailyPayments(dateString) {
     document.getElementById('daily-payments-section').style.display = 'block';
@@ -261,10 +263,6 @@ function showDailyPayments(dateString) {
     }
 
     paymentsForDate.forEach((payment, index) => {
-        // --- SWIPE-TO-DELETE CONTAINER ---
-        const swipeContainer = document.createElement('div');
-        swipeContainer.className = 'swipe-container';
-
         const paymentItem = document.createElement('div');
         paymentItem.className = 'daily-payment-item';
         paymentItem.dataset.paymentIndex = index;
@@ -286,89 +284,20 @@ function showDailyPayments(dateString) {
         noteButton.textContent = payment.note ? 'Edit Note' : 'Add Note';
         noteButton.onclick = () => handleNoteForPayment(index, payment.note);
         actionsDiv.appendChild(noteButton);
-        paymentItem.appendChild(actionsDiv); // Append actionsDiv to paymentItem
 
-        // --- DELETE BUTTON (Initially Hidden) ---
         let deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
-        deleteButton.className = 'delete-button swipe-delete-button'; // Add swipe-delete-button class
+        deleteButton.className = 'delete-button';
         deleteButton.onclick = () => deletePayment(index, dateString);
-        swipeContainer.appendChild(deleteButton);  // Add to swipeContainer
+        actionsDiv.appendChild(deleteButton);
 
-        swipeContainer.appendChild(paymentItem);   // Add paymentItem to swipeContainer
-        dailyPaymentsListDiv.appendChild(swipeContainer); // Add swipeContainer to the list
-
-        // --- Touch Event Handling (Swipe Logic) ---
-        addSwipeToDelete(swipeContainer, index, dateString); // Call helper function
+        paymentItem.appendChild(actionsDiv);
+        dailyPaymentsListDiv.appendChild(paymentItem);
     });
 }
 
 
-function addSwipeToDelete(swipeContainer, paymentIndex, dateString) {
-    let touchStartX = 0;
-    let touchEndX = 0;
-    let isSwiping = false;
-    const paymentItem = swipeContainer.querySelector('.daily-payment-item');
-    const deleteButton = swipeContainer.querySelector('.swipe-delete-button');
-    const swipeThreshold = 100; // Minimum swipe distance (in pixels)
-
-    swipeContainer.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        isSwiping = true; // Start swiping
-    }, { passive: false });
-
-
-     swipeContainer.addEventListener('touchmove', (e) => {
-        if (!isSwiping) return;
-
-        touchEndX = e.touches[0].clientX;
-        let diffX = touchStartX - touchEndX;
-
-        // Only allow leftward swipe
-        if (diffX > 0) {
-          // Prevent vertical scrolling while swiping horizontally
-          e.preventDefault();
-
-            // Limit the swipe to the width of the delete button
-            const maxSwipe = deleteButton.offsetWidth;
-            diffX = Math.min(diffX, maxSwipe);
-
-            paymentItem.style.transform = `translateX(-${diffX}px)`;
-            deleteButton.style.transform = `translateX(-${diffX}px)`; // Move delete button along
-        }
-    }, { passive: false });
-
-
-   swipeContainer.addEventListener('touchend', () => {
-        isSwiping = false; // Reset swiping flag
-
-        let diffX = touchStartX - touchEndX;
-
-        // If swiped past threshold, show delete button; otherwise, reset
-        if (diffX > swipeThreshold) {
-            const deleteButtonWidth = deleteButton.offsetWidth;
-            paymentItem.style.transform = `translateX(-${deleteButtonWidth}px)`;
-            deleteButton.style.transform = `translateX(-${deleteButtonWidth}px)`;
-             paymentItem.style.transition = 'transform 0.2s ease'; //smooth transition
-             deleteButton.style.transition = 'transform 0.2s ease';
-
-        } else {
-            paymentItem.style.transform = 'translateX(0)';
-            deleteButton.style.transform = 'translateX(0)';
-              paymentItem.style.transition = 'transform 0.2s ease'; //smooth transition
-             deleteButton.style.transition = 'transform 0.2s ease';
-        }
-
-        // Reset transitions after they complete
-        setTimeout(() => {
-            paymentItem.style.transition = '';
-            deleteButton.style.transition = '';
-        }, 200);
-    });
-}
-
-
-// Function to delete a payment.  NO CHANGES NEEDED HERE.
+// Function to delete a payment
 function deletePayment(paymentIndex, dateString) {
     if (confirm('Are you sure you want to delete this payment?')) {
         savedPayments.splice(paymentIndex, 1);
