@@ -4,6 +4,12 @@
     let currentCalendarMonth = new Date().getMonth();
     let currentCalendarYear = new Date().getFullYear();
 
+    // NEW: Date formatting function
+    function formatDate(dateString) {
+        const [year, month, day] = dateString.split('-');
+        return `${year}-${month}-${day}`; // Consistent YYYY-MM-DD format
+    }
+
     // Logout function
     function logout() {
         localStorage.removeItem('m2m_access');
@@ -98,7 +104,6 @@
     // Check authentication on app startup
     if (!checkAuth()) {
         document.getElementById('auth-overlay').style.display = 'flex';
-        return false;
     }
 
     // Function to calculate the payment
@@ -208,6 +213,7 @@
                     let dayNumber = document.createElement('div');
                     dayNumber.classList.add('day-number');
                     dayNumber.textContent = date;
+                    cell.appendChild(dayNumber);
 
                     const currentDate = new Date(year, month, date, 0, 0, 0, 0);
                     const currentDateString = currentDate.toISOString().split('T')[0];
@@ -228,6 +234,7 @@
                             showDailyPayments(currentDateStringForEvent);
                         });
                     })(currentDateString);
+
                     date++;
                 }
             }
@@ -237,7 +244,8 @@
             // Function to display payments for a specific day
     function showDailyPayments(dateString) {
         document.getElementById('daily-payments-section').style.display = 'block';
-        document.getElementById('selected-date').textContent = dateString;
+        // Use the formatDate function!  This is the KEY FIX.
+        document.getElementById('selected-date').textContent = formatDate(dateString);
         const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
         dailyPaymentsListDiv.innerHTML = '';
 
