@@ -708,7 +708,13 @@
                             cell.classList.add('today');
                         }
 
-                        cell.addEventListener('click', () => showDailyPayments(currentDateString));
+                        // Create a closure to capture the currentDateString correctly
+                        ((currentDateStringForEvent) => {
+                            cell.addEventListener('click', () => {
+                                console.log("Clicked day:", date, " - Passing date string:", currentDateStringForEvent); // Log inside event listener
+                                showDailyPayments(currentDateStringForEvent);
+                            });
+                        })(currentDateString); // Immediately invoke the function to capture currentDateString
                         date++;
                     }
                 }
