@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,13 +37,14 @@
 
         #auth-box, #history-box {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
+            padding: 20px;
+            border-radius: 12px;
             text-align: center;
             width: 90%;
-            max-width: 400px;
-            overflow-y: auto; /* Enable scroll if content is long */
-            max-height: 80%; /* Limit height to 80% of viewport */
+            max-width: 450px;
+            overflow-y: auto;
+            max-height: 85%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         #auth-box input {
@@ -55,6 +56,8 @@
             margin-left: auto;
             margin-right: auto;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 8px;
         }
 
         #user-name {
@@ -64,24 +67,25 @@
             background: #4CAF50;
             color: white;
             padding: 8px 15px;
-            border-radius: 20px;
+            border-radius: 24px;
             display: none;
             z-index: 1000;
             font-size: 16px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, box-shadow 0.3s;
         }
 
         #user-name:hover {
             background-color: #45a049;
+            box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
         }
 
         .container {
             background-color: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             position: relative;
             margin-top: 60px;
         }
@@ -94,19 +98,20 @@
 
         .input-section {
             margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 8px;
+            padding: 25px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fafafa;
         }
 
         .input-group {
-            margin: 15px 0;
+            margin: 18px 0;
             text-align: center;
         }
 
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: bold;
             color: #555;
         }
@@ -115,10 +120,10 @@
             padding: 12px;
             font-size: 16px;
             width: 100%;
-            max-width: 250px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin: 5px 0;
+            max-width: 280px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin: 6px 0;
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -126,61 +131,64 @@
         }
 
         .button-container {
-            text-align: center; /* Center buttons horizontally */
+            text-align: center;
         }
 
         button {
-            padding: 12px 25px;
+            padding: 12px 28px;
             font-size: 16px;
             background-color: #376FE9;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            margin: 10px;
-            transition: background-color 0.3s;
+            margin: 8px;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
 
         button:hover {
             background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 7px rgba(0,0,0,0.2);
         }
 
         button#reset-button {
-            background-color: #f44336; /* Red color for reset */
-            padding: 8px 15px; /* Smaller padding */
-            font-size: 14px; /* Smaller font size */
-            margin: 5px; /* Smaller margin */
+            background-color: #f44336;
+            padding: 8px 15px;
+            font-size: 14px;
+            margin: 5px;
         }
 
         button#reset-button:hover {
-            background-color: #d32f2f; /* Darker red on hover */
+            background-color: #d32f2f;
         }
-
 
         #result {
             margin-top: 30px;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 25px;
+            border-radius: 10px;
             display: none;
-            text-align: center; /* Center content in result area */
+            text-align: center;
+            background-color: #fff;
+            box-shadow: 0 2px 7px rgba(0,0,0,0.1);
         }
 
         #result button#save-payment-button {
-            background-color: #4CAF50; /* Green for save button */
+            background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             font-size: 16px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 18px;
             transition: background-color 0.3s;
         }
 
         #result button#save-payment-button:hover {
             background-color: #45a049;
         }
-
 
         .payment-due {
             background-color: #ffebee;
@@ -193,21 +201,25 @@
         }
 
         .result-line {
-            margin: 10px 0;
+            margin: 12px 0;
             font-size: 18px;
+            color: #444;
         }
 
         .total-amount {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
-            margin-top: 15px;
+            margin-top: 20px;
+            color: #2e7d32;
         }
 
         .instructions {
             margin: 20px 0;
-            padding: 15px;
-            background-color: #fff3e0;
-            border-left: 4px solid #ff9800;
+            padding: 18px;
+            background-color: #fffde7;
+            border-left: 5px solid #ffca28;
+            border-radius: 0 5px 5px 0;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
         }
 
         .highlight {
@@ -223,6 +235,9 @@
             justify-content: space-between;
             align-items: center;
             position: relative;
+            background-color: #f0f4c3;
+            border: 1px solid #e0e0b0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         #android-banner {
@@ -263,341 +278,651 @@
             color: #666;
         }
 
-        /* Style for history section - Simplified */
-        #history-payments-list {
-            text-align: left;
-            padding: 10px;
-        }
-
-        .history-month {
-            margin-top: 20px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 5px;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-
-        .history-payment {
-            margin: 5px 0;
-            font-size: 1em;
+        /* Calendar styles - Modernized */
+        .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px dashed #eee;
+            margin-bottom: 10px;
         }
 
-        .payment-actions-history button {
-            margin-left: 10px;
-            padding: 6px 10px;
-            font-size: 14px;
-            background-color: #ddd;
-            color: #333;
+        .calendar-header button {
+            background-color: transparent;
+            color: #555;
             border: none;
-            border-radius: 5px;
+            font-size: 1.2em;
             cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
-        .payment-actions-history button.delete-button {
-            background-color: #f44336; /* Red for delete button in history */
+
+        .calendar-header button:hover {
+            background-color: #eee;
+        }
+
+        .calendar-month-year {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px; /* Rounded calendar */
+            overflow: hidden; /* Clip rounded corners */
+            box-shadow: 0 2px 7px rgba(0,0,0,0.1); /* Calendar shadow */
+            margin-bottom: 20px;
+            background-color: #fff; /* White calendar background */
+        }
+
+        .calendar th, .calendar td {
+            padding: 10px;
+            text-align: center;
+            border: none; /* No cell borders */
+        }
+
+        .calendar th {
+            background-color: #f0f0f0;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .calendar td {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .calendar td:hover {
+            background-color: #f9f9f9; /* Lighter hover */
+        }
+
+        .calendar td.has-payment {
+            background-color: #e8f5e9;
+        }
+
+        .calendar td.today {
+            font-weight: bold;
+            background-color: #e0f7fa; /* Light blue for today */
+        }
+
+        .calendar .day-number {
+            padding-bottom: 6px;
+            font-size: 1em;
+            color: #333;
+        }
+
+        #daily-payments-section {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .daily-payment-item {
+            margin-bottom: 12px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .payment-details {
+            flex-grow: 1;
+        }
+
+        .payment-actions button {
+            margin-left: 10px;
+            padding: 7px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ddd;
+            color: #444;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .payment-actions button:hover {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .payment-actions button.delete-button {
+            background-color: #f44336; /* Red for delete button */
             color: white;
         }
 
+        .payment-actions button.delete-button:hover {
+            background-color: #d32f2f;
+        }
 
+        .payment-note {
+            margin-top: 8px;
+            font-style: italic;
+            color: #777;
+        }
+
+        .note-input-area {
+            margin-top: 12px;
+        }
+
+        .note-input-area textarea {
+            width: calc(100% - 16px); /* Adjust width for padding */
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            margin-bottom: 8px;
+        }
+
+        .note-input-area button {
+            margin: 0 5px;
+        }
     </style>
 </head>
 <body>
+    <!-- Overlay di Autenticazione -->
     <div id="auth-overlay" style="display: none;">
         <div id="auth-box">
-            <h2>Welcome to M2M Calculator</h2>
+            <h2>Benvenuto alla Calcolatrice M2M</h2>
             <div id="code-section">
-                <input type="password" id="access-code" placeholder="Enter access code">
-                <button onclick="checkCode()">Continue</button>
+                <input type="password" id="access-code" placeholder="Inserisci codice di accesso">
+                <button onclick="checkCode()">Continua</button>
             </div>
             <div id="name-section" style="display: none;">
-                <input type="text" id="user-name-input" placeholder="Enter your name">
-                <button onclick="saveName()">Save</button>
+                <input type="text" id="user-name-input" placeholder="Inserisci il tuo nome">
+                <button onclick="saveName()">Salva</button>
             </div>
         </div>
     </div>
 
+    <!-- Overlay Storico Pagamenti -->
     <div id="history-overlay" style="display: none;">
         <div id="history-box">
-            <h2>Payment History</h2>
-            <button onclick="showCalculator()" style="float: right;">Back to Calculator</button>
-            <div id="history-payments-list">
-                <!-- Payments will be listed here -->
+            <h2>Storico Pagamenti</h2>
+            <button onclick="showCalculator()" style="float: right;">Torna alla Calcolatrice</button>
+            <div id="calendar-header" class="calendar-header">
+                <button id="prev-month-btn"><</button>
+                <span id="calendar-month-year" class="calendar-month-year"></span>
+                <button id="next-month-btn">></button>
+            </div>
+            <div id="calendar-container">
+                <!-- Il calendario verrà generato qui -->
+            </div>
+            <div id="daily-payments-section" style="display: none;">
+                <h3>Pagamenti per <span id="selected-date"></span></h3>
+                <div id="daily-payments-list">
+                    <!-- I pagamenti giornalieri saranno elencati qui -->
+                </div>
             </div>
             <button onclick="logout()" style="margin-top: 20px;">Logout</button>
         </div>
     </div>
 
-
+    <!-- Nome Utente -->
     <div id="user-name" onclick="showPaymentHistory()"></div>
 
+    <!-- Contenitore Principale -->
     <div class="container" style="display: none;">
+        <!-- Banner di installazione (iOS e Android) -->
         <div id="ios-banner" class="install-banner" style="display: none;">
             <div>
-                📲 Install this app: Tap <img src="icons/share-icon.png" style="height:18px; vertical-align:middle">
-                then "Add to Home Screen"
+                📲 Installa questa app: Tocca <img src="icons/share-icon.png" style="height:18px; vertical-align:middle">
+                poi "Aggiungi alla schermata Home"
             </div>
             <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
         </div>
 
         <div id="android-banner" class="install-banner" style="display: none;">
-            <div>📲 Install this app for better experience</div>
-            <button id="install-button">Install</button>
+            <div>📲 Installa questa app per una migliore esperienza</div>
+            <button id="install-button">Installa</button>
             <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
         </div>
 
-        <h1>M2M Payment Calculator</h1>
+        <h1>Calcolatrice Pagamenti M2M</h1>
 
+        <!-- Istruzioni -->
         <div class="instructions">
-            <p>How to use:</p>
+            <p>Come usare:</p>
             <ol>
-                <li>Enter <span class="highlight">regular payments</span> (cash/card payments handled by therapist)</li>
-                <li>Enter <span class="highlight">gift card payments</span> (processed by the center)</li>
-                <li>Click Calculate to see net amount</li>
-                <li>Positive amount = Payment to Center</li>
-                <li>Negative amount = Payment to Therapist</li>
+                <li>Inserisci i <span class="highlight">pagamenti regolari</span> (pagamenti in contanti/carta gestiti dal terapista)</li>
+                <li>Inserisci i <span class="highlight">pagamenti con gift card</span> (elaborati dal centro)</li>
+                <li>Clicca Calcola per vedere l'importo netto</li>
+                <li>Importo positivo = Pagamento al Centro</li>
+                <li>Importo negativo = Pagamento al Terapista</li>
             </ol>
         </div>
 
+        <!-- Sezione Input -->
         <div class="input-section">
             <div class="input-group">
-                <label for="regular-payments">Regular Payments (€):</label>
-                <input type="number" id="regular-payments" placeholder="Enter amount" step="0.01" min="0">
+                <label for="regular-payments">Pagamenti Regolari (€):</label>
+                <input type="number" id="regular-payments" placeholder="Inserisci importo" step="0.01" min="0">
             </div>
 
             <div class="input-group">
-                <label for="giftcard-payments">Gift Card Payments (€):</label>
-                <input type="number" id="giftcard-payments" placeholder="Enter amount" step="0.01" min="0">
+                <label for="giftcard-payments">Pagamenti con Gift Card (€):</label>
+                <input type="number" id="giftcard-payments" placeholder="Inserisci importo" step="0.01" min="0">
             </div>
 
             <div class="button-container">
-                <button onclick="calculatePayment()">Calculate</button>
+                <button onclick="calculatePayment()">Calcola</button>
                 <button id="reset-button" onclick="resetAll()">Reset</button>
             </div>
         </div>
 
+        <!-- Risultato -->
         <div id="result">
-            <button id="save-payment-button" onclick="savePayment()" style="display: none;">Save Payment</button>
+            <button id="save-payment-button" onclick="savePayment()" style="display: none;">Salva Pagamento</button>
         </div>
     </div>
 
     <script>
-        const AUTH_CODE = "1228";
-        let currentPaymentAmount = 0; // Variable to store the calculated payment amount
-        let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
+        const AUTH_CODE = "1228";  // Codice di accesso (puoi cambiarlo)
+        let currentPaymentAmount = 0; // Variabile per memorizzare l'importo del pagamento calcolato
+        let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]'); // Carica i pagamenti salvati, o un array vuoto se non ce ne sono
+        let currentCalendarMonth = new Date().getMonth(); // Mese corrente (0-11)
+        let currentCalendarYear = new Date().getFullYear(); // Anno corrente
+
 
         // Funzione di logout
         function logout() {
-            localStorage.removeItem('m2m_access');
-            localStorage.removeItem('m2m_name');
-            document.querySelector('.container').style.display = 'none';
-            document.getElementById('user-name').style.display = 'none';
-            document.getElementById('history-overlay').style.display = 'none';
-            document.getElementById('auth-overlay').style.display = 'flex';
-            document.getElementById('access-code').value = '';
-            document.getElementById('user-name-input').value = '';
-            document.getElementById('code-section').style.display = 'block';
-            document.getElementById('name-section').style.display = 'none';
+            localStorage.removeItem('m2m_access'); // Rimuove il codice di accesso salvato
+            localStorage.removeItem('m2m_name');  // Rimuove il nome utente salvato
+            document.querySelector('.container').style.display = 'none'; // Nasconde la calcolatrice
+            document.getElementById('user-name').style.display = 'none'; // Nasconde il nome utente
+            document.getElementById('history-overlay').style.display = 'none'; // Nasconde lo storico pagamenti
+            document.getElementById('auth-overlay').style.display = 'flex'; // Mostra l'overlay di autenticazione
+            document.getElementById('access-code').value = ''; // Resetta il campo del codice
+            document.getElementById('user-name-input').value = ''; // Resetta il campo del nome
+            document.getElementById('code-section').style.display = 'block'; // Mostra la sezione del codice
+            document.getElementById('name-section').style.display = 'none'; // Nasconde la sezione del nome
         }
 
+        // Funzione per controllare l'autenticazione all'avvio dell'app
         function checkAuth() {
-            const savedCode = localStorage.getItem('m2m_access');
-            const userName = localStorage.getItem('m2m_name');
+            const savedCode = localStorage.getItem('m2m_access'); // Recupera il codice salvato
+            const userName = localStorage.getItem('m2m_name'); // Recupera il nome utente salvato
 
-            if(savedCode === AUTH_CODE && userName) {
-                showApp(userName);
-                return true;
+            if (savedCode === AUTH_CODE && userName) {
+                showApp(userName); // Se il codice e il nome sono corretti, mostra l'app
+                return true; // Restituisce true per indicare che l'utente è autenticato
             }
-            document.getElementById('auth-overlay').style.display = 'flex';
-            return false;
+            document.getElementById('auth-overlay').style.display = 'flex'; // Altrimenti, mostra l'overlay di autenticazione
+            return false; // Restituisce false per indicare che l'utente non è autenticato
         }
 
+        // Funzione per controllare il codice di accesso inserito dall'utente
         function checkCode() {
-            const codeInput = document.getElementById('access-code');
-            if(codeInput.value === AUTH_CODE) {
-                document.getElementById('code-section').style.display = 'none';
-                document.getElementById('name-section').style.display = 'block';
+            const codeInput = document.getElementById('access-code'); // Recupera il campo di input del codice
+            if (codeInput.value === AUTH_CODE) {
+                document.getElementById('code-section').style.display = 'none'; // Nasconde la sezione del codice
+                document.getElementById('name-section').style.display = 'block'; // Mostra la sezione per inserire il nome
             } else {
-                alert('Invalid access code');
+                alert('Codice di accesso non valido'); // Mostra un avviso se il codice non è corretto
             }
         }
 
+        // Funzione per salvare il nome utente
         function saveName() {
-            const nameInput = document.getElementById('user-name-input');
-            if(nameInput.value.trim().length > 0) {
-                localStorage.setItem('m2m_access', AUTH_CODE);
-                localStorage.setItem('m2m_name', nameInput.value.trim());
-                showApp(nameInput.value.trim());
+            const nameInput = document.getElementById('user-name-input'); // Recupera il campo di input del nome
+            if (nameInput.value.trim().length > 0) {
+                localStorage.setItem('m2m_access', AUTH_CODE); // Salva il codice di accesso nel localStorage
+                localStorage.setItem('m2m_name', nameInput.value.trim()); // Salva il nome utente nel localStorage
+                showApp(nameInput.value.trim()); // Mostra l'app
             } else {
-                alert('Please enter a valid name');
+                alert('Inserisci un nome valido'); // Mostra un avviso se il nome non è valido
             }
         }
 
+        // Funzione per mostrare l'interfaccia principale dell'app
         function showApp(userName) {
-            document.getElementById('auth-overlay').style.display = 'none';
-            document.getElementById('user-name').textContent = `Hello ${userName}`;
-            document.getElementById('user-name').style.display = 'block';
-            document.querySelector('.container').style.display = 'block';
-            showInstallBanners();
+            document.getElementById('auth-overlay').style.display = 'none'; // Nasconde l'overlay di autenticazione
+            document.getElementById('user-name').textContent = `Ciao ${userName}`; // Mostra il nome utente
+            document.getElementById('user-name').style.display = 'block'; // Rende visibile il nome utente
+            document.querySelector('.container').style.display = 'block'; // Mostra il contenitore principale dell'app
+            showInstallBanners(); // Mostra i banner di installazione (se necessario)
         }
 
+        // Funzione per mostrare i banner di installazione per PWA
         function showInstallBanners() {
-            let deferredPrompt;
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                document.getElementById('android-banner').style.display = 'flex';
-            });
+            let deferredPrompt; // Variabile per gestire l'evento beforeinstallprompt
 
-            document.getElementById('install-button').addEventListener('click', async () => {
-                if(deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    if(outcome === 'accepted') {
-                        document.getElementById('android-banner').style.display = 'none';
-                    }
-                    deferredPrompt = null;
+            // Gestisce l'evento beforeinstallprompt (per Android)
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault(); // Impedisce il comportamento predefinito del browser
+                deferredPrompt = e; // Salva l'evento per un uso successivo
+
+                // Mostra il banner solo se l'app non è già installata
+                if (!window.matchMedia('(display-mode: standalone)').matches) {
+                    document.getElementById('android-banner').style.display = 'flex'; // Mostra il banner per Android
                 }
             });
 
+            // Gestisce il click sul pulsante di installazione (per Android)
+            document.getElementById('install-button').addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt(); // Mostra il prompt di installazione
+                    const { outcome } = await deferredPrompt.userChoice; // Attende la scelta dell'utente
+                    if (outcome === 'accepted') {
+                        document.getElementById('android-banner').style.display = 'none'; // Nasconde il banner se l'utente accetta
+                    }
+                    deferredPrompt = null; // Resetta la variabile deferredPrompt
+                }
+            });
+
+            // Controlla se il dispositivo è iOS e se l'app non è già in modalità standalone
             const isIos = () => /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
             const isInStandaloneMode = () => ('standalone' in window.navigator) && window.navigator.standalone;
+
             if (isIos() && !isInStandaloneMode()) {
-                document.getElementById('ios-banner').style.display = 'flex';
+                document.getElementById('ios-banner').style.display = 'flex'; // Mostra il banner per iOS
             }
         }
 
-        if(!checkAuth()) {
-            document.getElementById('auth-overlay').style.display = 'flex';
+        // Controlla l'autenticazione all'avvio dell'app
+        if (!checkAuth()) {
+            document.getElementById('auth-overlay').style.display = 'flex'; // Mostra l'overlay di autenticazione se l'utente non è autenticato
         }
 
-
+        // Funzione per calcolare il pagamento
         function calculatePayment() {
-            const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
-            const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
-            const toCenter = regular * 0.4;
-            const toTherapist = giftcard * 0.6;
-            currentPaymentAmount = toCenter - toTherapist;
+            const regular = parseFloat(document.getElementById('regular-payments').value) || 0; // Recupera i pagamenti regolari (o 0 se il campo è vuoto)
+            const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0; // Recupera i pagamenti con gift card (o 0 se il campo è vuoto)
+            const toCenter = regular * 0.4; // Calcola la quota del centro (40% dei pagamenti regolari)
+            const toTherapist = giftcard * 0.6; // Calcola la quota del terapista (60% dei pagamenti con gift card)
+            currentPaymentAmount = toCenter - toTherapist; // Calcola l'importo netto
             const netAmount = currentPaymentAmount;
 
-            const resultDiv = document.getElementById('result');
+            const resultDiv = document.getElementById('result'); // Recupera l'elemento div per il risultato
             resultDiv.innerHTML = `
-                <div class="result-line">• Center keeps 40% of regular: €${toCenter.toFixed(2)}</div>
-                <div class="result-line">• Center owes 60% of gift cards: €${toTherapist.toFixed(2)}</div>
+                <div class="result-line">• Il centro trattiene il 40% dei pagamenti regolari: €${toCenter.toFixed(2)}</div>
+                <div class="result-line">• Il centro deve il 60% delle gift card: €${toTherapist.toFixed(2)}</div>
                 <hr>
                 <div class="total-amount ${netAmount >= 0 ? 'highlight' : ''}">
                     ${netAmount >= 0 ?
-                        `Payment to Center: €${netAmount.toFixed(2)}` :
-                        `Payment to Therapist: €${Math.abs(netAmount).toFixed(2)}`}
+                        `Pagamento al Centro: €${netAmount.toFixed(2)}` :
+                        `Pagamento al Terapista: €${Math.abs(netAmount).toFixed(2)}`}
                 </div>
-                <button id="save-payment-button" onclick="savePayment()">Save Payment</button>
-            `;
+                <button id="save-payment-button" onclick="savePayment()">Salva Pagamento</button>
+            `; // Imposta il contenuto HTML del risultato
 
-            resultDiv.className = netAmount >= 0 ? 'payment-due' : 'payment-receivable';
-            resultDiv.style.display = 'block';
-            document.getElementById('save-payment-button').style.display = 'inline-block';
+            resultDiv.className = netAmount >= 0 ? 'payment-due' : 'payment-receivable'; // Imposta la classe CSS in base al tipo di pagamento
+            resultDiv.style.display = 'block'; // Mostra il risultato
+            document.getElementById('save-payment-button').style.display = 'inline-block'; // Mostra il pulsante "Salva Pagamento"
         }
 
+        // Funzione per resettare tutti i campi del modulo
         function resetAll() {
-            document.getElementById('regular-payments').value = '';
-            document.getElementById('giftcard-payments').value = '';
-            document.getElementById('result').style.display = 'none';
-            document.getElementById('save-payment-button').style.display = 'none';
+            document.getElementById('regular-payments').value = ''; // Resetta il campo dei pagamenti regolari
+            document.getElementById('giftcard-payments').value = ''; // Resetta il campo dei pagamenti con gift card
+            document.getElementById('result').style.display = 'none'; // Nasconde il risultato
+            document.getElementById('save-payment-button').style.display = 'none'; // Nasconde il pulsante "Salva Pagamento"
         }
 
+        // Funzione per salvare il pagamento corrente
         function savePayment() {
-            const paymentDate = new Date().toLocaleDateString();
+            const now = new Date(); // Ottiene la data e l'ora correnti
+            const paymentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0]; // Formatta la data come YYYY-MM-DD, impostando l'ora a mezzanotte
             const paymentData = {
                 date: paymentDate,
-                amount: currentPaymentAmount
+                amount: currentPaymentAmount,
+                note: '' // Inizialmente la nota è vuota
             };
 
-            savedPayments.push(paymentData);
-            localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
+            savedPayments.push(paymentData); // Aggiunge il pagamento all'array dei pagamenti salvati
+            localStorage.setItem('m2m_payments', JSON.stringify(savedPayments)); // Salva l'array aggiornato nel localStorage
 
-            alert(`Payment of €${Math.abs(currentPaymentAmount).toFixed(2)} ${currentPaymentAmount >= 0 ? 'to Center' : 'to Therapist'} saved for ${paymentDate}`);
-            document.getElementById('save-payment-button').style.display = 'none';
+            alert(`Pagamento di €${Math.abs(currentPaymentAmount).toFixed(2)} ${currentPaymentAmount >= 0 ? 'al Centro' : 'al Terapista'} salvato per ${paymentDate}`); // Mostra un messaggio di conferma
+            document.getElementById('save-payment-button').style.display = 'none'; // Nasconde il pulsante "Salva Pagamento"
         }
 
+        // Funzione per mostrare lo storico dei pagamenti
         function showPaymentHistory() {
-            document.querySelector('.container').style.display = 'none';
-            document.getElementById('history-overlay').style.display = 'flex';
-            displayPaymentHistory();
+            document.querySelector('.container').style.display = 'none'; // Nasconde la calcolatrice
+            document.getElementById('history-overlay').style.display = 'flex'; // Mostra l'overlay dello storico pagamenti
+            document.getElementById('daily-payments-section').style.display = 'none'; // Nasconde inizialmente la sezione dei pagamenti giornalieri
+            generateCalendar(currentCalendarMonth, currentCalendarYear); // Genera il calendario per il mese e l'anno correnti
         }
 
+        // Funzione per tornare alla calcolatrice dallo storico pagamenti
         function showCalculator() {
-            document.querySelector('.container').style.display = 'block';
-            document.getElementById('history-overlay').style.display = 'none';
+            document.querySelector('.container').style.display = 'block'; // Mostra la calcolatrice
+            document.getElementById('history-overlay').style.display = 'none'; // Nasconde l'overlay dello storico pagamenti
         }
 
-        function displayPaymentHistory() {
-            const historyListDiv = document.getElementById('history-payments-list');
-            historyListDiv.innerHTML = ''; // Clear previous history
+        // Funzione per generare il calendario
+        function generateCalendar(month, year) {
+            const calendarContainer = document.getElementById('calendar-container'); // Recupera il contenitore del calendario
+            calendarContainer.innerHTML = ''; // Pulisce il contenuto precedente del calendario
 
-            let savedPayments = localStorage.getItem('m2m_payments');
-            savedPayments = savedPayments ? JSON.parse(savedPayments) : [];
+            const firstDayOfMonth = new Date(year, month, 1); // Ottiene il primo giorno del mese
+            const daysInMonth = new Date(year, month + 1, 0).getDate(); // Ottiene il numero di giorni del mese
+            const startingDayOfWeek = firstDayOfMonth.getDay(); // Ottiene il giorno della settimana in cui inizia il mese (0 per Domenica, 1 per Lunedì, ecc.)
 
-            if (savedPayments.length === 0) {
-                historyListDiv.innerHTML = '<p>No payments saved yet.</p>';
+            const monthYearDisplay = document.getElementById('calendar-month-year'); // Recupera l'elemento per visualizzare il mese e l'anno
+            monthYearDisplay.textContent = firstDayOfMonth.toLocaleString('it-IT', { month: 'long', year: 'numeric' }); // Imposta il testo con il mese e l'anno in formato italiano
+
+            const calendarTable = document.createElement('table'); // Crea l'elemento tabella per il calendario
+            calendarTable.className = 'calendar'; // Imposta la classe CSS per la tabella
+            let thead = calendarTable.createTHead(); // Crea l'intestazione della tabella
+            let headerRow = thead.insertRow(); // Crea la riga dell'intestazione
+            const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']; // Array con i nomi dei giorni della settimana (iniziando da Lunedì)
+            daysOfWeek.forEach(day => {
+                let th = document.createElement('th'); // Crea un elemento th per ogni giorno della settimana
+                th.textContent = day; // Imposta il testo dell'intestazione con il nome del giorno
+                headerRow.appendChild(th); // Aggiunge l'elemento th alla riga dell'intestazione
+            });
+
+            let tbody = calendarTable.createTBody(); // Crea il corpo della tabella
+            let date = 1; // Inizializza la variabile per il giorno del mese
+            let dayOfWeekCounter = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1; // Calcola l'offset per il primo giorno del mese (0 per Lunedì, 1 per Martedì, ecc.)
+
+            for (let i = 0; i < 6; i++) { // Ciclo per le righe (massimo 6 settimane)
+                let row = tbody.insertRow(); // Crea una nuova riga
+                for (let j = 0; j < 7; j++) { // Ciclo per i giorni della settimana
+                    if (i === 0 && j < dayOfWeekCounter) {
+                        let cell = row.insertCell(); // Crea una cella vuota
+                        cell.textContent = ''; // Imposta il testo della cella come vuoto
+                    } else if (date > daysInMonth) {
+                        break; // Se il giorno supera il numero di giorni del mese, esce dal ciclo interno
+                    } else {
+                        let cell = row.insertCell(); // Crea una cella
+                        cell.classList.add('day');  //aggiunge la classe day
+                        let dayNumber = document.createElement('div'); // Crea un elemento div per il numero del giorno
+                        dayNumber.classList.add('day-number'); //aggiunge la classe day-number
+                        dayNumber.textContent = date; // Imposta il testo del div con il numero del giorno
+                        cell.appendChild(dayNumber); // Aggiunge il div alla cella
+
+                        // Crea un oggetto Date per il giorno corrente, impostando l'ora a mezzanotte
+                        const currentDate = new Date(year, month, date, 0, 0, 0, 0);
+                        const currentDateString = currentDate.toISOString().split('T')[0]; // Formatta la data come YYYY-MM-DD
+
+                        if (savedPayments.some(p => p.date === currentDateString)) {
+                            cell.classList.add('has-payment'); // Se ci sono pagamenti per questa data, aggiunge la classe 'has-payment'
+                        }
+
+                        const today = new Date(); // Ottiene la data odierna
+                        // Confronta le date complete (anno, mese e giorno)
+                        if (currentDate.getFullYear() === today.getFullYear() &&
+                            currentDate.getMonth() === today.getMonth() &&
+                            currentDate.getDate() === today.getDate()) {
+                            cell.classList.add('today'); // Se la data corrente
+                        // Confronta le date complete (anno, mese e giorno)
+                        if (currentDate.getFullYear() === today.getFullYear() &&
+                            currentDate.getMonth() === today.getMonth() &&
+                            currentDate.getDate() === today.getDate()) {
+                            cell.classList.add('today'); // Se la data corrente è oggi, aggiunge la classe 'today'
+                        }
+
+                        // Utilizza una IIFE (Immediately Invoked Function Expression) per catturare correttamente il valore di currentDateString
+                        (function(currentDateStringForEvent) {
+                            cell.addEventListener('click', () => {
+                                showDailyPayments(currentDateStringForEvent); // Associa la funzione showDailyPayments al click sulla cella
+                            });
+                        })(currentDateString);
+
+                        date++; // Incrementa il giorno
+                    }
+                }
+            }
+            calendarContainer.appendChild(calendarTable); // Aggiunge la tabella del calendario al contenitore
+        }
+
+        // Funzione per mostrare i pagamenti di un giorno specifico
+        function showDailyPayments(date) {
+            const parsedDate = new Date(date); // Converte la stringa della data in un oggetto Date
+            if (isNaN(parsedDate.getTime())) { // Controlla se la data è valida
+                console.error("Data non valida:", date);
+                return;
+            }
+            document.getElementById('daily-payments-section').style.display = 'block'; // Mostra la sezione dei pagamenti giornalieri
+            document.getElementById('selected-date').textContent = parsedDate.toLocaleDateString('it-IT'); // Formatta la data in italiano e la visualizza
+            const dailyPaymentsListDiv = document.getElementById('daily-payments-list'); // Recupera il contenitore per la lista dei pagamenti giornalieri
+            dailyPaymentsListDiv.innerHTML = ''; // Pulisce il contenuto precedente
+
+            const paymentsForDate = savedPayments.filter(payment => payment.date === date); // Filtra i pagamenti per la data selezionata
+
+            if (paymentsForDate.length === 0) {
+                dailyPaymentsListDiv.innerHTML = '<p>Nessun pagamento per questa data.</p>'; // Se non ci sono pagamenti, mostra un messaggio
                 return;
             }
 
-            // Group payments by month and year
-            const paymentsByMonth = {};
-            savedPayments.forEach((payment, index) => { // Added index here
-                const date = new Date(payment.date);
-                const monthYear = date.toLocaleString('en-US', { year: 'numeric', month: 'long' });
-                if (!paymentsByMonth[monthYear]) {
-                    paymentsByMonth[monthYear] = [];
+            paymentsForDate.forEach((payment, index) => {
+                const paymentItem = document.createElement('div'); // Crea un elemento div per ogni pagamento
+                paymentItem.className = 'daily-payment-item'; // Imposta la classe CSS
+                paymentItem.dataset.paymentIndex = index; // Memorizza l'indice del pagamento nei dati dell'elemento
+
+                const detailsDiv = document.createElement('div');  // Crea un div per i dettagli del pagamento
+                detailsDiv.className = 'payment-details'; // Imposta la classe CSS
+                detailsDiv.innerHTML = `
+                    Pagamento ${payment.amount >= 0 ? 'al Centro' : 'al Terapista'}: €${Math.abs(payment.amount).toFixed(2)}
+                `; // Imposta il testo con i dettagli del pagamento
+                if (payment.note) {
+                    detailsDiv.innerHTML += `<div class="payment-note">Nota: ${payment.note}</div>`; // Aggiunge la nota, se presente
                 }
-                paymentsByMonth[monthYear].push({payment: payment, index: index}); // Store both payment and index
+                paymentItem.appendChild(detailsDiv); // Aggiunge i dettagli al div del pagamento
+
+                const actionsDiv = document.createElement('div'); // Crea un div per le azioni (modifica/elimina)
+                actionsDiv.className = 'payment-actions'; // Imposta la classe CSS
+
+                let noteButton = document.createElement('button'); // Crea il pulsante per aggiungere/modificare la nota
+                noteButton.textContent = payment.note ? 'Modifica Nota' : 'Aggiungi Nota'; // Imposta il testo del pulsante
+                noteButton.onclick = () => handleNoteForPayment(index, payment.note); // Associa la funzione handleNoteForPayment al click
+                actionsDiv.appendChild(noteButton); // Aggiunge il pulsante al div delle azioni
+
+                let deleteButton = document.createElement('button'); // Crea il pulsante per eliminare il pagamento
+                deleteButton.textContent = 'Elimina'; // Imposta il testo del pulsante
+                deleteButton.className = 'delete-button'; // Imposta la classe CSS per il pulsante di eliminazione
+                deleteButton.onclick = () => deletePayment(index, date); // Associa la funzione deletePayment al click
+                actionsDiv.appendChild(deleteButton); // Aggiunge il pulsante al div delle azioni
+
+                paymentItem.appendChild(actionsDiv); // Aggiunge il div delle azioni al div del pagamento
+                dailyPaymentsListDiv.appendChild(paymentItem); // Aggiunge il div del pagamento alla lista
             });
+        }
 
-            // Display payments month by month
-            for (const monthYear in paymentsByMonth) {
-                if (paymentsByMonth.hasOwnProperty(monthYear)) {
-                    const monthPayments = paymentsByMonth[monthYear];
-                    historyListDiv.innerHTML += `<div class="history-month">${monthYear}</div>`;
-                    monthPayments.forEach(item => { // Now item is {payment: payment, index: index}
-                        const payment = item.payment;
-                        const index = item.index;
-                        historyListDiv.innerHTML += `
-                            <div class="history-payment">
-                                <div>
-                                    • ${payment.date}:
-                                    ${payment.amount >= 0 ? 'Payment to Center' : 'Payment to Therapist'}:
-                                    €${Math.abs(payment.amount).toFixed(2)}
-                                </div>
-                                <div class="payment-actions-history">
-                                    <button class="delete-button" onclick="deletePaymentFromHistory(${index})">Delete</button>
-                                </div>
-                            </div>`;
-                    });
-                }
+        // Funzione per eliminare un pagamento
+        function deletePayment(paymentIndex, date) {
+            if (confirm('Sei sicuro di voler eliminare questo pagamento?')) {
+                savedPayments.splice(paymentIndex, 1); // Rimuove il pagamento dall'array
+                localStorage.setItem('m2m_payments', JSON.stringify(savedPayments)); // Salva l'array aggiornato nel localStorage
+                showDailyPayments(date); // Aggiorna la visualizzazione dei pagamenti giornalieri
+                generateCalendar(currentCalendarMonth, currentCalendarYear); // Aggiorna il calendario
             }
         }
 
-        function deletePaymentFromHistory(paymentIndex) {
-            if (confirm('Are you sure you want to delete this payment?')) {
-                savedPayments.splice(paymentIndex, 1);
-                localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
-                displayPaymentHistory(); // Refresh history display
+        // Funzione per gestire l'aggiunta o la modifica di una nota a un pagamento
+        function handleNoteForPayment(paymentIndex, existingNote) {
+            const dailyPaymentItem = document.querySelector(`.daily-payment-item[data-payment-index="${paymentIndex}"]`); // Recupera l'elemento del pagamento
+            let noteArea = dailyPaymentItem.querySelector('.note-input-area'); // Cerca l'area di input della nota
+
+            if (noteArea) { // Se l'area della nota esiste già, la rimuove (toggle)
+                dailyPaymentItem.removeChild(noteArea);
+            } else { // Altrimenti, crea l'area della nota
+                noteArea = document.createElement('div');
+                noteArea.className = 'note-input-area'; // Imposta la classe CSS
+                let textarea = document.createElement('textarea'); // Crea l'area di testo per la nota
+                textarea.placeholder = 'Inserisci nota...'; // Imposta il placeholder
+                textarea.value = existingNote || ''; // Imposta il valore (se esiste una nota precedente)
+                noteArea.appendChild(textarea); // Aggiunge l'area di testo al div della nota
+
+                let saveNoteButton = document.createElement('button'); // Crea il pulsante "Salva Nota"
+                saveNoteButton.textContent = 'Salva Nota'; // Imposta il testo
+                saveNoteButton.onclick = () => saveNote(paymentIndex, textarea.value, dailyPaymentItem); // Associa la funzione saveNote al click
+                noteArea.appendChild(saveNoteButton); // Aggiunge il pulsante al div della nota
+
+                let cancelButton = document.createElement('button'); // Crea il pulsante "Annulla"
+                cancelButton.textContent = 'Annulla'; // Imposta il testo
+                cancelButton.onclick = () => dailyPaymentItem.removeChild(noteArea); // Associa la rimozione dell'area della nota al click
+                noteArea.appendChild(cancelButton); // Aggiunge il pulsante al div della nota
+
+                dailyPaymentItem.appendChild(noteArea); // Aggiunge il div della nota all'elemento del pagamento
             }
         }
 
+        // Funzione per salvare la nota di un pagamento
+        function saveNote(paymentIndex, noteText, dailyPaymentItem) {
+            // Trova l'oggetto pagamento corretto nell'array savedPayments
+            const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
 
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('keypress', e => { if(e.key === 'Enter') calculatePayment() });
+            if (paymentToUpdate) {
+                paymentToUpdate.note = noteText; // Aggiorna la nota nell'oggetto pagamento
+                localStorage.setItem('m2m_payments', JSON.stringify(savedPayments)); // Salva l'array aggiornato nel localStorage
+                dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area')); // Rimuove l'area di input della nota
+                showDailyPayments(paymentToUpdate.date); // Aggiorna la visualizzazione dei pagamenti giornalieri per mostrare la nota
+            } else {
+                console.error("Pagamento non trovato all'indice:", paymentIndex); // Gestione dell'errore se il pagamento non viene trovato
+            }
+        }
+
+        // Event listener per il pulsante "Mese Precedente"
+        document.getElementById('prev-month-btn').addEventListener('click', () => {
+            currentCalendarMonth--; // Decrementa il mese
+            if (currentCalendarMonth < 0) { // Se il mese diventa negativo, passa all'anno precedente
+                currentCalendarMonth = 11;
+                currentCalendarYear--;
+            }
+            generateCalendar(currentCalendarMonth, currentCalendarYear); // Rigenera il calendario
+            document.getElementById('daily-payments-section').style.display = 'none'; // Nasconde la sezione dei pagamenti giornalieri
         });
 
+        // Event listener per il pulsante "Mese Successivo"
+        document.getElementById('next-month-btn').addEventListener('click', () => {
+            currentCalendarMonth++; // Incrementa il mese
+            if (currentCalendarMonth > 11) { // Se il mese supera 11, passa all'anno successivo
+                currentCalendarMonth = 0;
+                currentCalendarYear++;
+            }
+            generateCalendar(currentCalendarMonth, currentCalendarYear); // Rigenera il calendario
+            document.getElementById('daily-payments-section').style.display = 'none'; // Nasconde la sezione dei pagamenti giornalieri
+        });
+
+        // Event listener per la pressione del tasto "Invio" nei campi di input
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', e => {
+                if (e.key === 'Enter') {
+                    calculatePayment(); // Esegue il calcolo del pagamento
+                }
+            });
+        });
+
+        // Registrazione del Service Worker (per la funzionalità PWA)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js');
+                navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                })
+                .catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
             });
         }
     </script>
 </body>
 </html>
+
