@@ -655,6 +655,7 @@
         function generateCalendar(month, year) {
             const calendarContainer = document.getElementById('calendar-container');
             calendarContainer.innerHTML = ''; // Clear previous calendar
+            console.log(`Generating calendar for month: ${month + 1}, year: ${year}`); // Log month and year
 
             const firstDayOfMonth = new Date(year, month, 1);
             const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -694,9 +695,10 @@
                         dayNumber.textContent = date;
                         cell.appendChild(dayNumber);
 
-                        // Corrected Date Construction
-                        const currentDate = new Date(year, month, date);
+                        // Date Object Creation - Setting time to midnight
+                        const currentDate = new Date(year, month, date, 0, 0, 0, 0);
                         const currentDateString = currentDate.toISOString().split('T')[0];
+                        console.log(`Calendar Day: ${date}, currentDateString: ${currentDateString}`); // Log each day's date string
 
                         if (savedPayments.some(p => p.date === currentDateString)) {
                             cell.classList.add('has-payment');
@@ -717,9 +719,11 @@
 
 
         function showDailyPayments(date) {
-            console.log("showDailyPayments received date:", date); // Debugging log
+            console.log("showDailyPayments received date string:", date); // Debugging log - Input date string
+            const parsedDate = new Date(date);
+            console.log("showDailyPayments parsed Date object:", parsedDate); // Debugging log - Date object
             document.getElementById('daily-payments-section').style.display = 'block';
-            document.getElementById('selected-date').textContent = new Date(date).toLocaleDateString();
+            document.getElementById('selected-date').textContent = parsedDate.toLocaleDateString();
             const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
             dailyPaymentsListDiv.innerHTML = ''; // Clear previous daily payments
 
