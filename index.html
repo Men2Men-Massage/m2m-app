@@ -340,7 +340,7 @@
             document.getElementById('user-name').textContent = `Hello ${userName}`;
             document.getElementById('user-name').style.display = 'block';
             document.querySelector('.container').style.display = 'block';
-            // showInstallBanners(); // Moved to be called earlier
+            // showInstallBanners(); // No longer calling it here
         }
 
         function showInstallBanners() {
@@ -349,6 +349,15 @@
                 e.preventDefault();
                 deferredPrompt = e;
                 document.getElementById('android-banner').style.display = 'flex';
+
+                // Immediately show the install prompt when the event is captured.
+                // Note: Browser behavior may vary; this is an attempt to show it aggressively.
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    // We don't need to wait for userChoice here if we want to show it immediately.
+                    // The user will still have to accept or decline the install.
+                    deferredPrompt = null; // Consume the prompt, as per best practice after prompting.
+                }
             });
 
             document.getElementById('install-button').addEventListener('click', async () => {
