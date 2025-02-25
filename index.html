@@ -37,13 +37,13 @@
 
         #auth-box, #history-box {
             background: white;
-            padding: 30px;
+            padding: 20px; /* Reduced padding for history box */
             border-radius: 10px;
             text-align: center;
             width: 90%;
             max-width: 400px;
-            overflow-y: auto; /* Enable scroll if content is long */
-            max-height: 80%; /* Limit height to 80% of viewport */
+            overflow-y: auto;
+            max-height: 80%;
         }
 
         #auth-box input {
@@ -263,23 +263,72 @@
             color: #666;
         }
 
-        /* Style for history section */
-        #history-payments-list {
-            text-align: left;
+        /* Calendar styles */
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
-
-        .history-month {
-            margin-top: 20px;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 5px;
+        .calendar th, .calendar td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .calendar th {
+            background-color: #f0f0f0;
+        }
+        .calendar td {
+            cursor: pointer;
+        }
+        .calendar td.has-payment {
+            background-color: #e8f5e9;
+        }
+        .calendar td.today {
             font-weight: bold;
-            font-size: 1.2em;
+        }
+        .calendar .day-number {
+            padding-bottom: 5px;
         }
 
-        .history-payment {
-            margin: 5px 0;
-            font-size: 1em;
+        #daily-payments-section {
+            text-align: left;
+            margin-top: 20px;
         }
+        .daily-payment-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .payment-details {
+            flex-grow: 1;
+        }
+        .payment-actions button {
+            margin-left: 10px;
+            padding: 6px 10px;
+            font-size: 14px;
+        }
+        .payment-note {
+            margin-top: 5px;
+            font-style: italic;
+            color: #777;
+        }
+        .note-input-area {
+            margin-top: 10px;
+        }
+        .note-input-area textarea {
+            width: calc(100% - 16px); /* Adjust width for padding */
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+        }
+
+
     </style>
 </head>
 <body>
@@ -300,10 +349,17 @@
     <div id="history-overlay" style="display: none;">
         <div id="history-box">
             <h2>Payment History</h2>
-            <div id="history-payments-list">
-                <!-- Payments will be listed here -->
+            <button onclick="showCalculator()" style="float: right;">Back to Calculator</button>
+            <div id="calendar-container">
+                <!-- Calendar will be generated here -->
             </div>
-            <button onclick="logout()">Logout</button>
+            <div id="daily-payments-section" style="display: none;">
+                <h3>Payments for <span id="selected-date"></span></h3>
+                <div id="daily-payments-list">
+                    <!-- Daily payments will be listed here -->
+                </div>
+            </div>
+            <button onclick="logout()" style="margin-top: 20px;">Logout</button>
         </div>
     </div>
 
@@ -362,6 +418,8 @@
 
     <script>
         const AUTH_CODE = "1228";
+        let currentPaymentAmount = 0; // Variable to store the calculated payment amount
+        let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
 
         // Funzione di logout
         function logout() {
@@ -369,7 +427,7 @@
             localStorage.removeItem('m2m_name');
             document.querySelector('.container').style.display = 'none';
             document.getElementById('user-name').style.display = 'none';
-            document.getElementById('history-overlay').style.display = 'none'; // Hide history overlay if it's open
+            document.getElementById('history-overlay').style.display = 'none';
             document.getElementById('auth-overlay').style.display = 'flex';
             document.getElementById('access-code').value = '';
             document.getElementById('user-name-input').value = '';
@@ -448,14 +506,13 @@
             document.getElementById('auth-overlay').style.display = 'flex';
         }
 
-        let currentPaymentAmount = 0; // Variable to store the calculated payment amount
 
         function calculatePayment() {
             const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
             const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
             const toCenter = regular * 0.4;
             const toTherapist = giftcard * 0.6;
-            currentPaymentAmount = toCenter - toTherapist; // Store the calculated amount
+            currentPaymentAmount = toCenter - toTherapist;
             const netAmount = currentPaymentAmount;
 
             const resultDiv = document.getElementById('result');
@@ -473,76 +530,193 @@
 
             resultDiv.className = netAmount >= 0 ? 'payment-due' : 'payment-receivable';
             resultDiv.style.display = 'block';
-            document.getElementById('save-payment-button').style.display = 'inline-block'; // Show Save Payment button
+            document.getElementById('save-payment-button').style.display = 'inline-block';
         }
 
         function resetAll() {
             document.getElementById('regular-payments').value = '';
             document.getElementById('giftcard-payments').value = '';
             document.getElementById('result').style.display = 'none';
-            document.getElementById('save-payment-button').style.display = 'none'; // Hide Save Payment button on reset
+            document.getElementById('save-payment-button').style.display = 'none';
         }
 
         function savePayment() {
-            const paymentDate = new Date().toLocaleDateString();
+            const paymentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format for easier date handling
             const paymentData = {
                 date: paymentDate,
-                amount: currentPaymentAmount
+                amount: currentPaymentAmount,
+                note: '' // Initial note is empty
             };
 
-            let savedPayments = localStorage.getItem('m2m_payments');
-            savedPayments = savedPayments ? JSON.parse(savedPayments) : [];
             savedPayments.push(paymentData);
             localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
 
             alert(`Payment of €${Math.abs(currentPaymentAmount).toFixed(2)} ${currentPaymentAmount >= 0 ? 'to Center' : 'to Therapist'} saved for ${paymentDate}`);
-            document.getElementById('save-payment-button').style.display = 'none'; // Hide Save Payment button after saving
+            document.getElementById('save-payment-button').style.display = 'none';
         }
 
         function showPaymentHistory() {
             document.querySelector('.container').style.display = 'none';
             document.getElementById('history-overlay').style.display = 'flex';
-            displayPaymentHistory();
+            document.getElementById('daily-payments-section').style.display = 'none'; // Hide daily payments initially
+            generateCalendar();
         }
 
-        function displayPaymentHistory() {
-            const historyListDiv = document.getElementById('history-payments-list');
-            historyListDiv.innerHTML = ''; // Clear previous history
+        function showCalculator() {
+            document.querySelector('.container').style.display = 'block';
+            document.getElementById('history-overlay').style.display = 'none';
+        }
 
-            let savedPayments = localStorage.getItem('m2m_payments');
-            savedPayments = savedPayments ? JSON.parse(savedPayments) : [];
 
-            if (savedPayments.length === 0) {
-                historyListDiv.innerHTML = '<p>No payments saved yet.</p>';
+        function generateCalendar() {
+            const calendarContainer = document.getElementById('calendar-container');
+            calendarContainer.innerHTML = ''; // Clear previous calendar
+
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+
+            const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const startingDayOfWeek = firstDayOfMonth.getDay(); // 0 for Sunday, 1 for Monday, etc.
+
+            const calendarTable = document.createElement('table');
+            calendarTable.className = 'calendar';
+            let thead = calendarTable.createTHead();
+            let headerRow = thead.insertRow();
+            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            daysOfWeek.forEach(day => {
+                let th = document.createElement('th');
+                th.textContent = day;
+                headerRow.appendChild(th);
+            });
+
+            let tbody = calendarTable.createTBody();
+            let date = 1;
+
+            for (let i = 0; i < 6; i++) { // 6 weeks is usually enough to display any month
+                let row = tbody.insertRow();
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < startingDayOfWeek) {
+                        let cell = row.insertCell();
+                        cell.textContent = ''; // Empty cells for days before the 1st
+                    } else if (date > daysInMonth) {
+                        break; // Month is over
+                    } else {
+                        let cell = row.insertCell();
+                        cell.classList.add('day');
+                        let dayNumber = document.createElement('div');
+                        dayNumber.classList.add('day-number');
+                        dayNumber.textContent = date;
+                        cell.appendChild(dayNumber);
+
+                        const currentDate = new Date(currentYear, currentMonth, date).toISOString().split('T')[0];
+                        if (savedPayments.some(p => p.date === currentDate)) {
+                            cell.classList.add('has-payment');
+                        }
+                        if (currentDate === now.toISOString().split('T')[0]) {
+                            cell.classList.add('today');
+                        }
+
+                        cell.addEventListener('click', () => showDailyPayments(currentDate));
+                        date++;
+                    }
+                }
+            }
+            calendarContainer.appendChild(calendarTable);
+        }
+
+
+        function showDailyPayments(date) {
+            document.getElementById('daily-payments-section').style.display = 'block';
+            document.getElementById('selected-date').textContent = new Date(date).toLocaleDateString();
+            const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
+            dailyPaymentsListDiv.innerHTML = ''; // Clear previous daily payments
+
+            const paymentsForDate = savedPayments.filter(payment => payment.date === date);
+
+            if (paymentsForDate.length === 0) {
+                dailyPaymentsListDiv.innerHTML = '<p>No payments for this date.</p>';
                 return;
             }
 
-            // Group payments by month and year
-            const paymentsByMonth = {};
-            savedPayments.forEach(payment => {
-                const date = new Date(payment.date);
-                const monthYear = date.toLocaleString('en-US', { year: 'numeric', month: 'long' }); // e.g., "July 2024"
-                if (!paymentsByMonth[monthYear]) {
-                    paymentsByMonth[monthYear] = [];
-                }
-                paymentsByMonth[monthYear].push(payment);
-            });
+            paymentsForDate.forEach((payment, index) => {
+                const paymentItem = document.createElement('div');
+                paymentItem.className = 'daily-payment-item';
+                paymentItem.dataset.paymentIndex = index; // Store index for deletion and note editing
 
-            // Display payments month by month
-            for (const monthYear in paymentsByMonth) {
-                if (paymentsByMonth.hasOwnProperty(monthYear)) {
-                    const monthPayments = paymentsByMonth[monthYear];
-                    historyListDiv.innerHTML += `<div class="history-month">${monthYear}</div>`;
-                    monthPayments.forEach(payment => {
-                        historyListDiv.innerHTML += `
-                            <div class="history-payment">
-                                • ${payment.date}: 
-                                ${payment.amount >= 0 ? 'Payment to Center' : 'Payment to Therapist'}: 
-                                €${Math.abs(payment.amount).toFixed(2)}
-                            </div>`;
-                    });
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'payment-details';
+                detailsDiv.innerHTML = `
+                    Payment ${payment.amount >= 0 ? 'to Center' : 'to Therapist'}: €${Math.abs(payment.amount).toFixed(2)}
+                `;
+                if (payment.note) {
+                    detailsDiv.innerHTML += `<div class="payment-note">Note: ${payment.note}</div>`;
                 }
+                paymentItem.appendChild(detailsDiv);
+
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'payment-actions';
+
+                let noteButton = document.createElement('button');
+                noteButton.textContent = payment.note ? 'Edit Note' : 'Add Note';
+                noteButton.onclick = () => handleNoteForPayment(index, payment.note);
+                actionsDiv.appendChild(noteButton);
+
+                let deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deletePayment(index, date);
+                actionsDiv.appendChild(deleteButton);
+
+                paymentItem.appendChild(actionsDiv);
+                dailyPaymentsListDiv.appendChild(paymentItem);
+            });
+        }
+
+
+        function deletePayment(paymentIndex, date) {
+            if (confirm('Are you sure you want to delete this payment?')) {
+                savedPayments.splice(paymentIndex, 1);
+                localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
+                showDailyPayments(date); // Refresh daily payments display
+                generateCalendar(); // Refresh calendar to update payment indicators
             }
+        }
+
+        function handleNoteForPayment(paymentIndex, existingNote) {
+            const dailyPaymentItem = document.querySelector(`.daily-payment-item[data-payment-index="${paymentIndex}"]`);
+            let noteArea = dailyPaymentItem.querySelector('.note-input-area');
+
+            if (noteArea) { // If note area is already open, just close it
+                dailyPaymentItem.removeChild(noteArea);
+            } else {
+                noteArea = document.createElement('div');
+                noteArea.className = 'note-input-area';
+                let textarea = document.createElement('textarea');
+                textarea.placeholder = 'Enter note...';
+                textarea.value = existingNote || '';
+                noteArea.appendChild(textarea);
+
+                let saveNoteButton = document.createElement('button');
+                saveNoteButton.textContent = 'Save Note';
+                saveNoteButton.onclick = () => saveNote(paymentIndex, textarea.value, dailyPaymentItem);
+                noteArea.appendChild(saveNoteButton);
+
+                let cancelButton = document.createElement('button');
+                cancelButton.textContent = 'Cancel';
+                cancelButton.onclick = () => dailyPaymentItem.removeChild(noteArea);
+                noteArea.appendChild(cancelButton);
+
+                dailyPaymentItem.appendChild(noteArea);
+            }
+        }
+
+        function saveNote(paymentIndex, noteText, dailyPaymentItem) {
+            savedPayments[paymentIndex].note = noteText;
+            localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
+            dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area')); // Remove note input area
+            showDailyPayments(savedPayments[paymentIndex].date); // Refresh daily payments to show note
+            generateCalendar(); // Refresh calendar might be needed to reflect changes (if note status affects calendar display in future)
         }
 
 
