@@ -207,7 +207,6 @@
                     let dayNumber = document.createElement('div');
                     dayNumber.classList.add('day-number');
                     dayNumber.textContent = date;
-                    cell.appendChild(dayNumber);
 
                     const currentDate = new Date(year, month, date, 0, 0, 0, 0);
                     const currentDateString = currentDate.toISOString().split('T')[0];
@@ -225,11 +224,9 @@
 
                     (function(currentDateStringForEvent) {
                         cell.addEventListener('click', () => {
-                            console.log("Calendar cell clicked, dateString:", currentDateStringForEvent); // NUOVA LINEA
                             showDailyPayments(currentDateStringForEvent);
                         });
                     })(currentDateString);
-
                     date++;
                 }
             }
@@ -238,7 +235,6 @@
     }
             // Function to display payments for a specific day
     function showDailyPayments(dateString) {
-        console.log("showDailyPayments: dateString received:", dateString); // NUOVA LINEA
         document.getElementById('daily-payments-section').style.display = 'block';
         document.getElementById('selected-date').textContent = dateString;
         const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
