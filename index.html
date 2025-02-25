@@ -526,6 +526,12 @@
     let currentCalendarMonth = new Date().getMonth();
     let currentCalendarYear = new Date().getFullYear();
 
+    // NEW: Date formatting function
+    function formatDate(dateString) {
+        const [year, month, day] = dateString.split('-');
+        return `${year}-${month}-${day}`; // Consistent YYYY-MM-DD format
+    }
+
     // Logout function
     function logout() {
         localStorage.removeItem('m2m_access');
@@ -698,13 +704,13 @@
         const startingDayOfWeek = firstDayOfMonth.getDay();
 
         const monthYearDisplay = document.getElementById('calendar-month-year');
-        monthYearDisplay.textContent = firstDayOfMonth.toLocaleString('en-US', { month: 'long', year: 'numeric' }); // English
+        monthYearDisplay.textContent = firstDayOfMonth.toLocaleString('en-US', { month: 'long', year: 'numeric' });
 
         const calendarTable = document.createElement('table');
         calendarTable.className = 'calendar';
         let thead = calendarTable.createTHead();
         let headerRow = thead.insertRow();
-        const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // English
+        const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         daysOfWeek.forEach(day => {
             let th = document.createElement('th');
             th.textContent = day;
@@ -759,9 +765,9 @@
     }
             // Function to display payments for a specific day
     function showDailyPayments(dateString) {
-        // Use the dateString directly, no need to create a new Date object for display
         document.getElementById('daily-payments-section').style.display = 'block';
-        document.getElementById('selected-date').textContent = dateString; // Display the date string directly
+        // Use the formatDate function!  This is the KEY FIX.
+        document.getElementById('selected-date').textContent = formatDate(dateString);
         const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
         dailyPaymentsListDiv.innerHTML = '';
 
@@ -798,7 +804,7 @@
             let deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
             deleteButton.className = 'delete-button';
-            deleteButton.onclick = () => deletePayment(index, dateString); // Pass dateString
+            deleteButton.onclick = () => deletePayment(index, dateString);
             actionsDiv.appendChild(deleteButton);
 
             paymentItem.appendChild(actionsDiv);
@@ -806,12 +812,13 @@
         });
     }
 
+
     // Function to delete a payment
-    function deletePayment(paymentIndex, dateString) { // Receives dateString
+    function deletePayment(paymentIndex, dateString) {
         if (confirm('Are you sure you want to delete this payment?')) {
             savedPayments.splice(paymentIndex, 1);
             localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
-            showDailyPayments(dateString); // Pass dateString
+            showDailyPayments(dateString);
             generateCalendar(currentCalendarMonth, currentCalendarYear);
         }
     }
