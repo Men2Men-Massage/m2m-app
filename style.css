@@ -1,0 +1,408 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 60px auto 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    position: relative;
+}
+
+#auth-overlay, #history-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+#auth-box, #history-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    width: 90%;
+    max-width: 450px;
+    overflow-y: auto;
+    max-height: 85%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+#auth-box input {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    font-size: 16px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+#user-name {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 24px;
+    display: none;
+    z-index: 1000;
+    font-size: 16px;
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+#user-name:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-top: 60px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.input-section {
+    margin: 20px 0;
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.input-group {
+    margin: 18px 0;
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+input {
+    padding: 12px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 280px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin: 6px 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+.button-container {
+    text-align: center;
+}
+
+button {
+    padding: 12px 28px;
+    font-size: 16px;
+    background-color: #376FE9;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 8px;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 7px rgba(0,0,0,0.2);
+}
+
+button#reset-button {
+    background-color: #f44336;
+    padding: 8px 15px;
+    font-size: 14px;
+    margin: 5px;
+}
+
+button#reset-button:hover {
+    background-color: #d32f2f;
+}
+
+#result {
+    margin-top: 30px;
+    padding: 25px;
+    border-radius: 10px;
+    display: none;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.1);
+}
+
+#result button#save-payment-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 18px;
+    transition: background-color 0.3s;
+}
+
+#result button#save-payment-button:hover {
+    background-color: #45a049;
+}
+
+.payment-due {
+    background-color: #ffebee;
+    border: 2px solid #ff5252;
+}
+
+.payment-receivable {
+    background-color: #e8f5e9;
+    border: 2px solid #4CAF50;
+}
+
+.result-line {
+    margin: 12px 0;
+    font-size: 18px;
+    color: #444;
+}
+
+.total-amount {
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #2e7d32;
+}
+
+.instructions {
+    margin: 20px 0;
+    padding: 18px;
+    background-color: #fffde7;
+    border-left: 5px solid #ffca28;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+}
+
+.highlight {
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+.install-banner {
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    background-color: #f0f4c3;
+    border: 1px solid #e0e0b0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+#android-banner {
+    background-color: #e8f5e9;
+    border: 2px solid #4CAF50;
+}
+
+#ios-banner {
+    background-color: #fff3e0;
+    border: 2px solid #ff9800;
+}
+
+.install-banner button {
+    background: none;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#android-banner button {
+    background-color: #376FE9;
+    color: white;
+}
+
+#ios-banner button {
+    background-color: #ff9800;
+    color: white;
+}
+
+.close-banner {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #666;
+}
+
+/* Calendar styles - Modernized */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.calendar-header button {
+    background-color: transparent;
+    color: #555;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.calendar-header button:hover {
+    background-color: #eee;
+}
+
+.calendar-month-year {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #333;
+}
+
+.calendar {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.calendar th, .calendar td {
+    padding: 10px;
+    text-align: center;
+    border: none;
+}
+
+.calendar th {
+    background-color: #f0f0f0;
+    font-weight: 500;
+    color: #555;
+}
+
+.calendar td {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.calendar td:hover {
+    background-color: #f9f9f9;
+}
+
+.calendar td.has-payment {
+    background-color: #e8f5e9;
+}
+
+.calendar td.today {
+    font-weight: bold;
+    background-color: #e0f7fa;
+}
+
+.calendar .day-number {
+    padding-bottom: 6px;
+    font-size: 1em;
+    color: #333;
+}
+
+#daily-payments-section {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.daily-payment-item {
+    margin-bottom: 12px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.payment-details {
+    flex-grow: 1;
+}
+
+.payment-actions button {
+    margin-left: 10px;
+    padding: 7px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ddd;
+    color: #444;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.payment-actions button:hover {
+    background-color: #ccc;
+    color: #333;
+}
+
+.payment-actions button.delete-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.payment-actions button.delete-button:hover {
+    background-color: #d32f2f;
+}
+
+.payment-note {
+    margin-top: 8px;
+    font-style: italic;
+    color: #777;
+}
+
+.note-input-area {
+    margin-top: 12px;
+}
+
+.note-input-area textarea {
+    width: calc(100% - 16px);
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    margin-bottom: 8px;
+}
+
+.note-input-area button {
+    margin: 0 5px;
+}
