@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M2M Payment Calculator</title>
-    
+
     <!-- Meta tags per PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Payment Calc">
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
     <link rel="manifest" href="/manifest.json">
-    
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,10 +45,14 @@
         }
 
         #auth-box input {
-            width: 100%;
+            width: 100%; /* Take full width of auth-box */
             margin: 10px 0;
             padding: 12px;
             font-size: 16px;
+            display: block; /* Ensure block display for margin auto to work */
+            margin-left: auto; /* Center horizontally */
+            margin-right: auto; /* Center horizontally */
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
         }
 
         #user-name {
@@ -95,7 +99,7 @@
 
         .input-group {
             margin: 15px 0;
-            text-align: center;
+            text-align: center; /* Center the content of input-group */
         }
 
         label {
@@ -108,10 +112,15 @@
         input {
             padding: 12px;
             font-size: 16px;
-            width: 250px;
+            width: 100%; /* Take full width of input-group */
+            max-width: 250px; /* Limit max width */
             border: 1px solid #ddd;
             border-radius: 5px;
             margin: 5px 0;
+            display: block; /* Ensure block display for margin auto to work */
+            margin-left: auto; /* Center horizontally */
+            margin-right: auto; /* Center horizontally */
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
         }
 
         button {
@@ -239,7 +248,7 @@
     <div class="container" style="display: none;">
         <div id="ios-banner" class="install-banner" style="display: none;">
             <div>
-                📲 Install this app: Tap <img src="icons/share-icon.png" style="height:18px; vertical-align:middle"> 
+                📲 Install this app: Tap <img src="icons/share-icon.png" style="height:18px; vertical-align:middle">
                 then "Add to Home Screen"
             </div>
             <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
@@ -252,7 +261,7 @@
         </div>
 
         <h1>M2M Payment Calculator</h1>
-        
+
         <div class="instructions">
             <p>How to use:</p>
             <ol>
@@ -305,7 +314,7 @@
         function checkAuth() {
             const savedCode = localStorage.getItem('m2m_access');
             const userName = localStorage.getItem('m2m_name');
-            
+
             if(savedCode === AUTH_CODE && userName) {
                 showApp(userName);
                 return true;
@@ -386,8 +395,8 @@
                 <div class="result-line">• Center owes 60% of gift cards: €${toTherapist.toFixed(2)}</div>
                 <hr>
                 <div class="total-amount ${netAmount >= 0 ? 'highlight' : ''}">
-                    ${netAmount >= 0 ? 
-                        `Payment to Center: €${netAmount.toFixed(2)}` : 
+                    ${netAmount >= 0 ?
+                        `Payment to Center: €${netAmount.toFixed(2)}` :
                         `Payment to Therapist: €${Math.abs(netAmount).toFixed(2)}`}
                 </div>
             `;
