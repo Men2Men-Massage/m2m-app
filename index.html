@@ -22,7 +22,7 @@
             position: relative;
         }
 
-        #auth-overlay {
+        #auth-overlay, #history-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -35,13 +35,15 @@
             z-index: 1000;
         }
 
-        #auth-box {
+        #auth-box, #history-box {
             background: white;
             padding: 30px;
             border-radius: 10px;
             text-align: center;
             width: 90%;
             max-width: 400px;
+            overflow-y: auto; /* Enable scroll if content is long */
+            max-height: 80%; /* Limit height to 80% of viewport */
         }
 
         #auth-box input {
@@ -260,6 +262,24 @@
             font-weight: bold;
             color: #666;
         }
+
+        /* Style for history section */
+        #history-payments-list {
+            text-align: left;
+        }
+
+        .history-month {
+            margin-top: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .history-payment {
+            margin: 5px 0;
+            font-size: 1em;
+        }
     </style>
 </head>
 <body>
@@ -277,7 +297,18 @@
         </div>
     </div>
 
-    <div id="user-name" onclick="logout()"></div>
+    <div id="history-overlay" style="display: none;">
+        <div id="history-box">
+            <h2>Payment History</h2>
+            <div id="history-payments-list">
+                <!-- Payments will be listed here -->
+            </div>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+
+    <div id="user-name" onclick="showPaymentHistory()"></div>
 
     <div class="container" style="display: none;">
         <div id="ios-banner" class="install-banner" style="display: none;">
@@ -334,17 +365,16 @@
 
         // Funzione di logout
         function logout() {
-            if(confirm("Are you sure you want to log out?")) {
-                localStorage.removeItem('m2m_access');
-                localStorage.removeItem('m2m_name');
-                document.querySelector('.container').style.display = 'none';
-                document.getElementById('user-name').style.display = 'none';
-                document.getElementById('auth-overlay').style.display = 'flex';
-                document.getElementById('access-code').value = '';
-                document.getElementById('user-name-input').value = '';
-                document.getElementById('code-section').style.display = 'block';
-                document.getElementById('name-section').style.display = 'none';
-            }
+            localStorage.removeItem('m2m_access');
+            localStorage.removeItem('m2m_name');
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('user-name').style.display = 'none';
+            document.getElementById('history-overlay').style.display = 'none'; // Hide history overlay if it's open
+            document.getElementById('auth-overlay').style.display = 'flex';
+            document.getElementById('access-code').value = '';
+            document.getElementById('user-name-input').value = '';
+            document.getElementById('code-section').style.display = 'block';
+            document.getElementById('name-section').style.display = 'none';
         }
 
         function checkAuth() {
@@ -467,6 +497,52 @@
 
             alert(`Payment of €${Math.abs(currentPaymentAmount).toFixed(2)} ${currentPaymentAmount >= 0 ? 'to Center' : 'to Therapist'} saved for ${paymentDate}`);
             document.getElementById('save-payment-button').style.display = 'none'; // Hide Save Payment button after saving
+        }
+
+        function showPaymentHistory() {
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('history-overlay').style.display = 'flex';
+            displayPaymentHistory();
+        }
+
+        function displayPaymentHistory() {
+            const historyListDiv = document.getElementById('history-payments-list');
+            historyListDiv.innerHTML = ''; // Clear previous history
+
+            let savedPayments = localStorage.getItem('m2m_payments');
+            savedPayments = savedPayments ? JSON.parse(savedPayments) : [];
+
+            if (savedPayments.length === 0) {
+                historyListDiv.innerHTML = '<p>No payments saved yet.</p>';
+                return;
+            }
+
+            // Group payments by month and year
+            const paymentsByMonth = {};
+            savedPayments.forEach(payment => {
+                const date = new Date(payment.date);
+                const monthYear = date.toLocaleString('en-US', { year: 'numeric', month: 'long' }); // e.g., "July 2024"
+                if (!paymentsByMonth[monthYear]) {
+                    paymentsByMonth[monthYear] = [];
+                }
+                paymentsByMonth[monthYear].push(payment);
+            });
+
+            // Display payments month by month
+            for (const monthYear in paymentsByMonth) {
+                if (paymentsByMonth.hasOwnProperty(monthYear)) {
+                    const monthPayments = paymentsByMonth[monthYear];
+                    historyListDiv.innerHTML += `<div class="history-month">${monthYear}</div>`;
+                    monthPayments.forEach(payment => {
+                        historyListDiv.innerHTML += `
+                            <div class="history-payment">
+                                • ${payment.date}: 
+                                ${payment.amount >= 0 ? 'Payment to Center' : 'Payment to Therapist'}: 
+                                €${Math.abs(payment.amount).toFixed(2)}
+                            </div>`;
+                    });
+                }
+            }
         }
 
 
