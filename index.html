@@ -247,7 +247,7 @@
 
         <div id="android-banner" class="install-banner" style="display: none;">
             <div>📲 Install this app for better experience</div>
-            <button id="install-button">Install</button>
+            <button id="install-button">Install Now</button>
             <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
         </div>
 
@@ -286,8 +286,58 @@
 
     <script>
         const AUTH_CODE = "1228";
+        let deferredPrompt;
 
-        // Funzione di logout
+        function showInstallBanners() {
+            // Gestione Android
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                showAndroidBanner();
+            });
+
+            // Mostra il banner Android dopo 2 secondi se non è già stato mostrato
+            setTimeout(() => {
+                if(window.matchMedia('(display-mode: browser)').matches) {
+                    showAndroidBanner();
+                }
+            }, 2000);
+
+            // Gestione iOS
+            const isIos = () => /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+            const isInStandaloneMode = () => ('standalone' in window.navigator) && window.navigator.standalone;
+            if (isIos() && !isInStandaloneMode()) {
+                document.getElementById('ios-banner').style.display = 'flex';
+            }
+        }
+
+        function showAndroidBanner() {
+            if(!document.getElementById('android-banner').style.display === 'flex') {
+                document.getElementById('android-banner').style.display = 'flex';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showInstallBanners();
+            
+            document.getElementById('install-button').addEventListener('click', async () => {
+                if(deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if(outcome === 'accepted') {
+                        document.getElementById('android-banner').style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                }
+            });
+
+            window.matchMedia('(display-mode: standalone)').addEventListener('change', (evt) => {
+                if(evt.matches) {
+                    document.getElementById('android-banner').style.display = 'none';
+                }
+            });
+        });
+
         function logout() {
             if(confirm("Are you sure you want to log out?")) {
                 localStorage.removeItem('m2m_access');
@@ -340,49 +390,6 @@
             document.getElementById('user-name').textContent = `Hello ${userName}`;
             document.getElementById('user-name').style.display = 'block';
             document.querySelector('.container').style.display = 'block';
-            // showInstallBanners(); // No longer calling it here
-        }
-
-        function showInstallBanners() {
-            let deferredPrompt;
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                document.getElementById('android-banner').style.display = 'flex';
-
-                // Immediately show the install prompt when the event is captured.
-                // Note: Browser behavior may vary; this is an attempt to show it aggressively.
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    // We don't need to wait for userChoice here if we want to show it immediately.
-                    // The user will still have to accept or decline the install.
-                    deferredPrompt = null; // Consume the prompt, as per best practice after prompting.
-                }
-            });
-
-            document.getElementById('install-button').addEventListener('click', async () => {
-                if(deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    if(outcome === 'accepted') {
-                        document.getElementById('android-banner').style.display = 'none';
-                    }
-                    deferredPrompt = null;
-                }
-            });
-
-            const isIos = () => /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
-            const isInStandaloneMode = () => ('standalone' in window.navigator) && window.navigator.standalone;
-            if (isIos() && !isInStandaloneMode()) {
-                document.getElementById('ios-banner').style.display = 'flex';
-            }
-        }
-
-        // Call showInstallBanners immediately after DOM is loaded
-        document.addEventListener('DOMContentLoaded', showInstallBanners);
-
-        if(!checkAuth()) {
-            document.getElementById('auth-overlay').style.display = 'flex';
         }
 
         function calculatePayment() {
@@ -422,6 +429,10 @@
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js');
             });
+        }
+
+        if(!checkAuth()) {
+            document.getElementById('auth-overlay').style.display = 'flex';
         }
     </script>
 </body>
