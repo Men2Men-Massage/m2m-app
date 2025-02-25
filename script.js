@@ -4,7 +4,7 @@
     let currentCalendarMonth = new Date().getMonth();
     let currentCalendarYear = new Date().getFullYear();
 
-    // NEW: Date formatting function
+    // Date formatting function (YYYY-MM-DD)
     function formatDate(dateString) {
         const [year, month, day] = dateString.split('-');
         return `${year}-${month}-${day}`; // Consistent YYYY-MM-DD format
@@ -144,7 +144,7 @@
     // Function to save the current payment
     function savePayment() {
         const now = new Date();
-        const paymentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
+        const paymentDate = formatDate(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`); // YYYY-MM-DD
         const paymentData = {
             date: paymentDate,
             amount: currentPaymentAmount,
@@ -172,86 +172,92 @@
         document.getElementById('history-overlay').style.display = 'none';
     }
 
-    // Function to generate the calendar
-    function generateCalendar(month, year) {
-        const calendarContainer = document.getElementById('calendar-container');
-        calendarContainer.innerHTML = '';
+    // Function to generate the calendar (Italian localization)
+   function generateCalendar(month, year) {
+    const calendarContainer = document.getElementById('calendar-container');
+    calendarContainer.innerHTML = '';
 
-        const firstDayOfMonth = new Date(year, month, 1);
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const startingDayOfWeek = firstDayOfMonth.getDay();
+    const firstDayOfMonth = new Date(year, month, 1);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const startingDayOfWeek = firstDayOfMonth.getDay(); // 0 (Sunday) to 6 (Saturday)
 
-        const monthYearDisplay = document.getElementById('calendar-month-year');
-        monthYearDisplay.textContent = firstDayOfMonth.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    const monthYearDisplay = document.getElementById('calendar-month-year');
+    // Italian month names
+    const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+        "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
+    ];
+    monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
 
-        const calendarTable = document.createElement('table');
-        calendarTable.className = 'calendar';
-        let thead = calendarTable.createTHead();
-        let headerRow = thead.insertRow();
-        const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        daysOfWeek.forEach(day => {
-            let th = document.createElement('th');
-            th.textContent = day;
-            headerRow.appendChild(th);
-        });
+    const calendarTable = document.createElement('table');
+    calendarTable.className = 'calendar';
+    let thead = calendarTable.createTHead();
+    let headerRow = thead.insertRow();
+    // Italian day names
+    const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+    daysOfWeek.forEach(day => {
+        let th = document.createElement('th');
+        th.textContent = day;
+        headerRow.appendChild(th);
+    });
 
-        let tbody = calendarTable.createTBody();
-        let date = 1;
-        let dayOfWeekCounter = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
+    let tbody = calendarTable.createTBody();
+    let date = 1;
+    // Adjust starting day for Monday (0 becomes 6, 1 stays 1, etc.)
+    let dayOfWeekCounter = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
 
-        for (let i = 0; i < 6; i++) {
-            let row = tbody.insertRow();
-            for (let j = 0; j < 7; j++) {
-                if (i === 0 && j < dayOfWeekCounter) {
-                    let cell = row.insertCell();
-                    cell.textContent = '';
-                } else if (date > daysInMonth) {
-                    break;
-                } else {
-                    let cell = row.insertCell();
-                    cell.classList.add('day');
-                    let dayNumber = document.createElement('div');
-                    dayNumber.classList.add('day-number');
-                    dayNumber.textContent = date;
-                    cell.appendChild(dayNumber);
+    for (let i = 0; i < 6; i++) {
+        let row = tbody.insertRow();
+        for (let j = 0; j < 7; j++) {
+            if (i === 0 && j < dayOfWeekCounter) {
+                let cell = row.insertCell();
+                cell.textContent = ''; // Empty cells before the first day
+            } else if (date > daysInMonth) {
+                break; // Stop if we've reached the end of the month
+            } else {
+                let cell = row.insertCell();
+                cell.classList.add('day');
+                let dayNumber = document.createElement('div');
+                dayNumber.classList.add('day-number');
+                dayNumber.textContent = date;
+                cell.appendChild(dayNumber);
 
-                    const currentDate = new Date(year, month, date, 0, 0, 0, 0);
-                    const currentDateString = currentDate.toISOString().split('T')[0];
+                // Construct YYYY-MM-DD string directly, NO TIMEZONE ISSUES
+                const currentDateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
 
-                    if (savedPayments.some(p => p.date === currentDateString)) {
-                        cell.classList.add('has-payment');
-                    }
-
-                    const today = new Date();
-                    if (currentDate.getFullYear() === today.getFullYear() &&
-                        currentDate.getMonth() === today.getMonth() &&
-                        currentDate.getDate() === today.getDate()) {
-                        cell.classList.add('today');
-                    }
-
-                    (function(currentDateStringForEvent) {
-                        cell.addEventListener('click', () => {
-                            showDailyPayments(currentDateStringForEvent);
-                        });
-                    })(currentDateString);
-
-                    date++;
+                if (savedPayments.some(p => p.date === currentDateString)) {
+                    cell.classList.add('has-payment');
                 }
+
+                const today = new Date();
+                const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                if (currentDateString === todayString) {
+                    cell.classList.add('today');
+                }
+
+
+                cell.addEventListener('click', () => {
+                    showDailyPayments(currentDateString);
+                });
+
+                date++;
             }
         }
-        calendarContainer.appendChild(calendarTable);
     }
-            // Function to display payments for a specific day
+    calendarContainer.appendChild(calendarTable);
+}
+
+
+
+    // Function to display payments for a specific day
     function showDailyPayments(dateString) {
         document.getElementById('daily-payments-section').style.display = 'block';
-        // Use the formatDate function!  This is the KEY FIX.
-        document.getElementById('selected-date').textContent = formatDate(dateString);
+        document.getElementById('selected-date').textContent = formatDate(dateString); // Use formatDate!
         const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
         dailyPaymentsListDiv.innerHTML = '';
 
         const paymentsForDate = savedPayments.filter(payment => payment.date === dateString);
 
-        if (paymentsForDate.length === 0) {
+          if (paymentsForDate.length === 0) {
             dailyPaymentsListDiv.innerHTML = '<p>No payments for this date.</p>';
             return;
         }
@@ -307,8 +313,10 @@
         let noteArea = dailyPaymentItem.querySelector('.note-input-area');
 
         if (noteArea) {
+            // If note area exists, remove it (toggle off)
             dailyPaymentItem.removeChild(noteArea);
         } else {
+            // If note area doesn't exist, create it
             noteArea = document.createElement('div');
             noteArea.className = 'note-input-area';
             let textarea = document.createElement('textarea');
@@ -338,7 +346,7 @@
             paymentToUpdate.note = noteText;
             localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
             dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area'));
-            showDailyPayments(paymentToUpdate.date);
+            showDailyPayments(paymentToUpdate.date); // Refresh to show updated note
         } else {
             console.error("Payment not found at index:", paymentIndex);
         }
