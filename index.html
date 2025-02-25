@@ -37,13 +37,14 @@
 
         #auth-box, #history-box {
             background: white;
-            padding: 20px; /* Reduced padding for history box */
-            border-radius: 10px;
+            padding: 20px;
+            border-radius: 12px; /* More rounded corners */
             text-align: center;
             width: 90%;
-            max-width: 400px;
+            max-width: 450px; /* Slightly wider box */
             overflow-y: auto;
-            max-height: 80%;
+            max-height: 85%; /* Slightly taller box */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* More pronounced shadow */
         }
 
         #auth-box input {
@@ -55,6 +56,8 @@
             margin-left: auto;
             margin-right: auto;
             box-sizing: border-box;
+            border: 1px solid #ccc; /* Lighter border */
+            border-radius: 8px; /* Rounded inputs */
         }
 
         #user-name {
@@ -64,24 +67,25 @@
             background: #4CAF50;
             color: white;
             padding: 8px 15px;
-            border-radius: 20px;
+            border-radius: 24px; /* More rounded button */
             display: none;
             z-index: 1000;
             font-size: 16px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2); /* More shadow */
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, box-shadow 0.3s; /* Transition for shadow */
         }
 
         #user-name:hover {
             background-color: #45a049;
+            box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3); /* Shadow on hover */
         }
 
         .container {
             background-color: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px; /* Rounded container */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* More shadow */
             position: relative;
             margin-top: 60px;
         }
@@ -94,19 +98,20 @@
 
         .input-section {
             margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #eee;
-            border-radius: 8px;
+            padding: 25px; /* Slightly more padding */
+            border: 1px solid #ddd; /* Lighter border */
+            border-radius: 10px; /* Rounded input section */
+            background-color: #fafafa; /* Light background for input section */
         }
 
         .input-group {
-            margin: 15px 0;
+            margin: 18px 0; /* More spacing */
             text-align: center;
         }
 
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px; /* Slightly less margin */
             font-weight: bold;
             color: #555;
         }
@@ -115,10 +120,10 @@
             padding: 12px;
             font-size: 16px;
             width: 100%;
-            max-width: 250px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin: 5px 0;
+            max-width: 280px; /* Slightly wider inputs */
+            border: 1px solid #ccc; /* Lighter input border */
+            border-radius: 6px; /* Rounded inputs */
+            margin: 6px 0; /* Adjusted margin */
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -126,43 +131,47 @@
         }
 
         .button-container {
-            text-align: center; /* Center buttons horizontally */
+            text-align: center;
         }
 
         button {
-            padding: 12px 25px;
+            padding: 12px 28px; /* Slightly wider buttons */
             font-size: 16px;
             background-color: #376FE9;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px; /* Rounded buttons */
             cursor: pointer;
-            margin: 10px;
-            transition: background-color 0.3s;
+            margin: 8px; /* Adjusted button margin */
+            transition: background-color 0.3s, transform 0.3s; /* Added transform transition */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15); /* Button shadow */
         }
 
         button:hover {
             background-color: #45a049;
+            transform: translateY(-2px); /* Slight lift on hover */
+            box-shadow: 0 4px 7px rgba(0,0,0,0.2); /* Enhanced shadow on hover */
         }
 
         button#reset-button {
             background-color: #f44336; /* Red color for reset */
-            padding: 8px 15px; /* Smaller padding */
-            font-size: 14px; /* Smaller font size */
-            margin: 5px; /* Smaller margin */
+            padding: 8px 15px;
+            font-size: 14px;
+            margin: 5px;
         }
 
         button#reset-button:hover {
-            background-color: #d32f2f; /* Darker red on hover */
+            background-color: #d32f2f;
         }
-
 
         #result {
             margin-top: 30px;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 25px; /* More padding for result */
+            border-radius: 10px; /* Rounded result area */
             display: none;
-            text-align: center; /* Center content in result area */
+            text-align: center;
+            background-color: #fff; /* White result background */
+            box-shadow: 0 2px 7px rgba(0,0,0,0.1); /* Result area shadow */
         }
 
         #result button#save-payment-button {
@@ -171,16 +180,15 @@
             padding: 10px 20px;
             font-size: 16px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px; /* Rounded save button */
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 18px; /* More margin */
             transition: background-color 0.3s;
         }
 
         #result button#save-payment-button:hover {
             background-color: #45a049;
         }
-
 
         .payment-due {
             background-color: #ffebee;
@@ -193,21 +201,25 @@
         }
 
         .result-line {
-            margin: 10px 0;
+            margin: 12px 0; /* Adjusted margin */
             font-size: 18px;
+            color: #444; /* Darker result text */
         }
 
         .total-amount {
-            font-size: 24px;
+            font-size: 26px; /* Slightly larger total amount */
             font-weight: bold;
-            margin-top: 15px;
+            margin-top: 20px; /* More margin */
+            color: #2e7d32; /* Green total amount color */
         }
 
         .instructions {
             margin: 20px 0;
-            padding: 15px;
-            background-color: #fff3e0;
-            border-left: 4px solid #ff9800;
+            padding: 18px; /* Adjusted padding */
+            background-color: #fffde7; /* Lighter instruction background */
+            border-left: 5px solid #ffca28; /* Yellow border left */
+            border-radius: 0 5px 5px 0; /* Right rounded corners */
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.05); /* Subtle instruction shadow */
         }
 
         .highlight {
@@ -223,6 +235,9 @@
             justify-content: space-between;
             align-items: center;
             position: relative;
+            background-color: #f0f4c3; /* Muted banner background */
+            border: 1px solid #e0e0b0; /* Muted banner border */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Subtle banner shadow */
         }
 
         #android-banner {
@@ -263,31 +278,69 @@
             color: #666;
         }
 
-        /* Calendar styles */
+        /* Calendar styles - Modernized */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .calendar-header button {
+            background-color: transparent;
+            color: #555;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .calendar-header button:hover {
+            background-color: #eee;
+        }
+        .calendar-month-year {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
         .calendar {
             width: 100%;
             border-collapse: collapse;
+            border-radius: 8px; /* Rounded calendar */
+            overflow: hidden; /* Clip rounded corners */
+            box-shadow: 0 2px 7px rgba(0,0,0,0.1); /* Calendar shadow */
             margin-bottom: 20px;
+            background-color: #fff; /* White calendar background */
         }
         .calendar th, .calendar td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 10px;
             text-align: center;
+            border: none; /* No cell borders */
         }
         .calendar th {
             background-color: #f0f0f0;
+            font-weight: 500;
+            color: #555;
         }
         .calendar td {
             cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .calendar td:hover {
+            background-color: #f9f9f9; /* Lighter hover */
         }
         .calendar td.has-payment {
             background-color: #e8f5e9;
         }
         .calendar td.today {
             font-weight: bold;
+            background-color: #e0f7fa; /* Light blue for today */
         }
         .calendar .day-number {
-            padding-bottom: 5px;
+            padding-bottom: 6px;
+            font-size: 1em;
+            color: #333;
         }
 
         #daily-payments-section {
@@ -295,37 +348,60 @@
             margin-top: 20px;
         }
         .daily-payment-item {
-            margin-bottom: 10px;
-            padding: 10px;
+            margin-bottom: 12px; /* More spacing */
+            padding: 15px; /* More padding */
             border: 1px solid #eee;
-            border-radius: 5px;
+            border-radius: 8px; /* Rounded payment items */
             background-color: #f9f9f9;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08); /* Payment item shadow */
         }
         .payment-details {
             flex-grow: 1;
         }
         .payment-actions button {
             margin-left: 10px;
-            padding: 6px 10px;
+            padding: 7px 12px; /* Adjusted button padding */
             font-size: 14px;
+            border-radius: 5px; /* Rounded action buttons */
+            border: none;
+            background-color: #ddd; /* Muted action button background */
+            color: #444;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
         }
+        .payment-actions button:hover {
+            background-color: #ccc;
+            color: #333;
+        }
+        .payment-actions button.delete-button {
+            background-color: #f44336; /* Red for delete button */
+            color: white;
+        }
+        .payment-actions button.delete-button:hover {
+            background-color: #d32f2f;
+        }
+
+
         .payment-note {
-            margin-top: 5px;
+            margin-top: 8px; /* More note margin */
             font-style: italic;
             color: #777;
         }
         .note-input-area {
-            margin-top: 10px;
+            margin-top: 12px; /* More note input area margin */
         }
         .note-input-area textarea {
             width: calc(100% - 16px); /* Adjust width for padding */
-            padding: 8px;
-            border-radius: 5px;
+            padding: 10px; /* More textarea padding */
+            border-radius: 6px; /* Rounded textarea */
             border: 1px solid #ddd;
-            margin-bottom: 5px;
+            margin-bottom: 8px; /* More margin */
+        }
+        .note-input-area button {
+            margin: 0 5px; /* Adjusted note button margin */
         }
 
 
@@ -350,6 +426,11 @@
         <div id="history-box">
             <h2>Payment History</h2>
             <button onclick="showCalculator()" style="float: right;">Back to Calculator</button>
+            <div id="calendar-header" class="calendar-header">
+                <button id="prev-month-btn"><</button>
+                <span id="calendar-month-year" class="calendar-month-year"></span>
+                <button id="next-month-btn">></button>
+            </div>
             <div id="calendar-container">
                 <!-- Calendar will be generated here -->
             </div>
@@ -420,6 +501,9 @@
         const AUTH_CODE = "1228";
         let currentPaymentAmount = 0; // Variable to store the calculated payment amount
         let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
+        let currentCalendarMonth = new Date().getMonth();
+        let currentCalendarYear = new Date().getFullYear();
+
 
         // Funzione di logout
         function logout() {
@@ -559,7 +643,7 @@
             document.querySelector('.container').style.display = 'none';
             document.getElementById('history-overlay').style.display = 'flex';
             document.getElementById('daily-payments-section').style.display = 'none'; // Hide daily payments initially
-            generateCalendar();
+            generateCalendar(currentCalendarMonth, currentCalendarYear); // Generate calendar for current month
         }
 
         function showCalculator() {
@@ -568,23 +652,22 @@
         }
 
 
-        function generateCalendar() {
+        function generateCalendar(month, year) {
             const calendarContainer = document.getElementById('calendar-container');
             calendarContainer.innerHTML = ''; // Clear previous calendar
 
-            const now = new Date();
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
-
-            const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const firstDayOfMonth = new Date(year, month, 1);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
             const startingDayOfWeek = firstDayOfMonth.getDay(); // 0 for Sunday, 1 for Monday, etc.
+
+            const monthYearDisplay = document.getElementById('calendar-month-year');
+            monthYearDisplay.textContent = firstDayOfMonth.toLocaleString('en-US', { month: 'long', year: 'numeric' });
 
             const calendarTable = document.createElement('table');
             calendarTable.className = 'calendar';
             let thead = calendarTable.createTHead();
             let headerRow = thead.insertRow();
-            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']; // Start week from Monday
             daysOfWeek.forEach(day => {
                 let th = document.createElement('th');
                 th.textContent = day;
@@ -593,11 +676,12 @@
 
             let tbody = calendarTable.createTBody();
             let date = 1;
+            let dayOfWeekCounter = startingDayOfWeek === 0 ? 7 : startingDayOfWeek; // Adjust Sunday to 7 for Monday start
 
             for (let i = 0; i < 6; i++) { // 6 weeks is usually enough to display any month
                 let row = tbody.insertRow();
-                for (let j = 0; j < 7; j++) {
-                    if (i === 0 && j < startingDayOfWeek) {
+                for (let j = 1; j <= 7; j++) { // Days from Monday (1) to Sunday (7)
+                    if (i === 0 && j < dayOfWeekCounter) {
                         let cell = row.insertCell();
                         cell.textContent = ''; // Empty cells for days before the 1st
                     } else if (date > daysInMonth) {
@@ -610,11 +694,12 @@
                         dayNumber.textContent = date;
                         cell.appendChild(dayNumber);
 
-                        const currentDate = new Date(currentYear, currentMonth, date).toISOString().split('T')[0];
+                        const currentDate = new Date(year, month, date).toISOString().split('T')[0];
                         if (savedPayments.some(p => p.date === currentDate)) {
                             cell.classList.add('has-payment');
                         }
-                        if (currentDate === now.toISOString().split('T')[0]) {
+                        const today = new Date();
+                        if (currentDate === today.toISOString().split('T')[0] && month === today.getMonth() && year === today.getFullYear()) {
                             cell.classList.add('today');
                         }
 
@@ -622,6 +707,7 @@
                         date++;
                     }
                 }
+                 dayOfWeekCounter = 1; // Reset counter for next rows
             }
             calendarContainer.appendChild(calendarTable);
         }
@@ -665,6 +751,7 @@
 
                 let deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-button'; // Add class for red delete button
                 deleteButton.onclick = () => deletePayment(index, date);
                 actionsDiv.appendChild(deleteButton);
 
@@ -679,7 +766,7 @@
                 savedPayments.splice(paymentIndex, 1);
                 localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
                 showDailyPayments(date); // Refresh daily payments display
-                generateCalendar(); // Refresh calendar to update payment indicators
+                generateCalendar(currentCalendarMonth, currentCalendarYear); // Refresh calendar to update payment indicators
             }
         }
 
@@ -716,8 +803,28 @@
             localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
             dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area')); // Remove note input area
             showDailyPayments(savedPayments[paymentIndex].date); // Refresh daily payments to show note
-            generateCalendar(); // Refresh calendar might be needed to reflect changes (if note status affects calendar display in future)
+            generateCalendar(currentCalendarMonth, currentCalendarYear); // Refresh calendar might be needed to reflect changes (if note status affects calendar display in future)
         }
+
+        document.getElementById('prev-month-btn').addEventListener('click', () => {
+            currentCalendarMonth--;
+            if (currentCalendarMonth < 0) {
+                currentCalendarMonth = 11;
+                currentCalendarYear--;
+            }
+            generateCalendar(currentCalendarMonth, currentCalendarYear);
+            document.getElementById('daily-payments-section').style.display = 'none'; // Hide daily payments on month change
+        });
+
+        document.getElementById('next-month-btn').addEventListener('click', () => {
+            currentCalendarMonth++;
+            if (currentCalendarMonth > 11) {
+                currentCalendarMonth = 0;
+                currentCalendarYear++;
+            }
+            generateCalendar(currentCalendarMonth, currentCalendarYear);
+            document.getElementById('daily-payments-section').style.display = 'none'; // Hide daily payments on month change
+        });
 
 
         document.querySelectorAll('input').forEach(input => {
