@@ -310,17 +310,17 @@
         .calendar {
             width: 100%;
             border-collapse: collapse;
-            border-radius: 8px; /* Rounded calendar */
-            overflow: hidden; /* Clip rounded corners */
-            box-shadow: 0 2px 7px rgba(0,0,0,0.1); /* Calendar shadow */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 7px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-            background-color: #fff; /* White calendar background */
+            background-color: #fff;
         }
 
         .calendar th, .calendar td {
             padding: 10px;
             text-align: center;
-            border: none; /* No cell borders */
+            border: none;
         }
 
         .calendar th {
@@ -335,7 +335,7 @@
         }
 
         .calendar td:hover {
-            background-color: #f9f9f9; /* Lighter hover */
+            background-color: #f9f9f9;
         }
 
         .calendar td.has-payment {
@@ -344,7 +344,7 @@
 
         .calendar td.today {
             font-weight: bold;
-            background-color: #e0f7fa; /* Light blue for today */
+            background-color: #e0f7fa;
         }
 
         .calendar .day-number {
@@ -392,7 +392,7 @@
         }
 
         .payment-actions button.delete-button {
-            background-color: #f44336; /* Red for delete button */
+            background-color: #f44336;
             color: white;
         }
 
@@ -411,7 +411,7 @@
         }
 
         .note-input-area textarea {
-            width: calc(100% - 16px); /* Adjust width for padding */
+            width: calc(100% - 16px);
             padding: 10px;
             border-radius: 6px;
             border: 1px solid #ddd;
@@ -519,125 +519,120 @@
             <button id="save-payment-button" onclick="savePayment()" style="display: none;">Salva Pagamento</button>
         </div>
     </div>
-
-    <script>
+        <script>
         const AUTH_CODE = "1228";  // Codice di accesso (puoi cambiarlo)
         let currentPaymentAmount = 0; // Variabile per memorizzare l'importo del pagamento calcolato
-        let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]'); // Carica i pagamenti salvati, o un array vuoto se non ce ne sono
+        let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]'); // Carica i pagamenti salvati
         let currentCalendarMonth = new Date().getMonth(); // Mese corrente (0-11)
         let currentCalendarYear = new Date().getFullYear(); // Anno corrente
 
 
         // Funzione di logout
         function logout() {
-            localStorage.removeItem('m2m_access'); // Rimuove il codice di accesso salvato
-            localStorage.removeItem('m2m_name');  // Rimuove il nome utente salvato
-            document.querySelector('.container').style.display = 'none'; // Nasconde la calcolatrice
-            document.getElementById('user-name').style.display = 'none'; // Nasconde il nome utente
-            document.getElementById('history-overlay').style.display = 'none'; // Nasconde lo storico pagamenti
-            document.getElementById('auth-overlay').style.display = 'flex'; // Mostra l'overlay di autenticazione
-            document.getElementById('access-code').value = ''; // Resetta il campo del codice
-            document.getElementById('user-name-input').value = ''; // Resetta il campo del nome
-            document.getElementById('code-section').style.display = 'block'; // Mostra la sezione del codice
-            document.getElementById('name-section').style.display = 'none'; // Nasconde la sezione del nome
+            localStorage.removeItem('m2m_access');
+            localStorage.removeItem('m2m_name');
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('user-name').style.display = 'none';
+            document.getElementById('history-overlay').style.display = 'none';
+            document.getElementById('auth-overlay').style.display = 'flex';
+            document.getElementById('access-code').value = '';
+            document.getElementById('user-name-input').value = '';
+            document.getElementById('code-section').style.display = 'block';
+            document.getElementById('name-section').style.display = 'none';
         }
 
         // Funzione per controllare l'autenticazione all'avvio dell'app
         function checkAuth() {
-            const savedCode = localStorage.getItem('m2m_access'); // Recupera il codice salvato
-            const userName = localStorage.getItem('m2m_name'); // Recupera il nome utente salvato
+            const savedCode = localStorage.getItem('m2m_access');
+            const userName = localStorage.getItem('m2m_name');
 
             if (savedCode === AUTH_CODE && userName) {
-                showApp(userName); // Se il codice e il nome sono corretti, mostra l'app
-                return true; // Restituisce true per indicare che l'utente è autenticato
+                showApp(userName);
+                return true;
             }
-            document.getElementById('auth-overlay').style.display = 'flex'; // Altrimenti, mostra l'overlay di autenticazione
-            return false; // Restituisce false per indicare che l'utente non è autenticato
+            document.getElementById('auth-overlay').style.display = 'flex';
+            return false;
         }
 
         // Funzione per controllare il codice di accesso inserito dall'utente
         function checkCode() {
-            const codeInput = document.getElementById('access-code'); // Recupera il campo di input del codice
+            const codeInput = document.getElementById('access-code');
             if (codeInput.value === AUTH_CODE) {
-                document.getElementById('code-section').style.display = 'none'; // Nasconde la sezione del codice
-                document.getElementById('name-section').style.display = 'block'; // Mostra la sezione per inserire il nome
+                document.getElementById('code-section').style.display = 'none';
+                document.getElementById('name-section').style.display = 'block';
             } else {
-                alert('Codice di accesso non valido'); // Mostra un avviso se il codice non è corretto
+                alert('Codice di accesso non valido');
             }
         }
 
         // Funzione per salvare il nome utente
         function saveName() {
-            const nameInput = document.getElementById('user-name-input'); // Recupera il campo di input del nome
+            const nameInput = document.getElementById('user-name-input');
             if (nameInput.value.trim().length > 0) {
-                localStorage.setItem('m2m_access', AUTH_CODE); // Salva il codice di accesso nel localStorage
-                localStorage.setItem('m2m_name', nameInput.value.trim()); // Salva il nome utente nel localStorage
-                showApp(nameInput.value.trim()); // Mostra l'app
+                localStorage.setItem('m2m_access', AUTH_CODE);
+                localStorage.setItem('m2m_name', nameInput.value.trim());
+                showApp(nameInput.value.trim());
             } else {
-                alert('Inserisci un nome valido'); // Mostra un avviso se il nome non è valido
+                alert('Inserisci un nome valido');
             }
         }
 
         // Funzione per mostrare l'interfaccia principale dell'app
         function showApp(userName) {
-            document.getElementById('auth-overlay').style.display = 'none'; // Nasconde l'overlay di autenticazione
-            document.getElementById('user-name').textContent = `Ciao ${userName}`; // Mostra il nome utente
-            document.getElementById('user-name').style.display = 'block'; // Rende visibile il nome utente
-            document.querySelector('.container').style.display = 'block'; // Mostra il contenitore principale dell'app
-            showInstallBanners(); // Mostra i banner di installazione (se necessario)
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('user-name').textContent = `Ciao ${userName}`;
+            document.getElementById('user-name').style.display = 'block';
+            document.querySelector('.container').style.display = 'block';
+            showInstallBanners();
         }
 
         // Funzione per mostrare i banner di installazione per PWA
         function showInstallBanners() {
-            let deferredPrompt; // Variabile per gestire l'evento beforeinstallprompt
+            let deferredPrompt;
 
-            // Gestisce l'evento beforeinstallprompt (per Android)
             window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault(); // Impedisce il comportamento predefinito del browser
-                deferredPrompt = e; // Salva l'evento per un uso successivo
+                e.preventDefault();
+                deferredPrompt = e;
 
-                // Mostra il banner solo se l'app non è già installata
                 if (!window.matchMedia('(display-mode: standalone)').matches) {
-                    document.getElementById('android-banner').style.display = 'flex'; // Mostra il banner per Android
+                    document.getElementById('android-banner').style.display = 'flex';
                 }
             });
 
-            // Gestisce il click sul pulsante di installazione (per Android)
             document.getElementById('install-button').addEventListener('click', async () => {
                 if (deferredPrompt) {
-                    deferredPrompt.prompt(); // Mostra il prompt di installazione
-                    const { outcome } = await deferredPrompt.userChoice; // Attende la scelta dell'utente
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
                     if (outcome === 'accepted') {
-                        document.getElementById('android-banner').style.display = 'none'; // Nasconde il banner se l'utente accetta
+                        document.getElementById('android-banner').style.display = 'none';
                     }
-                    deferredPrompt = null; // Resetta la variabile deferredPrompt
+                    deferredPrompt = null;
                 }
             });
 
-            // Controlla se il dispositivo è iOS e se l'app non è già in modalità standalone
             const isIos = () => /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
             const isInStandaloneMode = () => ('standalone' in window.navigator) && window.navigator.standalone;
 
             if (isIos() && !isInStandaloneMode()) {
-                document.getElementById('ios-banner').style.display = 'flex'; // Mostra il banner per iOS
+                document.getElementById('ios-banner').style.display = 'flex';
             }
         }
 
         // Controlla l'autenticazione all'avvio dell'app
         if (!checkAuth()) {
-            document.getElementById('auth-overlay').style.display = 'flex'; // Mostra l'overlay di autenticazione se l'utente non è autenticato
+            document.getElementById('auth-overlay').style.display = 'flex';
         }
 
         // Funzione per calcolare il pagamento
         function calculatePayment() {
-            const regular = parseFloat(document.getElementById('regular-payments').value) || 0; // Recupera i pagamenti regolari (o 0 se il campo è vuoto)
-            const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0; // Recupera i pagamenti con gift card (o 0 se il campo è vuoto)
-            const toCenter = regular * 0.4; // Calcola la quota del centro (40% dei pagamenti regolari)
-            const toTherapist = giftcard * 0.6; // Calcola la quota del terapista (60% dei pagamenti con gift card)
-            currentPaymentAmount = toCenter - toTherapist; // Calcola l'importo netto
+            const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
+            const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
+            const toCenter = regular * 0.4;
+            const toTherapist = giftcard * 0.6;
+            currentPaymentAmount = toCenter - toTherapist;
             const netAmount = currentPaymentAmount;
 
-            const resultDiv = document.getElementById('result'); // Recupera l'elemento div per il risultato
+            const resultDiv = document.getElementById('result');
             resultDiv.innerHTML = `
                 <div class="result-line">• Il centro trattiene il 40% dei pagamenti regolari: €${toCenter.toFixed(2)}</div>
                 <div class="result-line">• Il centro deve il 60% delle gift card: €${toTherapist.toFixed(2)}</div>
@@ -648,131 +643,122 @@
                         `Pagamento al Terapista: €${Math.abs(netAmount).toFixed(2)}`}
                 </div>
                 <button id="save-payment-button" onclick="savePayment()">Salva Pagamento</button>
-            `; // Imposta il contenuto HTML del risultato
+            `;
 
-            resultDiv.className = netAmount >= 0 ? 'payment-due' : 'payment-receivable'; // Imposta la classe CSS in base al tipo di pagamento
-            resultDiv.style.display = 'block'; // Mostra il risultato
-            document.getElementById('save-payment-button').style.display = 'inline-block'; // Mostra il pulsante "Salva Pagamento"
+            resultDiv.className = netAmount >= 0 ? 'payment-due' : 'payment-receivable';
+            resultDiv.style.display = 'block';
+            document.getElementById('save-payment-button').style.display = 'inline-block';
         }
 
         // Funzione per resettare tutti i campi del modulo
         function resetAll() {
-            document.getElementById('regular-payments').value = ''; // Resetta il campo dei pagamenti regolari
-            document.getElementById('giftcard-payments').value = ''; // Resetta il campo dei pagamenti con gift card
-            document.getElementById('result').style.display = 'none'; // Nasconde il risultato
-            document.getElementById('save-payment-button').style.display = 'none'; // Nasconde il pulsante "Salva Pagamento"
+            document.getElementById('regular-payments').value = '';
+            document.getElementById('giftcard-payments').value = '';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('save-payment-button').style.display = 'none';
         }
 
         // Funzione per salvare il pagamento corrente
         function savePayment() {
-            const now = new Date(); // Ottiene la data e l'ora correnti
-            const paymentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0]; // Formatta la data come YYYY-MM-DD, impostando l'ora a mezzanotte
+            const now = new Date();
+            const paymentDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString().split('T')[0];
             const paymentData = {
                 date: paymentDate,
                 amount: currentPaymentAmount,
-                note: '' // Inizialmente la nota è vuota
+                note: ''
             };
 
-            savedPayments.push(paymentData); // Aggiunge il pagamento all'array dei pagamenti salvati
-            localStorage.setItem('m2m_payments', JSON.stringify(savedPayments)); // Salva l'array aggiornato nel localStorage
+            savedPayments.push(paymentData);
+            localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
 
-            alert(`Pagamento di €${Math.abs(currentPaymentAmount).toFixed(2)} ${currentPaymentAmount >= 0 ? 'al Centro' : 'al Terapista'} salvato per ${paymentDate}`); // Mostra un messaggio di conferma
-            document.getElementById('save-payment-button').style.display = 'none'; // Nasconde il pulsante "Salva Pagamento"
+            alert(`Pagamento di €${Math.abs(currentPaymentAmount).toFixed(2)} ${currentPaymentAmount >= 0 ? 'al Centro' : 'al Terapista'} salvato per ${paymentDate}`);
+            document.getElementById('save-payment-button').style.display = 'none';
         }
 
         // Funzione per mostrare lo storico dei pagamenti
         function showPaymentHistory() {
-            document.querySelector('.container').style.display = 'none'; // Nasconde la calcolatrice
-            document.getElementById('history-overlay').style.display = 'flex'; // Mostra l'overlay dello storico pagamenti
-            document.getElementById('daily-payments-section').style.display = 'none'; // Nasconde inizialmente la sezione dei pagamenti giornalieri
-            generateCalendar(currentCalendarMonth, currentCalendarYear); // Genera il calendario per il mese e l'anno correnti
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('history-overlay').style.display = 'flex';
+            document.getElementById('daily-payments-section').style.display = 'none';
+            generateCalendar(currentCalendarMonth, currentCalendarYear);
         }
 
         // Funzione per tornare alla calcolatrice dallo storico pagamenti
         function showCalculator() {
-            document.querySelector('.container').style.display = 'block'; // Mostra la calcolatrice
-            document.getElementById('history-overlay').style.display = 'none'; // Nasconde l'overlay dello storico pagamenti
+            document.querySelector('.container').style.display = 'block';
+            document.getElementById('history-overlay').style.display = 'none';
         }
 
         // Funzione per generare il calendario
         function generateCalendar(month, year) {
-            const calendarContainer = document.getElementById('calendar-container'); // Recupera il contenitore del calendario
-            calendarContainer.innerHTML = ''; // Pulisce il contenuto precedente del calendario
+            const calendarContainer = document.getElementById('calendar-container');
+            calendarContainer.innerHTML = '';
 
-            const firstDayOfMonth = new Date(year, month, 1); // Ottiene il primo giorno del mese
-            const daysInMonth = new Date(year, month + 1, 0).getDate(); // Ottiene il numero di giorni del mese
-            const startingDayOfWeek = firstDayOfMonth.getDay(); // Ottiene il giorno della settimana in cui inizia il mese (0 per Domenica, 1 per Lunedì, ecc.)
+            const firstDayOfMonth = new Date(year, month, 1);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const startingDayOfWeek = firstDayOfMonth.getDay();
 
-            const monthYearDisplay = document.getElementById('calendar-month-year'); // Recupera l'elemento per visualizzare il mese e l'anno
-            monthYearDisplay.textContent = firstDayOfMonth.toLocaleString('it-IT', { month: 'long', year: 'numeric' }); // Imposta il testo con il mese e l'anno in formato italiano
+            const monthYearDisplay = document.getElementById('calendar-month-year');
+            monthYearDisplay.textContent = firstDayOfMonth.toLocaleString('it-IT', { month: 'long', year: 'numeric' });
 
-            const calendarTable = document.createElement('table'); // Crea l'elemento tabella per il calendario
-            calendarTable.className = 'calendar'; // Imposta la classe CSS per la tabella
-            let thead = calendarTable.createTHead(); // Crea l'intestazione della tabella
-            let headerRow = thead.insertRow(); // Crea la riga dell'intestazione
-            const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']; // Array con i nomi dei giorni della settimana (iniziando da Lunedì)
+            const calendarTable = document.createElement('table');
+            calendarTable.className = 'calendar';
+            let thead = calendarTable.createTHead();
+            let headerRow = thead.insertRow();
+            const daysOfWeek = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
             daysOfWeek.forEach(day => {
-                let th = document.createElement('th'); // Crea un elemento th per ogni giorno della settimana
-                th.textContent = day; // Imposta il testo dell'intestazione con il nome del giorno
-                headerRow.appendChild(th); // Aggiunge l'elemento th alla riga dell'intestazione
+                let th = document.createElement('th');
+                th.textContent = day;
+                headerRow.appendChild(th);
             });
 
-            let tbody = calendarTable.createTBody(); // Crea il corpo della tabella
-            let date = 1; // Inizializza la variabile per il giorno del mese
-            let dayOfWeekCounter = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1; // Calcola l'offset per il primo giorno del mese (0 per Lunedì, 1 per Martedì, ecc.)
+            let tbody = calendarTable.createTBody();
+            let date = 1;
+            let dayOfWeekCounter = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
 
-            for (let i = 0; i < 6; i++) { // Ciclo per le righe (massimo 6 settimane)
-                let row = tbody.insertRow(); // Crea una nuova riga
-                for (let j = 0; j < 7; j++) { // Ciclo per i giorni della settimana
+            for (let i = 0; i < 6; i++) {
+                let row = tbody.insertRow();
+                for (let j = 0; j < 7; j++) {
                     if (i === 0 && j < dayOfWeekCounter) {
-                        let cell = row.insertCell(); // Crea una cella vuota
-                        cell.textContent = ''; // Imposta il testo della cella come vuoto
+                        let cell = row.insertCell();
+                        cell.textContent = '';
                     } else if (date > daysInMonth) {
-                        break; // Se il giorno supera il numero di giorni del mese, esce dal ciclo interno
+                        break;
                     } else {
-                        let cell = row.insertCell(); // Crea una cella
-                        cell.classList.add('day');  //aggiunge la classe day
-                        let dayNumber = document.createElement('div'); // Crea un elemento div per il numero del giorno
-                        dayNumber.classList.add('day-number'); //aggiunge la classe day-number
-                        dayNumber.textContent = date; // Imposta il testo del div con il numero del giorno
-                        cell.appendChild(dayNumber); // Aggiunge il div alla cella
+                        let cell = row.insertCell();
+                        cell.classList.add('day');
+                        let dayNumber = document.createElement('div');
+                        dayNumber.classList.add('day-number');
+                        dayNumber.textContent = date;
+                        cell.appendChild(dayNumber);
 
-                        // Crea un oggetto Date per il giorno corrente, impostando l'ora a mezzanotte
                         const currentDate = new Date(year, month, date, 0, 0, 0, 0);
-                        const currentDateString = currentDate.toISOString().split('T')[0]; // Formatta la data come YYYY-MM-DD
+                        const currentDateString = currentDate.toISOString().split('T')[0];
 
                         if (savedPayments.some(p => p.date === currentDateString)) {
-                            cell.classList.add('has-payment'); // Se ci sono pagamenti per questa data, aggiunge la classe 'has-payment'
+                            cell.classList.add('has-payment');
                         }
 
-                        const today = new Date(); // Ottiene la data odierna
-                        // Confronta le date complete (anno, mese e giorno)
+                        const today = new Date();
                         if (currentDate.getFullYear() === today.getFullYear() &&
                             currentDate.getMonth() === today.getMonth() &&
                             currentDate.getDate() === today.getDate()) {
-                            cell.classList.add('today'); // Se la data corrente
-                        // Confronta le date complete (anno, mese e giorno)
-                        if (currentDate.getFullYear() === today.getFullYear() &&
-                            currentDate.getMonth() === today.getMonth() &&
-                            currentDate.getDate() === today.getDate()) {
-                            cell.classList.add('today'); // Se la data corrente è oggi, aggiunge la classe 'today'
+                            cell.classList.add('today');
                         }
 
-                        // Utilizza una IIFE (Immediately Invoked Function Expression) per catturare correttamente il valore di currentDateString
                         (function(currentDateStringForEvent) {
                             cell.addEventListener('click', () => {
-                                showDailyPayments(currentDateStringForEvent); // Associa la funzione showDailyPayments al click sulla cella
+                                showDailyPayments(currentDateStringForEvent);
                             });
                         })(currentDateString);
 
-                        date++; // Incrementa il giorno
+                        date++;
                     }
                 }
             }
-            calendarContainer.appendChild(calendarTable); // Aggiunge la tabella del calendario al contenitore
+            calendarContainer.appendChild(calendarTable);
         }
-
-        // Funzione per mostrare i pagamenti di un giorno specifico
+                    // Funzione per mostrare i pagamenti di un giorno specifico
         function showDailyPayments(date) {
             const parsedDate = new Date(date); // Converte la stringa della data in un oggetto Date
             if (isNaN(parsedDate.getTime())) { // Controlla se la data è valida
@@ -781,7 +767,7 @@
             }
             document.getElementById('daily-payments-section').style.display = 'block'; // Mostra la sezione dei pagamenti giornalieri
             document.getElementById('selected-date').textContent = parsedDate.toLocaleDateString('it-IT'); // Formatta la data in italiano e la visualizza
-            const dailyPaymentsListDiv = document.getElementById('daily-payments-list'); // Recupera il contenitore per la lista dei pagamenti giornalieri
+            const dailyPaymentsListDiv = document.getElementById('daily-payments-list'); // Recupera il contenitore per la lista dei pagamenti
             dailyPaymentsListDiv.innerHTML = ''; // Pulisce il contenuto precedente
 
             const paymentsForDate = savedPayments.filter(payment => payment.date === date); // Filtra i pagamenti per la data selezionata
@@ -793,119 +779,118 @@
 
             paymentsForDate.forEach((payment, index) => {
                 const paymentItem = document.createElement('div'); // Crea un elemento div per ogni pagamento
-                paymentItem.className = 'daily-payment-item'; // Imposta la classe CSS
-                paymentItem.dataset.paymentIndex = index; // Memorizza l'indice del pagamento nei dati dell'elemento
+                paymentItem.className = 'daily-payment-item';
+                paymentItem.dataset.paymentIndex = index;
 
-                const detailsDiv = document.createElement('div');  // Crea un div per i dettagli del pagamento
-                detailsDiv.className = 'payment-details'; // Imposta la classe CSS
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'payment-details';
                 detailsDiv.innerHTML = `
                     Pagamento ${payment.amount >= 0 ? 'al Centro' : 'al Terapista'}: €${Math.abs(payment.amount).toFixed(2)}
-                `; // Imposta il testo con i dettagli del pagamento
+                `;
                 if (payment.note) {
-                    detailsDiv.innerHTML += `<div class="payment-note">Nota: ${payment.note}</div>`; // Aggiunge la nota, se presente
+                    detailsDiv.innerHTML += `<div class="payment-note">Nota: ${payment.note}</div>`; // Aggiunge la nota
                 }
-                paymentItem.appendChild(detailsDiv); // Aggiunge i dettagli al div del pagamento
+                paymentItem.appendChild(detailsDiv);
 
-                const actionsDiv = document.createElement('div'); // Crea un div per le azioni (modifica/elimina)
-                actionsDiv.className = 'payment-actions'; // Imposta la classe CSS
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'payment-actions';
 
-                let noteButton = document.createElement('button'); // Crea il pulsante per aggiungere/modificare la nota
-                noteButton.textContent = payment.note ? 'Modifica Nota' : 'Aggiungi Nota'; // Imposta il testo del pulsante
-                noteButton.onclick = () => handleNoteForPayment(index, payment.note); // Associa la funzione handleNoteForPayment al click
-                actionsDiv.appendChild(noteButton); // Aggiunge il pulsante al div delle azioni
+                let noteButton = document.createElement('button');
+                noteButton.textContent = payment.note ? 'Modifica Nota' : 'Aggiungi Nota';
+                noteButton.onclick = () => handleNoteForPayment(index, payment.note);
+                actionsDiv.appendChild(noteButton);
 
-                let deleteButton = document.createElement('button'); // Crea il pulsante per eliminare il pagamento
-                deleteButton.textContent = 'Elimina'; // Imposta il testo del pulsante
-                deleteButton.className = 'delete-button'; // Imposta la classe CSS per il pulsante di eliminazione
-                deleteButton.onclick = () => deletePayment(index, date); // Associa la funzione deletePayment al click
-                actionsDiv.appendChild(deleteButton); // Aggiunge il pulsante al div delle azioni
+                let deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Elimina';
+                deleteButton.className = 'delete-button';
+                deleteButton.onclick = () => deletePayment(index, date);
+                actionsDiv.appendChild(deleteButton);
 
-                paymentItem.appendChild(actionsDiv); // Aggiunge il div delle azioni al div del pagamento
-                dailyPaymentsListDiv.appendChild(paymentItem); // Aggiunge il div del pagamento alla lista
+                paymentItem.appendChild(actionsDiv);
+                dailyPaymentsListDiv.appendChild(paymentItem);
             });
         }
 
         // Funzione per eliminare un pagamento
         function deletePayment(paymentIndex, date) {
             if (confirm('Sei sicuro di voler eliminare questo pagamento?')) {
-                savedPayments.splice(paymentIndex, 1); // Rimuove il pagamento dall'array
-                localStorage.setItem('m2m_payments', JSON.stringify(savedPayments)); // Salva l'array aggiornato nel localStorage
-                showDailyPayments(date); // Aggiorna la visualizzazione dei pagamenti giornalieri
-                generateCalendar(currentCalendarMonth, currentCalendarYear); // Aggiorna il calendario
+                savedPayments.splice(paymentIndex, 1);
+                localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
+                showDailyPayments(date);
+                generateCalendar(currentCalendarMonth, currentCalendarYear);
             }
         }
 
-        // Funzione per gestire l'aggiunta o la modifica di una nota a un pagamento
+        // Funzione per gestire l'aggiunta o la modifica di una nota
         function handleNoteForPayment(paymentIndex, existingNote) {
-            const dailyPaymentItem = document.querySelector(`.daily-payment-item[data-payment-index="${paymentIndex}"]`); // Recupera l'elemento del pagamento
-            let noteArea = dailyPaymentItem.querySelector('.note-input-area'); // Cerca l'area di input della nota
+            const dailyPaymentItem = document.querySelector(`.daily-payment-item[data-payment-index="${paymentIndex}"]`);
+            let noteArea = dailyPaymentItem.querySelector('.note-input-area');
 
-            if (noteArea) { // Se l'area della nota esiste già, la rimuove (toggle)
+            if (noteArea) {
                 dailyPaymentItem.removeChild(noteArea);
-            } else { // Altrimenti, crea l'area della nota
+            } else {
                 noteArea = document.createElement('div');
-                noteArea.className = 'note-input-area'; // Imposta la classe CSS
-                let textarea = document.createElement('textarea'); // Crea l'area di testo per la nota
-                textarea.placeholder = 'Inserisci nota...'; // Imposta il placeholder
-                textarea.value = existingNote || ''; // Imposta il valore (se esiste una nota precedente)
-                noteArea.appendChild(textarea); // Aggiunge l'area di testo al div della nota
+                noteArea.className = 'note-input-area';
+                let textarea = document.createElement('textarea');
+                textarea.placeholder = 'Inserisci nota...';
+                textarea.value = existingNote || '';
+                noteArea.appendChild(textarea);
 
-                let saveNoteButton = document.createElement('button'); // Crea il pulsante "Salva Nota"
-                saveNoteButton.textContent = 'Salva Nota'; // Imposta il testo
-                saveNoteButton.onclick = () => saveNote(paymentIndex, textarea.value, dailyPaymentItem); // Associa la funzione saveNote al click
-                noteArea.appendChild(saveNoteButton); // Aggiunge il pulsante al div della nota
+                let saveNoteButton = document.createElement('button');
+                saveNoteButton.textContent = 'Salva Nota';
+                saveNoteButton.onclick = () => saveNote(paymentIndex, textarea.value, dailyPaymentItem);
+                noteArea.appendChild(saveNoteButton);
 
-                let cancelButton = document.createElement('button'); // Crea il pulsante "Annulla"
-                cancelButton.textContent = 'Annulla'; // Imposta il testo
-                cancelButton.onclick = () => dailyPaymentItem.removeChild(noteArea); // Associa la rimozione dell'area della nota al click
-                noteArea.appendChild(cancelButton); // Aggiunge il pulsante al div della nota
+                let cancelButton = document.createElement('button');
+                cancelButton.textContent = 'Annulla';
+                cancelButton.onclick = () => dailyPaymentItem.removeChild(noteArea);
+                noteArea.appendChild(cancelButton);
 
-                dailyPaymentItem.appendChild(noteArea); // Aggiunge il div della nota all'elemento del pagamento
+                dailyPaymentItem.appendChild(noteArea);
             }
         }
 
         // Funzione per salvare la nota di un pagamento
         function saveNote(paymentIndex, noteText, dailyPaymentItem) {
-            // Trova l'oggetto pagamento corretto nell'array savedPayments
             const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
 
             if (paymentToUpdate) {
-                paymentToUpdate.note = noteText; // Aggiorna la nota nell'oggetto pagamento
-                localStorage.setItem('m2m_payments', JSON.stringify(savedPayments)); // Salva l'array aggiornato nel localStorage
-                dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area')); // Rimuove l'area di input della nota
-                showDailyPayments(paymentToUpdate.date); // Aggiorna la visualizzazione dei pagamenti giornalieri per mostrare la nota
+                paymentToUpdate.note = noteText;
+                localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
+                dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area'));
+                showDailyPayments(paymentToUpdate.date);
             } else {
-                console.error("Pagamento non trovato all'indice:", paymentIndex); // Gestione dell'errore se il pagamento non viene trovato
+                console.error("Pagamento non trovato all'indice:", paymentIndex);
             }
         }
 
         // Event listener per il pulsante "Mese Precedente"
         document.getElementById('prev-month-btn').addEventListener('click', () => {
-            currentCalendarMonth--; // Decrementa il mese
-            if (currentCalendarMonth < 0) { // Se il mese diventa negativo, passa all'anno precedente
+            currentCalendarMonth--;
+            if (currentCalendarMonth < 0) {
                 currentCalendarMonth = 11;
                 currentCalendarYear--;
             }
-            generateCalendar(currentCalendarMonth, currentCalendarYear); // Rigenera il calendario
-            document.getElementById('daily-payments-section').style.display = 'none'; // Nasconde la sezione dei pagamenti giornalieri
+            generateCalendar(currentCalendarMonth, currentCalendarYear);
+            document.getElementById('daily-payments-section').style.display = 'none';
         });
 
         // Event listener per il pulsante "Mese Successivo"
         document.getElementById('next-month-btn').addEventListener('click', () => {
-            currentCalendarMonth++; // Incrementa il mese
-            if (currentCalendarMonth > 11) { // Se il mese supera 11, passa all'anno successivo
+            currentCalendarMonth++;
+            if (currentCalendarMonth > 11) {
                 currentCalendarMonth = 0;
                 currentCalendarYear++;
             }
-            generateCalendar(currentCalendarMonth, currentCalendarYear); // Rigenera il calendario
-            document.getElementById('daily-payments-section').style.display = 'none'; // Nasconde la sezione dei pagamenti giornalieri
+            generateCalendar(currentCalendarMonth, currentCalendarYear);
+            document.getElementById('daily-payments-section').style.display = 'none';
         });
 
         // Event listener per la pressione del tasto "Invio" nei campi di input
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('keypress', e => {
                 if (e.key === 'Enter') {
-                    calculatePayment(); // Esegue il calcolo del pagamento
+                    calculatePayment();
                 }
             });
         });
