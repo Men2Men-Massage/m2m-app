@@ -694,16 +694,19 @@
                         dayNumber.textContent = date;
                         cell.appendChild(dayNumber);
 
-                        const currentDate = new Date(year, month, date).toISOString().split('T')[0];
-                        if (savedPayments.some(p => p.date === currentDate)) {
+                        // Corrected Date Construction
+                        const currentDate = new Date(year, month, date);
+                        const currentDateString = currentDate.toISOString().split('T')[0];
+
+                        if (savedPayments.some(p => p.date === currentDateString)) {
                             cell.classList.add('has-payment');
                         }
                         const today = new Date();
-                        if (currentDate === today.toISOString().split('T')[0] && month === today.getMonth() && year === today.getFullYear()) {
+                        if (currentDateString === today.toISOString().split('T')[0] && month === today.getMonth() && year === today.getFullYear()) {
                             cell.classList.add('today');
                         }
 
-                        cell.addEventListener('click', () => showDailyPayments(currentDate));
+                        cell.addEventListener('click', () => showDailyPayments(currentDateString));
                         date++;
                     }
                 }
@@ -714,6 +717,7 @@
 
 
         function showDailyPayments(date) {
+            console.log("showDailyPayments received date:", date); // Debugging log
             document.getElementById('daily-payments-section').style.display = 'block';
             document.getElementById('selected-date').textContent = new Date(date).toLocaleDateString();
             const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
