@@ -1,14 +1,8 @@
-    const AUTH_CODE = "1228";
+       const AUTH_CODE = "1228";
     let currentPaymentAmount = 0;
     let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
     let currentCalendarMonth = new Date().getMonth();
     let currentCalendarYear = new Date().getFullYear();
-
-    // NEW: Date formatting function
-    function formatDate(dateString) {
-        const [year, month, day] = dateString.split('-');
-        return `${year}-${month}-${day}`; // Consistent YYYY-MM-DD format
-    }
 
     // Logout function
     function logout() {
