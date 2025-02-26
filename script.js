@@ -68,6 +68,8 @@ function showApp(userName) {
     document.getElementById('user-name').style.display = 'block';
     document.querySelector('.container').style.display = 'block';
     showInstallBanners();
+     // Inizializza la sezione istruzioni
+     initInstructionsToggle();
 }
 
 // Function to show installation banners for PWA
@@ -252,7 +254,6 @@ function generateCalendar(month, year) {
     }
     calendarContainer.appendChild(calendarTable);
 
-    // Calcola *tutti e tre* i totali mensili
     const [monthlyDueTotal, monthlyGiftCardTotal, monthlyEarningsTotal] = calculateMonthlyTotals(month, year);
 
     const totalDueDiv = document.createElement('div');
@@ -265,9 +266,8 @@ function generateCalendar(month, year) {
     totalGiftCardDiv.textContent = `Total Gift Cards: €${monthlyGiftCardTotal.toFixed(2)}`;
     calendarContainer.appendChild(totalGiftCardDiv);
 
-    // Aggiungi il div per il totale guadagni
     const totalEarningsDiv = document.createElement('div');
-    totalEarningsDiv.className = 'monthly-total total-earnings'; // Usa entrambe le classi
+    totalEarningsDiv.className = 'monthly-total total-earnings';
     totalEarningsDiv.textContent = `Total Earnings: €${monthlyEarningsTotal.toFixed(2)}`;
     calendarContainer.appendChild(totalEarningsDiv);
 
@@ -282,22 +282,21 @@ function goToToday() {
     document.getElementById('daily-payments-section').style.display = 'none';
 }
 
-// Modificata per calcolare *tre* totali
+//  calcolare *tre* totali
 function calculateMonthlyTotals(month, year) {
     let dueTotal = 0;
     let giftCardTotal = 0;
-    let earningsTotal = 0; // Nuovo totale guadagni
+    let earningsTotal = 0;
 
     savedPayments.forEach(payment => {
         const [pYear, pMonth] = payment.date.split('-').map(Number);
         if (pYear === year && pMonth - 1 === month) {
             dueTotal += payment.dueAmount;
             giftCardTotal += payment.giftCardAmount;
-            // Calcola il guadagno come 60% della somma di dueAmount e giftCardAmount
             earningsTotal += (payment.dueAmount / 0.4) * 0.6;
         }
     });
-    return [dueTotal, giftCardTotal, earningsTotal]; // Restituisci tutti e tre i totali
+    return [dueTotal, giftCardTotal, earningsTotal];
 }
 
 
@@ -453,6 +452,27 @@ document.querySelectorAll('input').forEach(input => {
         }
     });
 });
+
+// Inizializza la sezione istruzioni (chiamata quando l'app si carica)
+function initInstructionsToggle() {
+    const toggleBtn = document.getElementById('toggle-instructions-btn');
+    const instructionsContent = document.getElementById('instructions-content');
+
+    // Imposta lo stato iniziale (chiuso)
+    instructionsContent.classList.add('collapsed');
+    toggleBtn.textContent = 'Show'; // Testo iniziale del pulsante
+
+
+    toggleBtn.addEventListener('click', () => {
+        if (instructionsContent.classList.contains('collapsed')) {
+            instructionsContent.classList.remove('collapsed');
+            toggleBtn.textContent = 'Hide'; // Cambia il testo
+        } else {
+            instructionsContent.classList.add('collapsed');
+            toggleBtn.textContent = 'Show'; // Cambia il testo
+        }
+    });
+}
 
 // Service Worker registration (for PWA functionality)
 if ('serviceWorker' in navigator) {
