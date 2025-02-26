@@ -515,3 +515,50 @@ button#reset-button:hover {
     border-color: #2e7d32;
     background-color: #e8f5e9;
 }
+
+.instructions-container {
+    margin: 20px 0;
+    padding: 18px;
+    background-color: #fffde7;
+    border-left: 5px solid #ffca28;
+    border-radius: 0 5px 5px 0;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+}
+
+.instructions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.instructions-header span {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#toggle-instructions-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ddd;
+    color: #444;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#toggle-instructions-btn:hover {
+    background-color: #ccc;
+    color: #333;
+}
+
+/* Nascondi inizialmente le istruzioni */
+#instructions-content {
+    overflow: hidden; /* Importante per l'animazione */
+    transition: max-height 0.3s ease; /* Animazione fluida */
+    max-height: 500px; /* Altezza massima iniziale (abbastanza grande) */
+}
+
+#instructions-content.collapsed {
+    max-height: 0; /* Chiudi nascondendo */
+}
