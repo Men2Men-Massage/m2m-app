@@ -513,11 +513,16 @@ button#reset-button:hover {
 
 .instructions-container {
     margin: 20px 0;
-    padding: 5px; /* Riduci il padding generale */
+    padding: 5px;
     background-color: #fffde7;
     border: 3px solid #ffca28;
     border-radius: 5px;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Rimuovi il bordo specifico quando è aperto */
+.instructions-container:not(.collapsed) .instructions {
+  border-left: none;
 }
 
 .instructions-header {
@@ -530,26 +535,25 @@ button#reset-button:hover {
 .instructions-header span {
     font-size: 18px;
     font-weight: bold;
-    margin-left: 8px; /* Aggiungi un po' di margine a sinistra */
+    margin-left: 8px;
 }
 
-/* Stile per il pulsante freccia */
+/* Stile per il pulsante Show/Hide */
 #toggle-instructions-btn {
-    background: none;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
     border: none;
-    font-size: 1.2em; /* Riduci leggermente la dimensione */
+    background-color: #ddd;
+    color: #444;
     cursor: pointer;
-    color: #ffca28; /* Colore giallo */
-    padding: 0;
-    line-height: 1;
-     transition: transform 0.3s ease; /* Aggiungi transizione per rotazione */
-    transform: rotate(-90deg); /* Inizialmente punta a sinistra */
-}
-/* Ruota la freccia quando è aperto */
-#toggle-instructions-btn.rotated {
-    transform: rotate(90deg); /* Punta a destra quando aperto */
+    transition: background-color 0.3s, color 0.3s;
 }
 
+#toggle-instructions-btn:hover {
+    background-color: #ccc;
+    color: #333;
+}
 
 #instructions-content {
     overflow: hidden;
