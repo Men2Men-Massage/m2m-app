@@ -1,3 +1,5 @@
+// script.js
+
 const AUTH_CODE = "1228";
 let currentPaymentAmount = 0;
 let currentGiftCardAmount = 0;
@@ -10,9 +12,12 @@ let selectedShiftDate = '';
 let selectedLocation = '';
 
 // Date formatting function (YYYY-MM-DD)
-function formatDate(dateString) {
-    const [year, month, day] = dateString.split('-');
-    return `${year}-${month}-${day}`; // Consistent YYYY-MM-DD format
+// MODIFICATA: Usa padStart per garantire il formato corretto
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 perché getMonth() è 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 // Logout function
@@ -148,6 +153,7 @@ function generatePayment() {
 }
 
 // NUOVA FUNZIONE: Mostra il modal per la selezione della data
+// MODIFICATA: Usa oggetti Date locali e formatDate()
 function showDateModal() {
     const dateModal = document.getElementById('date-modal');
     const dateSelect = document.getElementById('shift-date-select');
@@ -157,8 +163,9 @@ function showDateModal() {
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
 
-    const todayStr = formatDate(today.toISOString().split('T')[0]);
-    const yesterdayStr = formatDate(yesterday.toISOString().split('T')[0]);
+    // Usa formatDate() per formattare correttamente le date
+    const todayStr = formatDate(today);
+    const yesterdayStr = formatDate(yesterday);
 
     // Aggiungi le opzioni al select
     dateSelect.add(new Option(`Today (${todayStr})`, todayStr));
@@ -463,7 +470,7 @@ function saveNote(paymentIndex, noteText, dailyPaymentItem) {
 
 // Remove the note
 function removeNote(paymentIndex, dailyPaymentItem) {
-     const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
+    const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
 
     if (paymentToUpdate) {
         paymentToUpdate.note = '';
