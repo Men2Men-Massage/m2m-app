@@ -463,3 +463,32 @@ button#reset-button:hover {
   font-size: 1.2em; /* Adjust as needed */
   font-weight: bold;
 }
+
+#today-button {
+    padding: 5px 10px; /* Piccolo, come gli altri pulsanti */
+    font-size: 12px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ddd; /* O un altro colore a tua scelta */
+    color: #444;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-left: 10px; /* Spazio dal titolo del mese/anno */
+}
+
+#today-button:hover {
+    background-color: #ccc;
+    color: #333;
+}
+
+/* Stile per il totale mensile */
+.monthly-total {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #f0f8ff; /* Colore di sfondo leggero */
+    border: 1px solid #add8e6; /* Bordo leggero */
+    text-align: center; /* Centra il testo */
+}
