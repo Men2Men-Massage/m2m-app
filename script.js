@@ -308,6 +308,7 @@ function deletePayment(paymentIndex, dateString) {
 }
 
 // Function to handle adding or editing a note
+// Function to handle adding or editing a note
 function handleNoteForPayment(paymentIndex, existingNote) {
     const dailyPaymentItem = document.querySelector(`.daily-payment-item[data-payment-index="${paymentIndex}"]`);
     let noteArea = dailyPaymentItem.querySelector('.note-input-area');
@@ -329,10 +330,16 @@ function handleNoteForPayment(paymentIndex, existingNote) {
         saveNoteButton.onclick = () => saveNote(paymentIndex, textarea.value, dailyPaymentItem);
         noteArea.appendChild(saveNoteButton);
 
-        let cancelButton = document.createElement('button');
-        cancelButton.textContent = 'Cancel';
-        cancelButton.onclick = () => dailyPaymentItem.removeChild(noteArea);
-        noteArea.appendChild(cancelButton);
+
+        // Only add "Remove Note" button if there's an existing note
+        if (existingNote) {
+            let removeNoteButton = document.createElement('button');
+            removeNoteButton.textContent = 'Remove';
+            removeNoteButton.className = 'remove-note-button'; // Add class for styling
+            removeNoteButton.onclick = () => removeNote(paymentIndex, dailyPaymentItem);
+            noteArea.appendChild(removeNoteButton);
+        }
+
 
         dailyPaymentItem.appendChild(noteArea);
     }
@@ -346,11 +353,28 @@ function saveNote(paymentIndex, noteText, dailyPaymentItem) {
         paymentToUpdate.note = noteText;
         localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
         dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area'));
-        showDailyPayments(paymentToUpdate.date); // Refresh to show updated note
+        showDailyPayments(paymentToUpdate.date); // Refresh to show updated note and "Edit Note" button
     } else {
         console.error("Payment not found at index:", paymentIndex);
     }
 }
+
+// New function: Remove the note
+function removeNote(paymentIndex, dailyPaymentItem) {
+     const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
+
+    if (paymentToUpdate) {
+        paymentToUpdate.note = ''; // Clear the note
+        localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
+
+        // Remove the note input area *and* refresh the daily payments view
+        dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area'));
+        showDailyPayments(paymentToUpdate.date); // VERY IMPORTANT: Refresh to show "Add Note"
+    } else {
+        console.error("Payment not found at index:", paymentIndex);
+    }
+}
+
 
 // Event listener for the "Previous Month" button
 document.getElementById('prev-month-btn').addEventListener('click', () => {
