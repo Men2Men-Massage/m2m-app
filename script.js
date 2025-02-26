@@ -454,22 +454,28 @@ document.querySelectorAll('input').forEach(input => {
 });
 
 // Inizializza la sezione istruzioni (chiamata quando l'app si carica)
+// Modificata per gestire la freccia e lo stato iniziale
 function initInstructionsToggle() {
     const toggleBtn = document.getElementById('toggle-instructions-btn');
     const instructionsContent = document.getElementById('instructions-content');
+    const instructionsContainer = document.querySelector('.instructions-container');
 
-    // Imposta lo stato iniziale (chiuso)
-    instructionsContent.classList.add('collapsed');
-    toggleBtn.textContent = 'Show'; // Testo iniziale del pulsante
+
+    // Inizialmente APERTO, quindi imposta la freccia GIÙ e rimuovi la classe 'collapsed'
+    toggleBtn.innerHTML = '▼'; // Freccia giù
+    instructionsContent.classList.remove('collapsed'); // Assicurati che sia aperto
+     instructionsContainer.classList.remove('collapsed');
 
 
     toggleBtn.addEventListener('click', () => {
         if (instructionsContent.classList.contains('collapsed')) {
             instructionsContent.classList.remove('collapsed');
-            toggleBtn.textContent = 'Hide'; // Cambia il testo
+            instructionsContainer.classList.remove('collapsed'); // Rimuovi da container
+            toggleBtn.innerHTML = '▼'; // Freccia giù
         } else {
             instructionsContent.classList.add('collapsed');
-            toggleBtn.textContent = 'Show'; // Cambia il testo
+            instructionsContainer.classList.add('collapsed'); // Aggiungi a container
+            toggleBtn.innerHTML = '▲'; // Freccia su
         }
     });
 }
