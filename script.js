@@ -120,7 +120,7 @@ function calculatePayment() {
         <div class="result-line-total">• Total: €${(regular + giftcard).toFixed(2)}</div>
         <div class="payment-due-amount">Payment to Center (40%): €${dueAmount.toFixed(2)}</div>
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
-        <button id="save-payment-button" onclick="savePayment()">Save Payment</button>
+        <button id="save-payment-button" onclick="generatePayment()">Generate Payment</button>  <!-- Cambiato onclick -->
     `;
 
     resultDiv.className = 'payment-due';
@@ -137,29 +137,68 @@ function resetAll() {
     currentGiftCardAmount = 0;
 }
 
-// Function to save the current payment
-function savePayment() {
-    const now = new Date();
-    const paymentDate = formatDate(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`);
+// NUOVA FUNZIONE: Gestisce la generazione del pagamento
+function generatePayment() {
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
     const dueAmount = (regular + giftcard) * 0.4;
+      // 1. Chiedi la data
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const todayStr = formatDate(today.toISOString().split('T')[0]);
+    const yesterdayStr = formatDate(yesterday.toISOString().split('T')[0]);
 
-    const paymentData = {
-        date: paymentDate,
+    let shiftDate = prompt(`Enter the shift date (or press Cancel for today - ${todayStr}):\n\n- Today (${todayStr})\n- Yesterday (${yesterdayStr})`, todayStr);
+
+    if (shiftDate === null) {
+        shiftDate = todayStr; // Default a oggi se l'utente annulla
+    } else if (shiftDate.toLowerCase() !== yesterdayStr.toLowerCase()) {
+        shiftDate = todayStr;  // Se non è ieri, imposta a oggi.
+    }
+
+    // 2. Chiedi il luogo
+    let location = prompt("Enter the location (Prenzlauer Berg or Schoeneberg):", "Prenzlauer Berg");
+    if (location !== null) {
+        location = location.trim().toLowerCase(); // Converti in minuscolo
+        if (location !== "prenzlauer berg" && location !== "schoeneberg") {
+            alert("Invalid location.  Please enter 'Prenzlauer Berg' or 'Schoeneberg'.");
+            return; // Esci dalla funzione se il luogo non è valido
+        }
+        // Capitalizza la prima lettera di ogni parola
+        location = location.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    } else {
+        return; // Esci se l'utente annulla
+    }
+
+      // 3. Salva il pagamento (usa la funzione esistente)
+    savePaymentData(shiftDate, dueAmount, giftcard);
+
+    // 4. Genera i dati per il bonifico
+     const userName = localStorage.getItem('m2m_name'); // Prendi il nome utente
+     const iban = "DE12 3456 7890 1234 5678 90";  // IBAN corretto
+     const purpose = `${userName}, ${shiftDate}, ${location}`;
+
+    // 5. Mostra i dati all'utente
+       alert(`Please make an instant bank transfer:\n\nIBAN: ${iban}\nAmount: €${dueAmount.toFixed(2)}\nPurpose: ${purpose}`);
+
+}
+
+// Funzione separata per salvare i dati (per riutilizzo)
+function savePaymentData(date, dueAmount, giftCardAmount) {
+     const paymentData = {
+        date: date,
         dueAmount: dueAmount,
-        giftCardAmount: giftcard,
-        note: ''
+        giftCardAmount: giftCardAmount,
+        note: '' // Puoi aggiungere una nota qui se necessario
     };
 
     savedPayments.push(paymentData);
     localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
 
-    alert(`Payment to Center of €${dueAmount.toFixed(2)} and Gift Card payment of €${giftcard.toFixed(2)} saved for ${paymentDate}`);
-    document.getElementById('save-payment-button').style.display = 'none';
-    currentGiftCardAmount = 0;
-
-    if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
+      // Aggiorna il calendario se siamo nel mese corrente
+    const now = new Date();
+      if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
         generateCalendar(currentCalendarMonth, currentCalendarYear);
     }
 }
