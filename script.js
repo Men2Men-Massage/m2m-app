@@ -453,29 +453,21 @@ document.querySelectorAll('input').forEach(input => {
 });
 
 // Inizializza la sezione istruzioni (chiamata quando l'app si carica)
-// Modificata per gestire la freccia correttamente
 function initInstructionsToggle() {
     const toggleBtn = document.getElementById('toggle-instructions-btn');
     const instructionsContent = document.getElementById('instructions-content');
     const instructionsContainer = document.querySelector('.instructions-container');
 
-    // Inizialmente APERTO, freccia a DESTRA
-    toggleBtn.classList.add('rotated'); // Inizia ruotato a destra
+    // Imposta lo stato iniziale (aperto)
     instructionsContent.classList.remove('collapsed');
-    instructionsContainer.classList.remove('collapsed');
+    instructionsContainer.classList.remove('collapsed'); // Da container
+    toggleBtn.textContent = 'Hide'; // Mostra "Hide" inizialmente
 
 
     toggleBtn.addEventListener('click', () => {
-        if (instructionsContent.classList.contains('collapsed')) {
-            instructionsContent.classList.remove('collapsed');
-            instructionsContainer.classList.remove('collapsed');
-            toggleBtn.classList.add('rotated'); // Ruota a destra (aperto)
-
-        } else {
-            instructionsContent.classList.add('collapsed');
-            instructionsContainer.classList.add('collapsed');
-             toggleBtn.classList.remove('rotated'); // Ruota a sinistra (chiuso)
-        }
+        instructionsContent.classList.toggle('collapsed');
+        instructionsContainer.classList.toggle('collapsed'); // Su container
+        toggleBtn.textContent = instructionsContent.classList.contains('collapsed') ? 'Show' : 'Hide'; //Aggiorna pulsante
     });
 }
 
