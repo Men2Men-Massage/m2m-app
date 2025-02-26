@@ -122,7 +122,6 @@ function calculatePayment() {
         <div class="result-line-total">• Total: €${(regular + giftcard).toFixed(2)}</div>
         <div class="payment-due-amount">Payment to Center (40%): €${dueAmount.toFixed(2)}</div>
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
-        <button id="generate-payment-button" onclick="showPaymentDetails()">Generate Payment</button>
     `;
 
     resultDiv.className = 'payment-due';
