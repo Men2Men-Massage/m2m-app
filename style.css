@@ -20,6 +20,64 @@ body {
     z-index: 1000;
 }
 
+/* Aggiunto per l'overlay dei dettagli pagamento */
+#payment-details-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+#payment-details-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    width: 90%;
+    max-width: 450px;
+    overflow-y: auto;
+    max-height: 85%;  /* Evita che sia troppo alto su schermi piccoli */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Stile per il pulsante di copia */
+.copy-button {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ddd;
+    color: #444;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-left: 5px; /* Spazio tra testo e pulsante */
+}
+
+.copy-button:hover {
+    background-color: #ccc;
+    color: #333;
+}
+/* Stili per il selettore data e luogo (input-group è già definito) */
+#payment-date, #work-location {
+     padding: 12px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 280px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin: 6px 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+
 #auth-box, #history-box {
     background: white;
     padding: 20px;
@@ -159,7 +217,8 @@ button#reset-button:hover {
     box-shadow: 0 2px 7px rgba(0,0,0,0.1);
 }
 
-#result button#save-payment-button {
+/* Scommentato e modificato l'id */
+#result #generate-payment-button {
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
@@ -170,8 +229,8 @@ button#reset-button:hover {
     margin-top: 18px;
     transition: background-color 0.3s;
 }
-
-#result button#save-payment-button:hover {
+/* Scommentato e modificato l'id */
+#result #generate-payment-button:hover {
     background-color: #45a049;
 }
 
@@ -540,7 +599,7 @@ button#reset-button:hover {
 
 /* Stile per il pulsante Show/Hide */
 #toggle-instructions-btn {
-    padding: 5px 10px;
+     padding: 5px 10px;
     font-size: 12px;
     border-radius: 5px;
     border: none;
@@ -551,7 +610,7 @@ button#reset-button:hover {
 }
 
 #toggle-instructions-btn:hover {
-    background-color: #ccc;
+      background-color: #ccc;
     color: #333;
 }
 
