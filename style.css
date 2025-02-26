@@ -513,10 +513,10 @@ button#reset-button:hover {
 
 .instructions-container {
     margin: 20px 0;
-    padding: 18px;
+    padding: 5px; /* Riduci il padding generale */
     background-color: #fffde7;
-    border: 3px solid #ffca28; /* Bordo unico */
-    border-radius: 5px; /* Bordi arrotondati */
+    border: 3px solid #ffca28;
+    border-radius: 5px;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
 }
 
@@ -524,22 +524,30 @@ button#reset-button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0px; /* Rimosso spazio sotto l'header */
+    margin-bottom: 0px;
 }
+
 .instructions-header span {
     font-size: 18px;
     font-weight: bold;
+    margin-left: 8px; /* Aggiungi un po' di margine a sinistra */
 }
 
 /* Stile per il pulsante freccia */
 #toggle-instructions-btn {
-    background: none; /* Nessuno sfondo */
+    background: none;
     border: none;
-    font-size: 1.5em; /* Freccia più grande */
+    font-size: 1.2em; /* Riduci leggermente la dimensione */
     cursor: pointer;
-    color: #555; /* Colore freccia */
-    padding: 0; /* Nessun padding */
-    line-height: 1; /* Allinea verticalmente */
+    color: #ffca28; /* Colore giallo */
+    padding: 0;
+    line-height: 1;
+     transition: transform 0.3s ease; /* Aggiungi transizione per rotazione */
+    transform: rotate(-90deg); /* Inizialmente punta a sinistra */
+}
+/* Ruota la freccia quando è aperto */
+#toggle-instructions-btn.rotated {
+    transform: rotate(90deg); /* Punta a destra quando aperto */
 }
 
 
@@ -549,11 +557,10 @@ button#reset-button:hover {
     max-height: 500px; /* Inizialmente aperto */
 }
 
-/*  rimosso la classe .collapsed */
-
 /* Stile per quando è chiuso */
 #instructions-content.collapsed {
   max-height: 0;
+   padding: 0; /* Rimuovi il padding quando è chiuso */
 }
 
 /* Stile per l'header quando è chiuso */
