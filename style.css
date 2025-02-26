@@ -20,64 +20,6 @@ body {
     z-index: 1000;
 }
 
-/* Aggiunto per l'overlay dei dettagli pagamento */
-#payment-details-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-#payment-details-box {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    text-align: center;
-    width: 90%;
-    max-width: 450px;
-    overflow-y: auto;
-    max-height: 85%;  /* Evita che sia troppo alto su schermi piccoli */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* Stile per il pulsante di copia */
-.copy-button {
-    padding: 5px 10px;
-    font-size: 12px;
-    border-radius: 5px;
-    border: none;
-    background-color: #ddd;
-    color: #444;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-    margin-left: 5px; /* Spazio tra testo e pulsante */
-}
-
-.copy-button:hover {
-    background-color: #ccc;
-    color: #333;
-}
-/* Stili per il selettore data e luogo (input-group è già definito) */
-#payment-date, #work-location {
-     padding: 12px;
-    font-size: 16px;
-    width: 100%;
-    max-width: 280px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin: 6px 0;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    box-sizing: border-box;
-}
-
-
 #auth-box, #history-box {
     background: white;
     padding: 20px;
@@ -217,8 +159,7 @@ button#reset-button:hover {
     box-shadow: 0 2px 7px rgba(0,0,0,0.1);
 }
 
-/* Scommentato e modificato l'id */
-#result #generate-payment-button {
+#result button#save-payment-button {
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
@@ -229,8 +170,8 @@ button#reset-button:hover {
     margin-top: 18px;
     transition: background-color 0.3s;
 }
-/* Scommentato e modificato l'id */
-#result #generate-payment-button:hover {
+
+#result button#save-payment-button:hover {
     background-color: #45a049;
 }
 
@@ -454,7 +395,7 @@ button#reset-button:hover {
     margin-top: 12px;
     display: flex; /* Usa Flexbox */
     align-items: center; /* Allinea verticalmente */
-    flex-wrap: wrap; /* Permetti il wrapping su più righe se necessario */
+    flex-wrap: wrap; /* Permetti il wrapping su piÃ¹ righe se necessario */
 }
 
 .note-input-area textarea {
@@ -468,7 +409,7 @@ button#reset-button:hover {
 
 }
 
-/* Stili generali per i pulsanti nell'area note, più piccoli */
+/* Stili generali per i pulsanti nell'area note, piÃ¹ piccoli */
 .note-input-area button {
     padding: 5px 10px;  /* Riduci il padding */
     font-size: 12px;   /* Riduci la dimensione del font */
@@ -487,11 +428,11 @@ button#reset-button:hover {
     color: #333;
 }
 
-/* Stile specifico per il pulsante Remove, più piccolo e rosso */
+/* Stile specifico per il pulsante Remove, piÃ¹ piccolo e rosso */
 .note-input-area button.remove-note-button {
     background-color: #f44336;
     color: white;
-    /* Altre proprietà ereditate da .note-input-area button */
+    /* Altre proprietÃ  ereditate da .note-input-area button */
 }
 
 .note-input-area button.remove-note-button:hover {
@@ -579,7 +520,7 @@ button#reset-button:hover {
     box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
 }
 
-/* Rimuovi il bordo specifico quando è aperto */
+/* Rimuovi il bordo specifico quando Ã¨ aperto */
 .instructions-container:not(.collapsed) .instructions {
   border-left: none;
 }
@@ -599,7 +540,7 @@ button#reset-button:hover {
 
 /* Stile per il pulsante Show/Hide */
 #toggle-instructions-btn {
-     padding: 5px 10px;
+    padding: 5px 10px;
     font-size: 12px;
     border-radius: 5px;
     border: none;
@@ -610,7 +551,7 @@ button#reset-button:hover {
 }
 
 #toggle-instructions-btn:hover {
-      background-color: #ccc;
+    background-color: #ccc;
     color: #333;
 }
 
@@ -620,13 +561,13 @@ button#reset-button:hover {
     max-height: 500px; /* Inizialmente aperto */
 }
 
-/* Stile per quando è chiuso */
+/* Stile per quando Ã¨ chiuso */
 #instructions-content.collapsed {
   max-height: 0;
-   padding: 0; /* Rimuovi il padding quando è chiuso */
+   padding: 0; /* Rimuovi il padding quando Ã¨ chiuso */
 }
 
-/* Stile per l'header quando è chiuso */
+/* Stile per l'header quando Ã¨ chiuso */
 .instructions-container.collapsed .instructions-header{
   margin-bottom: 0px; /* Assicurati che non ci sia spazio extra */
 }
