@@ -5,6 +5,10 @@ let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
 let currentCalendarMonth = new Date().getMonth();
 let currentCalendarYear = new Date().getFullYear();
 
+// Variabili globali per memorizzare data e luogo selezionati
+let selectedShiftDate = '';
+let selectedLocation = '';
+
 // Date formatting function (YYYY-MM-DD)
 function formatDate(dateString) {
     const [year, month, day] = dateString.split('-');
@@ -137,87 +141,65 @@ function resetAll() {
     currentGiftCardAmount = 0;
 }
 
-// NUOVA FUNZIONE: Gestisce la generazione del pagamento
-// MODIFICATA: Gestione corretta della data, input più flessibile
+// MODIFICATA: Ora mostra i modali
 function generatePayment() {
-    const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
-    const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
-    const dueAmount = (regular + giftcard) * 0.4;
+    // Mostra il modal della data
+    showDateModal();
+}
 
-    // 1. Chiedi la data (gestione migliorata)
+// NUOVA FUNZIONE: Mostra il modal per la selezione della data
+function showDateModal() {
+    const dateModal = document.getElementById('date-modal');
+    const dateSelect = document.getElementById('shift-date-select');
+    dateSelect.innerHTML = ''; // Pulisci eventuali opzioni precedenti
+
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
 
-    // Formatta le date SENZA usare toISOString(), per evitare problemi di fuso orario
-    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-    const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+    const todayStr = formatDate(today.toISOString().split('T')[0]);
+    const yesterdayStr = formatDate(yesterday.toISOString().split('T')[0]);
 
+    // Aggiungi le opzioni al select
+    dateSelect.add(new Option(`Today (${todayStr})`, todayStr));
+    dateSelect.add(new Option(`Yesterday (${yesterdayStr})`, yesterdayStr));
 
-    let shiftDate = prompt(`Enter the shift date (YYYY-MM-DD, YYYY-MM, DD, or press Cancel for today - ${todayStr}):`, todayStr);
+    dateModal.style.display = 'flex'; // Mostra il modal
+}
 
-    if (shiftDate === null) {
-        shiftDate = todayStr; // Default a oggi se l'utente annulla
-    } else {
-        shiftDate = shiftDate.trim();
-        // Permetti input flessibili (YYYY-MM-DD, YYYY-MM, DD)
-        const dateParts = shiftDate.split('-');
-        let year = today.getFullYear();
-        let month = today.getMonth() + 1;
-        let day = today.getDate();
+// NUOVA FUNZIONE: Salva la data selezionata e mostra il modal del luogo
+function saveDateAndShowLocation() {
+    const dateSelect = document.getElementById('shift-date-select');
+    selectedShiftDate = dateSelect.value; // Salva la data selezionata
 
-        if (dateParts.length === 1) {
-            // Solo giorno fornito
-            day = parseInt(dateParts[0], 10);
-        } else if (dateParts.length === 2) {
-            // Mese e giorno forniti
-            month = parseInt(dateParts[0], 10);
-            day = parseInt(dateParts[1], 10);
-        } else if (dateParts.length === 3) {
-            // Anno, mese e giorno forniti
-            year = parseInt(dateParts[0], 10);
-            month = parseInt(dateParts[1], 10);
-            day = parseInt(dateParts[2], 10);
-        }
+    document.getElementById('date-modal').style.display = 'none'; // Nascondi il modal della data
+    showLocationModal(); // Mostra il modal del luogo
+}
 
-        // Crea la data, gestendo possibili errori
-        try {
-            let parsedDate = new Date(year, month - 1, day); // Mese è 0-based in Date
-            if (isNaN(parsedDate.getTime())) {  // Controlla se la data è valida
-                throw new Error("Invalid date");
-            }
-             //Formatta la data
-              shiftDate = formatDate(`${parsedDate.getFullYear()}-${String(parsedDate.getMonth() + 1).padStart(2, '0')}-${String(parsedDate.getDate()).padStart(2, '0')}`);
+// NUOVA FUNZIONE: Mostra il modal per la selezione del luogo
+function showLocationModal() {
+    document.getElementById('location-modal').style.display = 'flex';
+}
 
-        } catch (error) {
-            alert("Invalid date format. Using today's date.");
-            shiftDate = todayStr; // Usa la data di oggi in caso di errore
-        }
-    }
+// NUOVA FUNZIONE: Salva il luogo, esegue i calcoli e salva il pagamento
+function saveLocationAndGeneratePayment() {
+     selectedLocation = document.getElementById('location-select').value;
+     document.getElementById('location-modal').style.display = 'none';
 
+    // Calcola l'importo dovuto
+    const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
+    const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
+    const dueAmount = (regular + giftcard) * 0.4;
 
-    // 2. Chiedi il luogo
-    let location = prompt("Enter the location (Prenzlauer Berg or Schoeneberg):", "Prenzlauer Berg");
-    if (location !== null) {
-        location = location.trim().toLowerCase();
-        if (location !== "prenzlauer berg" && location !== "schoeneberg") {
-            alert("Invalid location.  Please enter 'Prenzlauer Berg' or 'Schoeneberg'.");
-            return;
-        }
-        location = location.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    } else {
-        return; // Esci se l'utente annulla
-    }
+    //Salva il pagamento
+    savePaymentData(selectedShiftDate, dueAmount, giftcard);
 
-    // 3. Salva il pagamento
-    savePaymentData(shiftDate, dueAmount, giftcard);
-
-    // 4. Genera i dati per il bonifico
+    // Genera i dati per il bonifico
     const userName = localStorage.getItem('m2m_name');
     const iban = "DE12 3456 7890 1234 5678 90"; // IBAN di esempio corretto
-    const purpose = `${userName}, ${shiftDate}, ${location}`;
+    const purpose = `${userName}, ${selectedShiftDate}, ${selectedLocation}`;
 
-    // 5. Mostra i dati all'utente
+    // Mostra i dati all'utente
     alert(`Please make an instant bank transfer:\n\nIBAN: ${iban}\nAmount: €${dueAmount.toFixed(2)}\nPurpose: ${purpose}`);
 }
 
@@ -374,8 +356,6 @@ function calculateMonthlyTotals(month, year) {
     return [dueTotal, giftCardTotal, earningsTotal];
 }
 
-
-
 function showDailyPayments(dateString) {
     document.getElementById('daily-payments-section').style.display = 'block';
     document.getElementById('selected-date').textContent = formatDate(dateString);
@@ -423,7 +403,6 @@ function showDailyPayments(dateString) {
         dailyPaymentsListDiv.appendChild(paymentItem);
     });
 }
-
 
 // Function to delete a payment
 function deletePayment(paymentIndex, dateString) {
@@ -495,7 +474,6 @@ function removeNote(paymentIndex, dailyPaymentItem) {
         console.error("Payment not found at index:", paymentIndex);
     }
 }
-
 
 // Event listener for the "Previous Month" button
 document.getElementById('prev-month-btn').addEventListener('click', () => {
