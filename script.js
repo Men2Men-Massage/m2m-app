@@ -1,6 +1,6 @@
 const AUTH_CODE = "1228";
-let currentPaymentAmount = 0; // Non più usata in questo modo
-let currentGiftCardAmount = 0; // Per tenere traccia del totale delle gift card
+let currentPaymentAmount = 0;
+let currentGiftCardAmount = 0;
 let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
 let currentCalendarMonth = new Date().getMonth();
 let currentCalendarYear = new Date().getFullYear();
@@ -137,7 +137,6 @@ function resetAll() {
 }
 
 // Function to save the current payment
-// Modificata per salvare separatamente i due importi
 function savePayment() {
     const now = new Date();
     const paymentDate = formatDate(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`);
@@ -147,8 +146,8 @@ function savePayment() {
 
     const paymentData = {
         date: paymentDate,
-        dueAmount: dueAmount, // Importo dovuto (40%)
-        giftCardAmount: giftcard, // Importo gift card
+        dueAmount: dueAmount,
+        giftCardAmount: giftcard,
         note: ''
     };
 
@@ -157,7 +156,7 @@ function savePayment() {
 
     alert(`Payment to Center of €${dueAmount.toFixed(2)} and Gift Card payment of €${giftcard.toFixed(2)} saved for ${paymentDate}`);
     document.getElementById('save-payment-button').style.display = 'none';
-    currentGiftCardAmount = 0; // Resetta dopo il salvataggio
+    currentGiftCardAmount = 0;
 
     if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
         generateCalendar(currentCalendarMonth, currentCalendarYear);
@@ -253,17 +252,24 @@ function generateCalendar(month, year) {
     }
     calendarContainer.appendChild(calendarTable);
 
-    // Calcola *entrambi* i totali mensili
-    const [monthlyDueTotal, monthlyGiftCardTotal] = calculateMonthlyTotals(month, year);
+    // Calcola *tutti e tre* i totali mensili
+    const [monthlyDueTotal, monthlyGiftCardTotal, monthlyEarningsTotal] = calculateMonthlyTotals(month, year);
+
     const totalDueDiv = document.createElement('div');
-    totalDueDiv.className = 'monthly-total'; // Mantieni la classe generale
+    totalDueDiv.className = 'monthly-total';
     totalDueDiv.textContent = `Total Due (40%): €${monthlyDueTotal.toFixed(2)}`;
     calendarContainer.appendChild(totalDueDiv);
 
     const totalGiftCardDiv = document.createElement('div');
-    totalGiftCardDiv.className = 'monthly-total'; // Mantieni la classe generale
+    totalGiftCardDiv.className = 'monthly-total';
     totalGiftCardDiv.textContent = `Total Gift Cards: €${monthlyGiftCardTotal.toFixed(2)}`;
     calendarContainer.appendChild(totalGiftCardDiv);
+
+    // Aggiungi il div per il totale guadagni
+    const totalEarningsDiv = document.createElement('div');
+    totalEarningsDiv.className = 'monthly-total total-earnings'; // Usa entrambe le classi
+    totalEarningsDiv.textContent = `Total Earnings: €${monthlyEarningsTotal.toFixed(2)}`;
+    calendarContainer.appendChild(totalEarningsDiv);
 
 }
 
@@ -276,22 +282,26 @@ function goToToday() {
     document.getElementById('daily-payments-section').style.display = 'none';
 }
 
-// Modificata per calcolare *due* totali separati
+// Modificata per calcolare *tre* totali
 function calculateMonthlyTotals(month, year) {
     let dueTotal = 0;
     let giftCardTotal = 0;
+    let earningsTotal = 0; // Nuovo totale guadagni
+
     savedPayments.forEach(payment => {
         const [pYear, pMonth] = payment.date.split('-').map(Number);
         if (pYear === year && pMonth - 1 === month) {
-            dueTotal += payment.dueAmount; // Aggiungi l'importo dovuto
-            giftCardTotal += payment.giftCardAmount; // Aggiungi l'importo gift card
+            dueTotal += payment.dueAmount;
+            giftCardTotal += payment.giftCardAmount;
+            // Calcola il guadagno come 60% della somma di dueAmount e giftCardAmount
+            earningsTotal += (payment.dueAmount / 0.4) * 0.6;
         }
     });
-    return [dueTotal, giftCardTotal]; // Restituisci un array con entrambi i totali
+    return [dueTotal, giftCardTotal, earningsTotal]; // Restituisci tutti e tre i totali
 }
 
 
-// Modificata per mostrare *entrambi* gli importi
+
 function showDailyPayments(dateString) {
     document.getElementById('daily-payments-section').style.display = 'block';
     document.getElementById('selected-date').textContent = formatDate(dateString);
@@ -312,7 +322,6 @@ function showDailyPayments(dateString) {
 
         const detailsDiv = document.createElement('div');
         detailsDiv.className = 'payment-details';
-        // Mostra *entrambi* gli importi
         detailsDiv.innerHTML = `
             <div>Payment to Center (40%): €${payment.dueAmount.toFixed(2)}</div>
             <div>Gift Card Payment: €${payment.giftCardAmount.toFixed(2)}</div>
