@@ -73,7 +73,7 @@
         <div class="instructions-container">
             <div class="instructions-header">
                 <span>How to use:</span>
-                <button id="toggle-instructions-btn">Show</button>
+                 <button id="toggle-instructions-btn">Show</button> <!-- Pulsante Show/Hide -->
             </div>
             <div class="instructions" id="instructions-content">
                 <ol>
@@ -102,10 +102,12 @@
         </div>
 
         <!-- Result -->
-          <div id="result">
+         <!-- RISULTATO E PULSANTE GENERATE PAYMENT -->
+        <div id="result">
             <!-- Qui verranno mostrati i dettagli del pagamento -->
-            <button id="generate-payment-button" onclick="showPaymentDetails()" style="display: none;">Generate Payment</button>
         </div>
+        <button id="generate-payment-button" onclick="showPaymentDetails()" style="display: none;">Generate Payment</button>  <!-- Generate Payment FUORI da resultDiv -->
+
         <!-- Aggiunto Overlay e contenuto per i dettagli del bonifico/pagamento -->
         <div id="payment-details-overlay" style="display: none;">
             <div id="payment-details-box">
