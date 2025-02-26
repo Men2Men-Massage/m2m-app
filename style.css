@@ -393,35 +393,52 @@ button#reset-button:hover {
 
 .note-input-area {
     margin-top: 12px;
+    display: flex; /* Usa Flexbox */
+    align-items: center; /* Allinea verticalmente */
+    flex-wrap: wrap; /* Permetti il wrapping su più righe se necessario */
 }
 
 .note-input-area textarea {
-    width: calc(100% - 16px);
+    width: 100%; /* Usa tutta la larghezza disponibile */
+    max-width: calc(100% - 16px); /* Considera il padding */
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ddd;
-    margin-bottom: 8px;
+    margin-bottom: 8px; /* Spazio sotto il textarea */
+    box-sizing: border-box; /* Include padding e border nella larghezza */
+
 }
 
-/* Stili per i pulsanti "Save Note" e "Cancel" */
+/* Stili generali per i pulsanti nell'area note, più piccoli */
 .note-input-area button {
-    padding: 7px 12px; /* Come .payment-actions button */
-    font-size: 14px;  /* Come .payment-actions button */
-    border-radius: 5px; /* Come .payment-actions button */
+    padding: 5px 10px;  /* Riduci il padding */
+    font-size: 12px;   /* Riduci la dimensione del font */
+    border-radius: 5px;
     border: none;
     background-color: #ddd;
     color: #444;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    margin: 0 5px; /* Spaziatura tra i pulsanti */
+    margin-right: 5px; /* Spazio tra i pulsanti, ma non dopo l'ultimo */
+    white-space: nowrap; /* Impedisci al testo di andare a capo */
 }
-
 
 .note-input-area button:hover {
-    background-color: #ccc;  /* Come .payment-actions button:hover */
-    color: #333;             /* Come .payment-actions button:hover */
+    background-color: #ccc;
+    color: #333;
 }
 
+/* Stile specifico per il pulsante Remove, più piccolo e rosso */
+.note-input-area button.remove-note-button {
+    background-color: #f44336;
+    color: white;
+    /* Altre proprietà ereditate da .note-input-area button */
+}
+
+.note-input-area button.remove-note-button:hover {
+    background-color: #d32f2f;
+    color: white;
+}
 
 /* Added styles */
 #back-to-calculator-btn {
@@ -445,14 +462,4 @@ button#reset-button:hover {
 #calendar-month-year {
   font-size: 1.2em; /* Adjust as needed */
   font-weight: bold;
-}
-
-.note-input-area button.remove-note-button {
-    background-color: #f44336; /* Rosso, simile a delete */
-    color: white;
-}
-
-.note-input-area button.remove-note-button:hover {
-    background-color: #d32f2f; /* Rosso più scuro al hover */
-    color: white;
 }
