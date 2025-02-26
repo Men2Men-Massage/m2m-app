@@ -77,15 +77,19 @@
         <h1>M2M Payment Calculator</h1>
 
         <!-- Instructions -->
-        <div class="instructions">
-            <p>How to use:</p>
-            <ol>
-                <li>Enter <span class="highlight">regular payments</span> (cash/card payments handled by therapist)</li>
-                <li>Enter <span class="highlight">gift card payments</span> (processed by the center)</li>
-                <li>Click Calculate to see net amount</li>
-                <li>Positive amount = Payment to Center</li>
-                <li>Negative amount = Payment to Therapist</li>
-            </ol>
+       <div class="instructions-container">
+            <div class="instructions-header">
+                <span>How to use:</span>
+                <button id="toggle-instructions-btn">Show/Hide</button>
+            </div>
+            <div class="instructions" id="instructions-content">
+                <ol>
+                    <li>Enter <span class="highlight">regular payments</span> (cash/card payments handled by therapist)</li>
+                    <li>Enter <span class="highlight">gift card payments</span> (processed by the center)</li>
+                    <li>Click Calculate to see net amount</li>
+                    <li>Make sure you've checked out all appointments in Fresha and entered any gift cards correctly!</li>
+                </ol>
+            </div>
         </div>
 
         <!-- Input Section -->
@@ -116,4 +120,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
