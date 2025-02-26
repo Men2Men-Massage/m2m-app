@@ -463,80 +463,7 @@ button#reset-button:hover {
   font-size: 1.2em; /* Adjust as needed */
   font-weight: bold;
 }
-
 #today-button {
-    padding: 5px 10px; /* Piccolo, come gli altri pulsanti */
-    font-size: 12px;
-    border-radius: 5px;
-    border: none;
-    background-color: #ddd; /* O un altro colore a tua scelta */
-    color: #444;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-    margin-left: 10px; /* Spazio dal titolo del mese/anno */
-}
-
-#today-button:hover {
-    background-color: #ccc;
-    color: #333;
-}
-
-/* Stile per il totale mensile */
-.monthly-total {
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-top: 10px;
-    padding: 8px 12px;
-    border-radius: 5px;
-    background-color: #f0f8ff; /* Colore di sfondo leggero */
-    border: 1px solid #add8e6; /* Bordo leggero */
-    text-align: center; /* Centra il testo */
-}
-
-.payment-due-amount { /* Per il 40% dovuto */
-    font-size: 20px;
-    font-weight: bold;
-    color: #d32f2f; /* Rosso (o un colore a tua scelta) */
-    margin-bottom: 10px; /* Spazio sotto */
-}
-
-.payment-receivable-amount { /* Per le gift card */
-    font-size: 20px;
-    font-weight: bold;
-    color: #2e7d32; /* Verde (o un colore a tua scelta) */
-    margin-bottom: 10px;
-}
-.result-line-total {
-  font-size: 16px;
-}
-
-.monthly-total.total-earnings { /* Stile specifico, ma riusa la classe base */
-    color: #2e7d32; /* Verde (o un altro colore a tua scelta) */
-    border-color: #2e7d32;
-    background-color: #e8f5e9;
-}
-
-.instructions-container {
-    margin: 20px 0;
-    padding: 18px;
-    background-color: #fffde7;
-    border-left: 5px solid #ffca28;
-    border-radius: 0 5px 5px 0;
-    box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
-}
-
-.instructions-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.instructions-header span {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-#toggle-instructions-btn {
     padding: 5px 10px;
     font-size: 12px;
     border-radius: 5px;
@@ -545,20 +472,91 @@ button#reset-button:hover {
     color: #444;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
+    margin-left: 10px;
 }
-
-#toggle-instructions-btn:hover {
+#today-button:hover {
     background-color: #ccc;
     color: #333;
 }
-
-/* Nascondi inizialmente le istruzioni */
-#instructions-content {
-    overflow: hidden; /* Importante per l'animazione */
-    transition: max-height 0.3s ease; /* Animazione fluida */
-    max-height: 500px; /* Altezza massima iniziale (abbastanza grande) */
+.monthly-total {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #f0f8ff;
+    border: 1px solid #add8e6;
+    text-align: center;
+}
+.monthly-total.total-earnings {
+    color: #2e7d32;
+    border-color: #2e7d32;
+    background-color: #e8f5e9;
+}
+.payment-due-amount {
+    font-size: 20px;
+    font-weight: bold;
+    color: #d32f2f;
+    margin-bottom: 10px;
+}
+.payment-receivable-amount {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2e7d32;
+    margin-bottom: 10px;
+}
+.result-line-total {
+  font-size: 16px;
 }
 
+/* ---------- */
+
+.instructions-container {
+    margin: 20px 0;
+    padding: 18px;
+    background-color: #fffde7;
+    border: 3px solid #ffca28; /* Bordo unico */
+    border-radius: 5px; /* Bordi arrotondati */
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+}
+
+.instructions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0px; /* Rimosso spazio sotto l'header */
+}
+.instructions-header span {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Stile per il pulsante freccia */
+#toggle-instructions-btn {
+    background: none; /* Nessuno sfondo */
+    border: none;
+    font-size: 1.5em; /* Freccia più grande */
+    cursor: pointer;
+    color: #555; /* Colore freccia */
+    padding: 0; /* Nessun padding */
+    line-height: 1; /* Allinea verticalmente */
+}
+
+
+#instructions-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    max-height: 500px; /* Inizialmente aperto */
+}
+
+/*  rimosso la classe .collapsed */
+
+/* Stile per quando è chiuso */
 #instructions-content.collapsed {
-    max-height: 0; /* Chiudi nascondendo */
+  max-height: 0;
+}
+
+/* Stile per l'header quando è chiuso */
+.instructions-container.collapsed .instructions-header{
+  margin-bottom: 0px; /* Assicurati che non ci sia spazio extra */
 }
