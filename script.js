@@ -68,8 +68,7 @@ function showApp(userName) {
     document.getElementById('user-name').style.display = 'block';
     document.querySelector('.container').style.display = 'block';
     showInstallBanners();
-     // Inizializza la sezione istruzioni
-     initInstructionsToggle();
+    initInstructionsToggle(); // Inizializza le istruzioni
 }
 
 // Function to show installation banners for PWA
@@ -113,8 +112,8 @@ if (!checkAuth()) {
 function calculatePayment() {
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
-    const dueAmount = (regular + giftcard) * 0.4; // 40% del totale
-    currentGiftCardAmount = giftcard; // Salva il valore delle gift card
+    const dueAmount = (regular + giftcard) * 0.4;
+    currentGiftCardAmount = giftcard;
 
     const resultDiv = document.getElementById('result');
     resultDiv.innerHTML = `
@@ -124,7 +123,7 @@ function calculatePayment() {
         <button id="save-payment-button" onclick="savePayment()">Save Payment</button>
     `;
 
-    resultDiv.className = 'payment-due'; //  mantieni una classe generale
+    resultDiv.className = 'payment-due';
     resultDiv.style.display = 'block';
     document.getElementById('save-payment-button').style.display = 'inline-block';
 }
@@ -135,7 +134,7 @@ function resetAll() {
     document.getElementById('giftcard-payments').value = '';
     document.getElementById('result').style.display = 'none';
     document.getElementById('save-payment-button').style.display = 'none';
-    currentGiftCardAmount = 0; // Resetta anche il totale delle gift card
+    currentGiftCardAmount = 0;
 }
 
 // Function to save the current payment
@@ -454,28 +453,28 @@ document.querySelectorAll('input').forEach(input => {
 });
 
 // Inizializza la sezione istruzioni (chiamata quando l'app si carica)
-// Modificata per gestire la freccia e lo stato iniziale
+// Modificata per gestire la freccia correttamente
 function initInstructionsToggle() {
     const toggleBtn = document.getElementById('toggle-instructions-btn');
     const instructionsContent = document.getElementById('instructions-content');
     const instructionsContainer = document.querySelector('.instructions-container');
 
-
-    // Inizialmente APERTO, quindi imposta la freccia GIÙ e rimuovi la classe 'collapsed'
-    toggleBtn.innerHTML = '▼'; // Freccia giù
-    instructionsContent.classList.remove('collapsed'); // Assicurati che sia aperto
-     instructionsContainer.classList.remove('collapsed');
+    // Inizialmente APERTO, freccia a DESTRA
+    toggleBtn.classList.add('rotated'); // Inizia ruotato a destra
+    instructionsContent.classList.remove('collapsed');
+    instructionsContainer.classList.remove('collapsed');
 
 
     toggleBtn.addEventListener('click', () => {
         if (instructionsContent.classList.contains('collapsed')) {
             instructionsContent.classList.remove('collapsed');
-            instructionsContainer.classList.remove('collapsed'); // Rimuovi da container
-            toggleBtn.innerHTML = '▼'; // Freccia giù
+            instructionsContainer.classList.remove('collapsed');
+            toggleBtn.classList.add('rotated'); // Ruota a destra (aperto)
+
         } else {
             instructionsContent.classList.add('collapsed');
-            instructionsContainer.classList.add('collapsed'); // Aggiungi a container
-            toggleBtn.innerHTML = '▲'; // Freccia su
+            instructionsContainer.classList.add('collapsed');
+             toggleBtn.classList.remove('rotated'); // Ruota a sinistra (chiuso)
         }
     });
 }
