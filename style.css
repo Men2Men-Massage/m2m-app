@@ -571,3 +571,54 @@ button#reset-button:hover {
 .instructions-container.collapsed .instructions-header{
   margin-bottom: 0px; /* Assicurati che non ci sia spazio extra */
 }
+
+.modal {
+    display: none; /* Nascondi per default */
+    position: fixed;
+    z-index: 1000; /* Sopra a tutto il resto */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Sfondo semi-trasparente */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 80%; /* Larghezza */
+    max-width: 400px; /* Larghezza massima */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.modal-content button {
+      padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #376FE9;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.modal-content button:hover {
+    background-color: #45a049;
+}
