@@ -509,3 +509,9 @@ button#reset-button:hover {
 .result-line-total {
   font-size: 16px;
 }
+
+.monthly-total.total-earnings { /* Stile specifico, ma riusa la classe base */
+    color: #2e7d32; /* Verde (o un altro colore a tua scelta) */
+    border-color: #2e7d32;
+    background-color: #e8f5e9;
+}
