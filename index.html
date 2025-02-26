@@ -80,7 +80,7 @@
         <div class="instructions-container">
             <div class="instructions-header">
                 <span>How to use:</span>
-                 <button id="toggle-instructions-btn">Show</button> <!-- Pulsante Show/Hide -->
+                 <button id="toggle-instructions-btn">Show</button>
             </div>
             <div class="instructions" id="instructions-content">
                 <ol>
@@ -112,11 +112,32 @@
 
         <!-- Result -->
         <div id="result">
-            <button id="save-payment-button" onclick="savePayment()" style="display: none;">Save Payment</button>
+            <button id="save-payment-button" onclick="generatePayment()" style="display: none;">Generate Payment</button>
+        </div>
+
+         <!-- Modals for Date and Location -->
+        <div id="date-modal" class="modal">
+            <div class="modal-content">
+                <h2>Select Shift Date</h2>
+                <select id="shift-date-select">
+                    <!-- Options will be added dynamically -->
+                </select>
+                <button onclick="saveDateAndShowLocation()">Next</button>
+            </div>
+        </div>
+
+        <div id="location-modal" class="modal">
+            <div class="modal-content">
+                <h2>Select Location</h2>
+                <select id="location-select">
+                    <option value="Prenzlauer Berg">Prenzlauer Berg</option>
+                    <option value="Schoeneberg">Schoeneberg</option>
+                </select>
+                <button onclick="saveLocationAndGeneratePayment()">Generate Payment</button>
+            </div>
         </div>
     </div>
 
-    <!-- Collegamento al file JavaScript esterno -->
     <script src="script.js"></script>
 </body>
 </html>
