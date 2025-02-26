@@ -1,5 +1,5 @@
 const AUTH_CODE = "1228";
-let currentPaymentAmount = 0;
+let currentPaymentAmount = 0; // Non più utilizzata direttamente
 let currentGiftCardAmount = 0;
 let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
 let currentCalendarMonth = new Date().getMonth();
@@ -19,6 +19,7 @@ function logout() {
     document.querySelector('.container').style.display = 'none';
     document.getElementById('user-name').style.display = 'none';
     document.getElementById('history-overlay').style.display = 'none';
+     document.getElementById('payment-details-overlay').style.display = 'none'; // Aggiunto per logout
     document.getElementById('auth-overlay').style.display = 'flex';
     document.getElementById('access-code').value = '';
     document.getElementById('user-name-input').value = '';
@@ -29,7 +30,7 @@ function logout() {
 // Controlla l'autenticazione all'avvio
 function checkAuth() {
     const savedCode = localStorage.getItem('m2m_access');
-     userName = localStorage.getItem('m2m_name'); // Carica il nome utente
+    userName = localStorage.getItem('m2m_name'); // Carica il nome utente
 
     if (savedCode === AUTH_CODE && userName) {
         showApp(userName);
@@ -109,7 +110,7 @@ if (!checkAuth()) {
     document.getElementById('auth-overlay').style.display = 'flex';
 }
 
-// Function to calculate the payment
+// Function to calculate the payment.  NON mostra più direttamente i dettagli.
 function calculatePayment() {
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
@@ -121,12 +122,13 @@ function calculatePayment() {
         <div class="result-line-total">• Total: €${(regular + giftcard).toFixed(2)}</div>
         <div class="payment-due-amount">Payment to Center (40%): €${dueAmount.toFixed(2)}</div>
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
-         <button id="generate-payment-button" onclick="showPaymentDetails()" style="display: block;">Generate Payment</button>
+        <button id="generate-payment-button" onclick="showPaymentDetails()">Generate Payment</button>
     `;
 
     resultDiv.className = 'payment-due';
     resultDiv.style.display = 'block';
-    //document.getElementById('generate-payment-button').style.display = 'inline-block'; //Mostra generate payment
+    document.getElementById('generate-payment-button').style.display = 'inline-block'; //Mostra generate payment *DOPO* il calcolo
+
 }
 
 // Function to reset all form fields
@@ -134,8 +136,9 @@ function resetAll() {
     document.getElementById('regular-payments').value = '';
     document.getElementById('giftcard-payments').value = '';
     document.getElementById('result').style.display = 'none';
-    document.getElementById('generate-payment-button').style.display = 'none';
+    document.getElementById('generate-payment-button').style.display = 'none'; // Nascondi anche il pulsante
     currentGiftCardAmount = 0;
+     document.getElementById('payment-details-overlay').style.display = 'none';//Assicurati che sia chiuso
 }
 
 // Function to save the current payment
@@ -143,8 +146,8 @@ function resetAll() {
 function savePayment() {
     const paymentDate = document.getElementById('payment-date').value;
     const workLocation = document.getElementById('work-location').value;
-    const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
-    const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
+    const regular = parseFloat(document.getElementById('regular-payments').value) || 0;  // Recupera di nuovo i valori
+    const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0; // perché potrebbero essere cambiati
     const dueAmount = (regular + giftcard) * 0.4;
 
     // Controlli di validità
@@ -173,6 +176,7 @@ function savePayment() {
     //document.getElementById('generate-payment-button').style.display = 'none';
     currentGiftCardAmount = 0;
     hidePaymentDetails(); // Nascondi l'overlay dopo il salvataggio
+    resetAll();          // Resetta i campi DOPO il salvataggio
 
     //Aggiorna il calendario solo se il mese/anno corrente è visibile
     if (currentCalendarMonth === new Date(paymentDate).getMonth() && currentCalendarYear === new Date(paymentDate).getFullYear()) {
