@@ -156,6 +156,10 @@ function savePayment() {
 
     alert(`Payment of €${Math.abs(currentPaymentAmount).toFixed(2)} ${currentPaymentAmount >= 0 ? 'to Center' : 'to Therapist'} saved for ${paymentDate}`);
     document.getElementById('save-payment-button').style.display = 'none';
+     // Aggiunto per aggiornare il totale mensile dopo il salvataggio
+    if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
+        generateCalendar(currentCalendarMonth, currentCalendarYear);
+    }
 }
 
 // Function to show the payment history
@@ -187,6 +191,14 @@ function generateCalendar(month, year) {
         "July", "August", "September", "October", "November", "December"
     ];
     monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
+
+    // Aggiungi il pulsante "Today"
+    const todayButton = document.createElement('button');
+    todayButton.id = 'today-button';
+    todayButton.textContent = 'Today';
+    todayButton.onclick = goToToday; // Collega la funzione
+    monthYearDisplay.appendChild(todayButton); // Aggiungi il pulsante
+
 
     const calendarTable = document.createElement('table');
     calendarTable.className = 'calendar';
@@ -244,8 +256,35 @@ function generateCalendar(month, year) {
         }
     }
     calendarContainer.appendChild(calendarTable);
+
+      // Calcola e mostra il totale mensile
+    const monthlyTotal = calculateMonthlyTotal(month, year);
+    const totalDiv = document.createElement('div');
+    totalDiv.className = 'monthly-total';
+    totalDiv.textContent = `Total for ${monthNames[month]}: €${monthlyTotal.toFixed(2)}`;
+    calendarContainer.appendChild(totalDiv);
 }
 
+
+// NUOVA FUNZIONE: Riporta alla data odierna
+function goToToday() {
+    currentCalendarMonth = new Date().getMonth();
+    currentCalendarYear = new Date().getFullYear();
+    generateCalendar(currentCalendarMonth, currentCalendarYear);
+    document.getElementById('daily-payments-section').style.display = 'none'; // Nascondi i dettagli giornalieri
+}
+
+// NUOVA FUNZIONE: Calcola il totale dei pagamenti per il mese corrente
+function calculateMonthlyTotal(month, year) {
+    let total = 0;
+    savedPayments.forEach(payment => {
+        const [pYear, pMonth] = payment.date.split('-').map(Number); // Destruttura e converte in numeri
+        if (pYear === year && pMonth - 1 === month) { // -1 perché i mesi in JS vanno da 0 a 11
+            total += payment.amount;
+        }
+    });
+    return total;
+}
 
 
 // Function to display payments for a specific day
@@ -303,11 +342,10 @@ function deletePayment(paymentIndex, dateString) {
         savedPayments.splice(paymentIndex, 1);
         localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
         showDailyPayments(dateString);
-        generateCalendar(currentCalendarMonth, currentCalendarYear);
+        generateCalendar(currentCalendarMonth, currentCalendarYear); // Aggiorna il calendario e il totale
     }
 }
 
-// Function to handle adding or editing a note
 // Function to handle adding or editing a note
 function handleNoteForPayment(paymentIndex, existingNote) {
     const dailyPaymentItem = document.querySelector(`.daily-payment-item[data-payment-index="${paymentIndex}"]`);
