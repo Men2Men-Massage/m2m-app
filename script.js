@@ -1,5 +1,3 @@
-// script.js
-
 const AUTH_CODE = "1228";
 let currentPaymentAmount = 0;
 let currentGiftCardAmount = 0;
@@ -12,7 +10,6 @@ let selectedShiftDate = '';
 let selectedLocation = '';
 
 // Date formatting function (YYYY-MM-DD)
-// MODIFICATA: Usa padStart per garantire il formato corretto
 function formatDate(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 perché getMonth() è 0-based
@@ -153,7 +150,6 @@ function generatePayment() {
 }
 
 // NUOVA FUNZIONE: Mostra il modal per la selezione della data
-// MODIFICATA: Usa oggetti Date locali e formatDate()
 function showDateModal() {
     const dateModal = document.getElementById('date-modal');
     const dateSelect = document.getElementById('shift-date-select');
@@ -163,7 +159,6 @@ function showDateModal() {
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
 
-    // Usa formatDate() per formattare correttamente le date
     const todayStr = formatDate(today);
     const yesterdayStr = formatDate(yesterday);
 
@@ -230,6 +225,7 @@ function savePaymentData(date, dueAmount, giftCardAmount) {
 }
 
 // Function to show the payment history
+//REINSERITA
 function showPaymentHistory() {
     document.querySelector('.container').style.display = 'none';
     document.getElementById('history-overlay').style.display = 'flex';
@@ -238,12 +234,14 @@ function showPaymentHistory() {
 }
 
 // Function to return to the calculator from the payment history
+//REINSERITA
 function showCalculator() {
     document.querySelector('.container').style.display = 'block';
     document.getElementById('history-overlay').style.display = 'none';
 }
 
 // Function to generate the calendar (English localization)
+//REINSERITA
 function generateCalendar(month, year) {
     const calendarContainer = document.getElementById('calendar-container');
     calendarContainer.innerHTML = '';
@@ -339,6 +337,7 @@ function generateCalendar(month, year) {
 
 
 // Riporta alla data odierna
+//REINSERITA
 function goToToday() {
     currentCalendarMonth = new Date().getMonth();
     currentCalendarYear = new Date().getFullYear();
@@ -347,6 +346,7 @@ function goToToday() {
 }
 
 //  calcolare *tre* totali
+//REINSERITA
 function calculateMonthlyTotals(month, year) {
     let dueTotal = 0;
     let giftCardTotal = 0;
@@ -363,9 +363,10 @@ function calculateMonthlyTotals(month, year) {
     return [dueTotal, giftCardTotal, earningsTotal];
 }
 
+//REINSERITA
 function showDailyPayments(dateString) {
     document.getElementById('daily-payments-section').style.display = 'block';
-    document.getElementById('selected-date').textContent = formatDate(dateString);
+    document.getElementById('selected-date').textContent = formatDate(new Date(dateString)); // ফরম্যাট the date here
     const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
     dailyPaymentsListDiv.innerHTML = '';
 
@@ -412,6 +413,7 @@ function showDailyPayments(dateString) {
 }
 
 // Function to delete a payment
+//REINSERITA
 function deletePayment(paymentIndex, dateString) {
     if (confirm('Are you sure you want to delete this payment?')) {
         savedPayments.splice(paymentIndex, 1);
@@ -422,6 +424,7 @@ function deletePayment(paymentIndex, dateString) {
 }
 
 // Function to handle adding or editing a note
+//REINSERITA
 function handleNoteForPayment(paymentIndex, existingNote) {
     const dailyPaymentItem = document.querySelector(`.daily-payment-item[data-payment-index="${paymentIndex}"]`);
     let noteArea = dailyPaymentItem.querySelector('.note-input-area');
@@ -455,6 +458,7 @@ function handleNoteForPayment(paymentIndex, existingNote) {
 }
 
 // Function to save the note of a payment
+//REINSERITA
 function saveNote(paymentIndex, noteText, dailyPaymentItem) {
     const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
 
@@ -469,8 +473,9 @@ function saveNote(paymentIndex, noteText, dailyPaymentItem) {
 }
 
 // Remove the note
+//REINSERITA
 function removeNote(paymentIndex, dailyPaymentItem) {
-    const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
+     const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
 
     if (paymentToUpdate) {
         paymentToUpdate.note = '';
@@ -483,6 +488,7 @@ function removeNote(paymentIndex, dailyPaymentItem) {
 }
 
 // Event listener for the "Previous Month" button
+//REINSERITA
 document.getElementById('prev-month-btn').addEventListener('click', () => {
     currentCalendarMonth--;
     if (currentCalendarMonth < 0) {
@@ -494,6 +500,7 @@ document.getElementById('prev-month-btn').addEventListener('click', () => {
 });
 
 // Event listener for the "Next Month" button
+//REINSERITA
 document.getElementById('next-month-btn').addEventListener('click', () => {
     currentCalendarMonth++;
     if (currentCalendarMonth > 11) {
@@ -505,6 +512,7 @@ document.getElementById('next-month-btn').addEventListener('click', () => {
 });
 
 // Event listener for the "Enter" key press in input fields
+//REINSERITA
 document.querySelectorAll('input').forEach(input => {
     input.addEventListener('keypress', e => {
         if (e.key === 'Enter') {
@@ -514,6 +522,7 @@ document.querySelectorAll('input').forEach(input => {
 });
 
 // Inizializza la sezione istruzioni (chiamata quando l'app si carica)
+//REINSERITA
 function initInstructionsToggle() {
     const toggleBtn = document.getElementById('toggle-instructions-btn');
     const instructionsContent = document.getElementById('instructions-content');
