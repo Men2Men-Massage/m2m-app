@@ -492,3 +492,20 @@ button#reset-button:hover {
     border: 1px solid #add8e6; /* Bordo leggero */
     text-align: center; /* Centra il testo */
 }
+
+.payment-due-amount { /* Per il 40% dovuto */
+    font-size: 20px;
+    font-weight: bold;
+    color: #d32f2f; /* Rosso (o un colore a tua scelta) */
+    margin-bottom: 10px; /* Spazio sotto */
+}
+
+.payment-receivable-amount { /* Per le gift card */
+    font-size: 20px;
+    font-weight: bold;
+    color: #2e7d32; /* Verde (o un colore a tua scelta) */
+    margin-bottom: 10px;
+}
+.result-line-total {
+  font-size: 16px;
+}
