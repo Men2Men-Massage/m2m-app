@@ -1,25 +1,23 @@
 const AUTH_CODE = "1228";
-let currentPaymentAmount = 0; // Non più utilizzata direttamente
+let currentPaymentAmount = 0;
 let currentGiftCardAmount = 0;
 let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
 let currentCalendarMonth = new Date().getMonth();
 let currentCalendarYear = new Date().getFullYear();
-let userName = ""; // Variabile globale per memorizzare il nome utente
 
-// Formatta la data in YYYY-MM-DD
+// Date formatting function (YYYY-MM-DD)
 function formatDate(dateString) {
     const [year, month, day] = dateString.split('-');
-    return `${year}-${month}-${day}`;
+    return `${year}-${month}-${day}`; // Consistent YYYY-MM-DD format
 }
 
-// Funzione di logout
+// Logout function
 function logout() {
     localStorage.removeItem('m2m_access');
     localStorage.removeItem('m2m_name');
     document.querySelector('.container').style.display = 'none';
     document.getElementById('user-name').style.display = 'none';
     document.getElementById('history-overlay').style.display = 'none';
-     document.getElementById('payment-details-overlay').style.display = 'none'; // Aggiunto per logout
     document.getElementById('auth-overlay').style.display = 'flex';
     document.getElementById('access-code').value = '';
     document.getElementById('user-name-input').value = '';
@@ -27,10 +25,10 @@ function logout() {
     document.getElementById('name-section').style.display = 'none';
 }
 
-// Controlla l'autenticazione all'avvio
+// Function to check authentication on app startup
 function checkAuth() {
     const savedCode = localStorage.getItem('m2m_access');
-    userName = localStorage.getItem('m2m_name'); // Carica il nome utente
+    const userName = localStorage.getItem('m2m_name');
 
     if (savedCode === AUTH_CODE && userName) {
         showApp(userName);
@@ -40,7 +38,7 @@ function checkAuth() {
     return false;
 }
 
-// Controlla il codice di accesso
+// Function to check the access code entered by the user
 function checkCode() {
     const codeInput = document.getElementById('access-code');
     if (codeInput.value === AUTH_CODE) {
@@ -51,7 +49,7 @@ function checkCode() {
     }
 }
 
-// Salva il nome utente
+// Function to save the username
 function saveName() {
     const nameInput = document.getElementById('user-name-input');
     if (nameInput.value.trim().length > 0) {
@@ -63,7 +61,7 @@ function saveName() {
     }
 }
 
-// Mostra l'app
+// Function to show the main app interface
 function showApp(userName) {
     document.getElementById('auth-overlay').style.display = 'none';
     document.getElementById('user-name').textContent = `Hello ${userName}`;
@@ -110,7 +108,7 @@ if (!checkAuth()) {
     document.getElementById('auth-overlay').style.display = 'flex';
 }
 
-// Function to calculate the payment.  NON mostra più direttamente i dettagli.
+// Function to calculate the payment
 function calculatePayment() {
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
@@ -122,12 +120,12 @@ function calculatePayment() {
         <div class="result-line-total">• Total: €${(regular + giftcard).toFixed(2)}</div>
         <div class="payment-due-amount">Payment to Center (40%): €${dueAmount.toFixed(2)}</div>
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
+        <button id="save-payment-button" onclick="savePayment()">Save Payment</button>
     `;
 
     resultDiv.className = 'payment-due';
     resultDiv.style.display = 'block';
-    document.getElementById('generate-payment-button').style.display = 'inline-block'; //Mostra generate payment *DOPO* il calcolo
-
+    document.getElementById('save-payment-button').style.display = 'inline-block';
 }
 
 // Function to reset all form fields
@@ -135,50 +133,33 @@ function resetAll() {
     document.getElementById('regular-payments').value = '';
     document.getElementById('giftcard-payments').value = '';
     document.getElementById('result').style.display = 'none';
-    document.getElementById('generate-payment-button').style.display = 'none'; // Nascondi anche il pulsante
+    document.getElementById('save-payment-button').style.display = 'none';
     currentGiftCardAmount = 0;
-     document.getElementById('payment-details-overlay').style.display = 'none';//Assicurati che sia chiuso
 }
 
 // Function to save the current payment
-// Modificata per salvare *dopo* la selezione di data e luogo
 function savePayment() {
-    const paymentDate = document.getElementById('payment-date').value;
-    const workLocation = document.getElementById('work-location').value;
-    const regular = parseFloat(document.getElementById('regular-payments').value) || 0;  // Recupera di nuovo i valori
-    const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0; // perché potrebbero essere cambiati
+    const now = new Date();
+    const paymentDate = formatDate(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`);
+    const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
+    const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
     const dueAmount = (regular + giftcard) * 0.4;
-
-    // Controlli di validità
-    if (!paymentDate) {
-        alert('Please select a shift date.');
-        return;
-    }
-    if (!workLocation) {
-        alert('Please select a work location.');
-        return;
-    }
-
 
     const paymentData = {
         date: paymentDate,
         dueAmount: dueAmount,
         giftCardAmount: giftcard,
-        note: '',
-        location: workLocation, // Aggiungi il luogo
+        note: ''
     };
 
     savedPayments.push(paymentData);
     localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
 
     alert(`Payment to Center of €${dueAmount.toFixed(2)} and Gift Card payment of €${giftcard.toFixed(2)} saved for ${paymentDate}`);
-    //document.getElementById('generate-payment-button').style.display = 'none';
+    document.getElementById('save-payment-button').style.display = 'none';
     currentGiftCardAmount = 0;
-    hidePaymentDetails(); // Nascondi l'overlay dopo il salvataggio
-    resetAll();          // Resetta i campi DOPO il salvataggio
 
-    //Aggiorna il calendario solo se il mese/anno corrente è visibile
-    if (currentCalendarMonth === new Date(paymentDate).getMonth() && currentCalendarYear === new Date(paymentDate).getFullYear()) {
+    if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
         generateCalendar(currentCalendarMonth, currentCalendarYear);
     }
 }
@@ -489,78 +470,6 @@ function initInstructionsToggle() {
         toggleBtn.textContent = instructionsContent.classList.contains('collapsed') ? 'Show' : 'Hide'; //Aggiorna pulsante
     });
 }
-
-// Funzione per mostrare i dettagli del pagamento/bonifico
-function showPaymentDetails() {
-    const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
-    const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
-    const dueAmount = (regular + giftcard) * 0.4;
-
-    // Imposta la data odierna come valore predefinito e massimo per il datepicker
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1); // Imposta a ieri
-    const todayString = today.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-    const yesterdayString = yesterday.toISOString().split('T')[0];
-
-    document.getElementById('payment-date').value = todayString;
-    document.getElementById('payment-date').max = todayString;
-    // Imposta la data minima a ieri
-    document.getElementById('payment-date').min = yesterdayString;
-
-
-    // Mostra l'importo dovuto
-    document.getElementById('amount-due').textContent = `€${dueAmount.toFixed(2)}`;
-    //Mostra il valore delle Gift Card
-    document.getElementById('gift-cards-value').textContent = `€${giftcard.toFixed(2)}`;
-
-    // Genera la causale *iniziale* (sarà aggiornata in generatePaymentReference)
-    generatePaymentReference();
-
-    // Mostra l'overlay
-    document.getElementById('payment-details-overlay').style.display = 'flex';
-    document.getElementById('result').style.display = 'none'; // Nasconde result
-}
-
-// Funzione per nascondere i dettagli del pagamento
-function hidePaymentDetails() {
-    document.getElementById('payment-details-overlay').style.display = 'none';
-}
-
-// Funzione per generare la causale del bonifico.  Separata per poter essere chiamata all'occorrenza
-function generatePaymentReference() {
-    const selectedDate = document.getElementById('payment-date').value;
-    const location = document.getElementById('work-location').value;
-
-    if (selectedDate && location) {
-      const formattedDate = selectedDate.split('-').reverse().join(''); // GGMMYYYY
-      const reference = `${userName.toUpperCase()} ${formattedDate} ${location.toUpperCase()}`;
-      document.getElementById('payment-reference').textContent = reference;
-    }
-}
-
-// Gestisci il cambio di data e luogo
-document.getElementById('payment-date').addEventListener('change', generatePaymentReference);
-document.getElementById('work-location').addEventListener('change', generatePaymentReference);
-
-// Funzione per copiare testo negli appunti
-function copyToClipboard(elementId) {
-    const text = document.getElementById(elementId).innerText;
-    navigator.clipboard.writeText(text).then(() => {
-        alert('Copied to clipboard!');
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-        alert('Failed to copy. Please copy manually.'); // Messaggio di fallback
-    });
-}
-
-// Aggiungi event listener ai pulsanti di copia
-document.querySelectorAll('.copy-button').forEach(button => {
-    button.addEventListener('click', function() {
-        const elementId = this.dataset.copy; // Ottieni l'ID dell'elemento da copiare
-        copyToClipboard(elementId);
-    });
-});
 
 // Service Worker registration (for PWA functionality)
 if ('serviceWorker' in navigator) {
