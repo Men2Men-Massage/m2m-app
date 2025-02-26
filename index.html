@@ -4,8 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M2M Payment Calculator</title>
+
+    <!-- Meta tags for PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Payment Calc">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
     <link rel="manifest" href="/manifest.json">
-     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+    <!-- Collegamento al file CSS esterno -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -37,7 +44,7 @@
             <div id="calendar-container">
                 <!-- Calendar will be generated here -->
             </div>
-           <div id="daily-payments-section" style="display: none;">
+            <div id="daily-payments-section" style="display: none;">
                 <h3>Payments for <span id="selected-date"></span></h3>
                 <div id="daily-payments-list">
                     <!-- Daily payments will be listed here -->
@@ -58,7 +65,7 @@
                 📲 Install this app: Tap <img src="icons/share-icon.png" style="height:18px; vertical-align:middle">
                 then "Add to Home Screen"
             </div>
-             <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
+            <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
         </div>
 
         <div id="android-banner" class="install-banner" style="display: none;">
@@ -91,57 +98,25 @@
                 <label for="regular-payments">Regular Payments (€):</label>
                 <input type="number" id="regular-payments" placeholder="Enter amount" step="0.01" min="0">
             </div>
+
             <div class="input-group">
                 <label for="giftcard-payments">Gift Card Payments (€):</label>
                 <input type="number" id="giftcard-payments" placeholder="Enter amount" step="0.01" min="0">
             </div>
-             <div class="button-container">
+
+            <div class="button-container">
                 <button onclick="calculatePayment()">Calculate</button>
                 <button id="reset-button" onclick="resetAll()">Reset</button>
             </div>
         </div>
 
         <!-- Result -->
-         <!-- RISULTATO E PULSANTE GENERATE PAYMENT -->
         <div id="result">
-            <!-- Qui verranno mostrati i dettagli del pagamento -->
-        </div>
-        <button id="generate-payment-button" onclick="showPaymentDetails()" style="display: none;">Generate Payment</button>  <!-- Generate Payment FUORI da resultDiv -->
-
-        <!-- Aggiunto Overlay e contenuto per i dettagli del bonifico/pagamento -->
-        <div id="payment-details-overlay" style="display: none;">
-            <div id="payment-details-box">
-                <h2>Payment Details</h2>
-                <div id="payment-details-content">
-                    <!-- Selettore data -->
-                    <div class="input-group">
-                        <label for="payment-date">Shift Date:</label>
-                        <input type="date" id="payment-date">
-                    </div>
-
-                    <!-- Selettore luogo -->
-                    <div class="input-group">
-                        <label for="work-location">Location:</label>
-                        <select id="work-location">
-                            <option value="Prenzlauer Berg">Prenzlauer Berg</option>
-                            <option value="Schoeneberg">Schoeneberg</option>
-                        </select>
-                    </div>
-
-                    <!-- Dettagli bonifico -->
-                    <p>Please make an instant bank transfer to:</p>
-                    <p><strong>MEN2MEN MASSAGEN</strong></p>
-                    <p>IBAN: <span id="iban-value">1234 5678 9123 4567 89</span> <button class="copy-button" data-copy="iban-value">Copy</button></p>
-                    <p>Reference: <span id="payment-reference"></span> <button class="copy-button" data-copy="payment-reference">Copy</button></p>
-                    <p>Amount Due: <span id="amount-due"></span></p>  <!-- Mostra l'importo dovuto -->
-                    <p>Gift Cards Value: <span id="gift-cards-value"></span></p>
-                    <button id="confirm-payment-button" onclick="savePayment()">Confirm Payment</button>  <!-- Pulsante per salvare -->
-                    <button id="close-payment-details-btn" onclick="hidePaymentDetails()">Close</button>
-
-                </div>
-            </div>
+            <button id="save-payment-button" onclick="savePayment()" style="display: none;">Save Payment</button>
         </div>
     </div>
-<script src="script.js"></script>
+
+    <!-- Collegamento al file JavaScript esterno -->
+    <script src="script.js"></script>
 </body>
 </html>
