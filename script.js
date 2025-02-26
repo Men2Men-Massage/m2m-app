@@ -1,5 +1,6 @@
 const AUTH_CODE = "1228";
-let currentPaymentAmount = 0;
+let currentPaymentAmount = 0; // Non più usata in questo modo
+let currentGiftCardAmount = 0; // Per tenere traccia del totale delle gift card
 let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
 let currentCalendarMonth = new Date().getMonth();
 let currentCalendarYear = new Date().getFullYear();
@@ -110,25 +111,18 @@ if (!checkAuth()) {
 function calculatePayment() {
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
-    const toCenter = regular * 0.4;
-    const toTherapist = giftcard * 0.6;
-    currentPaymentAmount = toCenter - toTherapist;
-    const netAmount = currentPaymentAmount;
+    const dueAmount = (regular + giftcard) * 0.4; // 40% del totale
+    currentGiftCardAmount = giftcard; // Salva il valore delle gift card
 
     const resultDiv = document.getElementById('result');
     resultDiv.innerHTML = `
-        <div class="result-line">• Center keeps 40% of regular: €${toCenter.toFixed(2)}</div>
-        <div class="result-line">• Center owes 60% of gift cards: €${toTherapist.toFixed(2)}</div>
-        <hr>
-        <div class="total-amount ${netAmount >= 0 ? 'highlight' : ''}">
-            ${netAmount >= 0 ?
-                `Payment to Center: €${netAmount.toFixed(2)}` :
-                `Payment to Therapist: €${Math.abs(netAmount).toFixed(2)}`}
-        </div>
+        <div class="result-line-total">• Total: €${(regular + giftcard).toFixed(2)}</div>
+        <div class="payment-due-amount">Payment to Center (40%): €${dueAmount.toFixed(2)}</div>
+        <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
         <button id="save-payment-button" onclick="savePayment()">Save Payment</button>
     `;
 
-    resultDiv.className = netAmount >= 0 ? 'payment-due' : 'payment-receivable';
+    resultDiv.className = 'payment-due'; //  mantieni una classe generale
     resultDiv.style.display = 'block';
     document.getElementById('save-payment-button').style.display = 'inline-block';
 }
@@ -139,24 +133,32 @@ function resetAll() {
     document.getElementById('giftcard-payments').value = '';
     document.getElementById('result').style.display = 'none';
     document.getElementById('save-payment-button').style.display = 'none';
+    currentGiftCardAmount = 0; // Resetta anche il totale delle gift card
 }
 
 // Function to save the current payment
+// Modificata per salvare separatamente i due importi
 function savePayment() {
     const now = new Date();
-    const paymentDate = formatDate(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`); // YYYY-MM-DD
+    const paymentDate = formatDate(`${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`);
+    const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
+    const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
+    const dueAmount = (regular + giftcard) * 0.4;
+
     const paymentData = {
         date: paymentDate,
-        amount: currentPaymentAmount,
+        dueAmount: dueAmount, // Importo dovuto (40%)
+        giftCardAmount: giftcard, // Importo gift card
         note: ''
     };
 
     savedPayments.push(paymentData);
     localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
 
-    alert(`Payment of €${Math.abs(currentPaymentAmount).toFixed(2)} ${currentPaymentAmount >= 0 ? 'to Center' : 'to Therapist'} saved for ${paymentDate}`);
+    alert(`Payment to Center of €${dueAmount.toFixed(2)} and Gift Card payment of €${giftcard.toFixed(2)} saved for ${paymentDate}`);
     document.getElementById('save-payment-button').style.display = 'none';
-     // Aggiunto per aggiornare il totale mensile dopo il salvataggio
+    currentGiftCardAmount = 0; // Resetta dopo il salvataggio
+
     if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
         generateCalendar(currentCalendarMonth, currentCalendarYear);
     }
@@ -183,28 +185,25 @@ function generateCalendar(month, year) {
 
     const firstDayOfMonth = new Date(year, month, 1);
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const startingDayOfWeek = firstDayOfMonth.getDay(); // 0 (Sunday) to 6 (Saturday)
+    const startingDayOfWeek = firstDayOfMonth.getDay();
 
     const monthYearDisplay = document.getElementById('calendar-month-year');
-    // English month names
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
     monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
 
-    // Aggiungi il pulsante "Today"
     const todayButton = document.createElement('button');
     todayButton.id = 'today-button';
     todayButton.textContent = 'Today';
-    todayButton.onclick = goToToday; // Collega la funzione
-    monthYearDisplay.appendChild(todayButton); // Aggiungi il pulsante
+    todayButton.onclick = goToToday;
+    monthYearDisplay.appendChild(todayButton);
 
 
     const calendarTable = document.createElement('table');
     calendarTable.className = 'calendar';
     let thead = calendarTable.createTHead();
     let headerRow = thead.insertRow();
-    // English day names
     const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     daysOfWeek.forEach(day => {
         let th = document.createElement('th');
@@ -214,7 +213,6 @@ function generateCalendar(month, year) {
 
     let tbody = calendarTable.createTBody();
     let date = 1;
-    // Adjust starting day for Monday (0 becomes 6, 1 stays 1, etc.)
     let dayOfWeekCounter = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
 
     for (let i = 0; i < 6; i++) {
@@ -222,9 +220,9 @@ function generateCalendar(month, year) {
         for (let j = 0; j < 7; j++) {
             if (i === 0 && j < dayOfWeekCounter) {
                 let cell = row.insertCell();
-                cell.textContent = ''; // Empty cells before the first day
+                cell.textContent = '';
             } else if (date > daysInMonth) {
-                break; // Stop if we've reached the end of the month
+                break;
             } else {
                 let cell = row.insertCell();
                 cell.classList.add('day');
@@ -233,7 +231,6 @@ function generateCalendar(month, year) {
                 dayNumber.textContent = date;
                 cell.appendChild(dayNumber);
 
-                // Construct YYYY-MM-DD string directly, NO TIMEZONE ISSUES
                 const currentDateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
 
                 if (savedPayments.some(p => p.date === currentDateString)) {
@@ -246,7 +243,6 @@ function generateCalendar(month, year) {
                     cell.classList.add('today');
                 }
 
-
                 cell.addEventListener('click', () => {
                     showDailyPayments(currentDateString);
                 });
@@ -257,40 +253,48 @@ function generateCalendar(month, year) {
     }
     calendarContainer.appendChild(calendarTable);
 
-      // Calcola e mostra il totale mensile
-    const monthlyTotal = calculateMonthlyTotal(month, year);
-    const totalDiv = document.createElement('div');
-    totalDiv.className = 'monthly-total';
-    totalDiv.textContent = `Total for ${monthNames[month]}: €${monthlyTotal.toFixed(2)}`;
-    calendarContainer.appendChild(totalDiv);
+    // Calcola *entrambi* i totali mensili
+    const [monthlyDueTotal, monthlyGiftCardTotal] = calculateMonthlyTotals(month, year);
+    const totalDueDiv = document.createElement('div');
+    totalDueDiv.className = 'monthly-total'; // Mantieni la classe generale
+    totalDueDiv.textContent = `Total Due (40%): €${monthlyDueTotal.toFixed(2)}`;
+    calendarContainer.appendChild(totalDueDiv);
+
+    const totalGiftCardDiv = document.createElement('div');
+    totalGiftCardDiv.className = 'monthly-total'; // Mantieni la classe generale
+    totalGiftCardDiv.textContent = `Total Gift Cards: €${monthlyGiftCardTotal.toFixed(2)}`;
+    calendarContainer.appendChild(totalGiftCardDiv);
+
 }
 
 
-// NUOVA FUNZIONE: Riporta alla data odierna
+// Riporta alla data odierna
 function goToToday() {
     currentCalendarMonth = new Date().getMonth();
     currentCalendarYear = new Date().getFullYear();
     generateCalendar(currentCalendarMonth, currentCalendarYear);
-    document.getElementById('daily-payments-section').style.display = 'none'; // Nascondi i dettagli giornalieri
+    document.getElementById('daily-payments-section').style.display = 'none';
 }
 
-// NUOVA FUNZIONE: Calcola il totale dei pagamenti per il mese corrente
-function calculateMonthlyTotal(month, year) {
-    let total = 0;
+// Modificata per calcolare *due* totali separati
+function calculateMonthlyTotals(month, year) {
+    let dueTotal = 0;
+    let giftCardTotal = 0;
     savedPayments.forEach(payment => {
-        const [pYear, pMonth] = payment.date.split('-').map(Number); // Destruttura e converte in numeri
-        if (pYear === year && pMonth - 1 === month) { // -1 perché i mesi in JS vanno da 0 a 11
-            total += payment.amount;
+        const [pYear, pMonth] = payment.date.split('-').map(Number);
+        if (pYear === year && pMonth - 1 === month) {
+            dueTotal += payment.dueAmount; // Aggiungi l'importo dovuto
+            giftCardTotal += payment.giftCardAmount; // Aggiungi l'importo gift card
         }
     });
-    return total;
+    return [dueTotal, giftCardTotal]; // Restituisci un array con entrambi i totali
 }
 
 
-// Function to display payments for a specific day
+// Modificata per mostrare *entrambi* gli importi
 function showDailyPayments(dateString) {
     document.getElementById('daily-payments-section').style.display = 'block';
-    document.getElementById('selected-date').textContent = formatDate(dateString); // Use formatDate!
+    document.getElementById('selected-date').textContent = formatDate(dateString);
     const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
     dailyPaymentsListDiv.innerHTML = '';
 
@@ -308,8 +312,10 @@ function showDailyPayments(dateString) {
 
         const detailsDiv = document.createElement('div');
         detailsDiv.className = 'payment-details';
+        // Mostra *entrambi* gli importi
         detailsDiv.innerHTML = `
-            Payment ${payment.amount >= 0 ? 'to Center' : 'to Therapist'}: €${Math.abs(payment.amount).toFixed(2)}
+            <div>Payment to Center (40%): €${payment.dueAmount.toFixed(2)}</div>
+            <div>Gift Card Payment: €${payment.giftCardAmount.toFixed(2)}</div>
         `;
         if (payment.note) {
             detailsDiv.innerHTML += `<div class="payment-note">Note: ${payment.note}</div>`;
@@ -342,7 +348,7 @@ function deletePayment(paymentIndex, dateString) {
         savedPayments.splice(paymentIndex, 1);
         localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
         showDailyPayments(dateString);
-        generateCalendar(currentCalendarMonth, currentCalendarYear); // Aggiorna il calendario e il totale
+        generateCalendar(currentCalendarMonth, currentCalendarYear);
     }
 }
 
@@ -352,10 +358,8 @@ function handleNoteForPayment(paymentIndex, existingNote) {
     let noteArea = dailyPaymentItem.querySelector('.note-input-area');
 
     if (noteArea) {
-        // If note area exists, remove it (toggle off)
         dailyPaymentItem.removeChild(noteArea);
     } else {
-        // If note area doesn't exist, create it
         noteArea = document.createElement('div');
         noteArea.className = 'note-input-area';
         let textarea = document.createElement('textarea');
@@ -369,15 +373,13 @@ function handleNoteForPayment(paymentIndex, existingNote) {
         noteArea.appendChild(saveNoteButton);
 
 
-        // Only add "Remove Note" button if there's an existing note
         if (existingNote) {
             let removeNoteButton = document.createElement('button');
             removeNoteButton.textContent = 'Remove';
-            removeNoteButton.className = 'remove-note-button'; // Add class for styling
+            removeNoteButton.className = 'remove-note-button';
             removeNoteButton.onclick = () => removeNote(paymentIndex, dailyPaymentItem);
             noteArea.appendChild(removeNoteButton);
         }
-
 
         dailyPaymentItem.appendChild(noteArea);
     }
@@ -391,23 +393,21 @@ function saveNote(paymentIndex, noteText, dailyPaymentItem) {
         paymentToUpdate.note = noteText;
         localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
         dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area'));
-        showDailyPayments(paymentToUpdate.date); // Refresh to show updated note and "Edit Note" button
+        showDailyPayments(paymentToUpdate.date); // Refresh to show updated note
     } else {
         console.error("Payment not found at index:", paymentIndex);
     }
 }
 
-// New function: Remove the note
+// Remove the note
 function removeNote(paymentIndex, dailyPaymentItem) {
      const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
 
     if (paymentToUpdate) {
-        paymentToUpdate.note = ''; // Clear the note
+        paymentToUpdate.note = '';
         localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
-
-        // Remove the note input area *and* refresh the daily payments view
         dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area'));
-        showDailyPayments(paymentToUpdate.date); // VERY IMPORTANT: Refresh to show "Add Note"
+        showDailyPayments(paymentToUpdate.date);
     } else {
         console.error("Payment not found at index:", paymentIndex);
     }
