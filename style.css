@@ -446,3 +446,13 @@ button#reset-button:hover {
   font-size: 1.2em; /* Adjust as needed */
   font-weight: bold;
 }
+
+.note-input-area button.remove-note-button {
+    background-color: #f44336; /* Rosso, simile a delete */
+    color: white;
+}
+
+.note-input-area button.remove-note-button:hover {
+    background-color: #d32f2f; /* Rosso più scuro al hover */
+    color: white;
+}
