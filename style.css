@@ -626,44 +626,51 @@ button#reset-button:hover {
    background-color: #45a049; /* Verde scuro al passaggio del mouse */
 }
 
-/* Contenitore per le informazioni di pagamento (layout a griglia) */
 #payment-info {
     margin-top: 20px;
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
-    text-align: left;
+    text-align: left; /* Allineamento generale a sinistra */
     line-height: 1.6;
-    /* Layout a griglia */
-    display: grid;
-    grid-template-columns: 1fr 2fr; /* Due colonne: 1/3 etichetta, 2/3 valore + pulsante */
-    gap: 10px; /* Spaziatura tra le celle */
-    align-items: center; /* Allineamento verticale */
+    display: grid; /* Mantieni la griglia */
+    grid-template-columns: auto 1fr; /* Cambiato a 'auto 1fr' */
+    gap: 10px 20px;  /* Aggiunto spazio orizzontale tra le colonne */
+    align-items: center; /* Allinea verticalmente */
 }
 
-/* Stile per i paragrafi dentro #payment-info */
- #payment-info p {
-      margin: 10px 0;
+/* Intestazione "Please make..." */
+#payment-info > p:first-child { /* Seleziona solo il *primo* paragrafo figlio diretto */
+    grid-column: 1 / -1;  /* Occupa l'intera riga */
+    text-align: center;    /* Centra il testo */
+    margin-bottom: 15px; /* Aggiungi spazio sotto */
+    font-weight: bold;   /* Rendi il testo in grassetto */
+    font-size: 1.1em;      /* Aumenta leggermente la dimensione */
+}
 
-  }
+#payment-info p {
+    margin: 5px 0;       /* Mantieni lo spazio verticale */
+    /* display: flex;  RIMUOVI display: flex */
+    /* align-items: center; RIMUOVI, gestito da grid */
+    /* justify-content: space-between;  RIMUOVI */
+}
 
-/* Stile per il testo in grassetto (etichette) */
+/* Stile per le etichette (Account Holder, IBAN, ecc.) */
 #payment-info strong {
     font-weight: bold;
-    text-align: right; /* Allinea a destra (nella prima colonna) */
-    display: block; /* Occupa l'intera larghezza della colonna */
+    text-align: right;  /* Allinea a destra (nella prima colonna) */
+    display: block;      /* Occupa l'intera larghezza della colonna */
 }
 
-/* Stile per lo span che contiene il valore */
-#payment-info p span{
-     display: block;
+/* Stile per i valori (e i pulsanti Copy) */
+#payment-info p span {
+  /*  display: block;  Non più necessario, gestito dalla griglia */
 }
 
-/* Stile per i pulsanti "Copy" */
 .copy-button {
-    margin-left: 0;       /* Nessun margine sinistro */
-    padding: 5px;        /* Padding ridotto */
+    margin-left: 10px; /*  spazio a sinistra del pulsante */
+    padding: 5px 10px;
     font-size: 12px;
     border-radius: 5px;
     border: none;
@@ -671,14 +678,13 @@ button#reset-button:hover {
     color: #444;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    white-space: nowrap; /* Evita che il testo del pulsante vada a capo */
+     white-space: nowrap; /* Evita che il testo del pulsante vada a capo */
 }
 
 .copy-button:hover {
     background-color: #ccc;
-    color: #333;
 }
 
 .result-line-total{
-    font-size: 18px;
+  font-size: 16px;
 }
