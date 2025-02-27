@@ -624,21 +624,20 @@ button#reset-button:hover {
     justify-content: center;
     text-align: center;
     padding: 8px 0;
-    width: 100%;
+    width: 33.33%; /* Impostare larghezza fissa per ogni elemento */
+    max-width: 150px; /* Limitare la larghezza massima */
     position: relative;
-    /* Rimuovi la transizione qui, la gestiamo in JS */
     border-radius: 12px;
-    height: 100%;
+    height: calc(100% - 16px); /* Ridurre leggermente l'altezza per garantire che rimanga all'interno */
+    margin: 8px; /* Aggiungere un margine per evitare che l'evidenziazione esca */
     cursor: pointer;
     user-select: none;
-    /* Aggiungi overflow hidden per contenere il ripple */
-    overflow: hidden;
+    overflow: hidden; /* Importante per contenere l'effetto ripple */
 }
 
 /* Stile quando l'elemento è attivo */
 .nav-item.active {
     background-color: rgba(55, 111, 233, 0.15);
-    /* Rimuovi la transizione qui, la gestiamo in JS */
 }
 
 .nav-item.active .nav-icon {
@@ -690,6 +689,23 @@ button#reset-button:hover {
     to {
         transform: scale(2.5);
         opacity: 0;
+    }
+}
+
+/* Media query per schermi piccoli per la navigazione */
+@media (max-width: 370px) {
+    .nav-item {
+        width: 30%; /* Ridurre la larghezza per schermi molto piccoli */
+        margin: 4px; /* Ridurre il margine */
+        padding: 6px 0; /* Ridurre il padding */
+    }
+    
+    .nav-icon {
+        font-size: 20px; /* Ridurre la dimensione dell'icona */
+    }
+    
+    .nav-text {
+        font-size: 10px; /* Ridurre la dimensione del testo */
     }
 }
 /* --- FINE NUOVA BARRA DI NAVIGAZIONE MODERNA --- */
