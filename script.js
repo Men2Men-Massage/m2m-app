@@ -135,7 +135,6 @@ function calculatePayment() {
 }
 
 // Function to reset all form fields
-//MODIFICATO
 function resetAll() {
     document.getElementById('regular-payments').value = '';
     document.getElementById('giftcard-payments').value = '';
@@ -202,6 +201,7 @@ function saveLocationAndGeneratePayment() {
     // Genera i dati per il bonifico
     const userName = localStorage.getItem('m2m_name');
     const iban = "DE12 3456 7890 1234 5678 90"; // IBAN di esempio corretto
+    const accountHolder = "M2M Massagen"; // Intestatario del conto
     const purpose = `${userName}, ${selectedShiftDate}, ${selectedLocation}`;
 
    // Rimuovi il pulsante "Generate Payment" e mostra le informazioni al suo posto
@@ -212,12 +212,13 @@ function saveLocationAndGeneratePayment() {
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
         <div id="payment-info">
             <p><strong>Please make an instant bank transfer:</strong></p>
-            <p><strong>IBAN:</strong> ${iban}</p>
-            <p><strong>Amount:</strong> €${dueAmount.toFixed(2)}</p>
-            <p><strong>Purpose:</strong> ${purpose}</p>
+            <p><strong>Account Holder:</strong> ${accountHolder}</p>
+            <p><strong>IBAN:</strong> ${iban} <button class="copy-button" onclick="copyToClipboard('${iban}')">Copy</button></p>
+            <p><strong>Amount:</strong> €${dueAmount.toFixed(2)} <button class="copy-button" onclick="copyToClipboard('${dueAmount.toFixed(2)}')">Copy</button></p>
+            <p><strong>Purpose:</strong> ${purpose} <button class="copy-button" onclick="copyToClipboard('${purpose}')">Copy</button></p>
         </div>
     `;
-    resultDiv.style.display = 'block'; // Assicurati che sia visibile
+    resultDiv.style.display = 'block';
 
 }
 
@@ -540,6 +541,17 @@ function initInstructionsToggle() {
         instructionsContent.classList.toggle('collapsed');
         instructionsContainer.classList.toggle('collapsed'); // Su container
         toggleBtn.textContent = instructionsContent.classList.contains('collapsed') ? 'Show' : 'Hide'; //Aggiorna pulsante
+    });
+}
+
+// NUOVA FUNZIONE: Copia il testo negli appunti
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Feedback visivo (opzionale, ma consigliato)
+        alert(`Copied: ${text}`);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+        alert('Failed to copy text. Please copy manually.'); // Fallback in caso di errore
     });
 }
 
