@@ -1,29 +1,36 @@
+/* General Styles */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;  /* Removed top margin */
-    padding: 0; /* Reset padding */
+    margin: 0;
+    padding: 0;
     background-color: #f5f5f5;
-    position: relative;
+    position: relative; /* Important for footer positioning */
+    min-height: 100vh; /* Ensure body takes at least full viewport height */
     padding-bottom: 60px; /* Space for the footer */
+
 }
 
 
-/* Overlay per l'autenticazione */
+/* Authentication Overlay */
 #auth-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Assicura che sia sopra a tutto */
+    z-index: 1000;
 }
 
-/* Contenitore per il box di autenticazione */
 #auth-box {
     background: white;
     padding: 20px;
@@ -31,26 +38,22 @@ body {
     text-align: center;
     width: 90%;
     max-width: 450px;
-    /* Removed max-height and overflow-y */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-
-/* Stile per gli input nel box di autenticazione */
 #auth-box input {
     width: 100%;
     margin: 10px 0;
     padding: 12px;
     font-size: 16px;
     display: block;
-    margin-left: auto; /* Centra orizzontalmente */
+    margin-left: auto;
     margin-right: auto;
-    box-sizing: border-box; /* Include padding e border nella larghezza */
     border: 1px solid #ccc;
     border-radius: 8px;
 }
 
-/* Nome utente (angolo in alto a destra) */
+/* User Name */
 #user-name {
     position: fixed;
     top: 20px;
@@ -59,7 +62,7 @@ body {
     color: white;
     padding: 8px 15px;
     border-radius: 24px;
-    display: none;  /* Nascosto all'inizio */
+    display: none;
     z-index: 1000;
     font-size: 16px;
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
@@ -72,18 +75,19 @@ body {
     box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
 }
 
-/* Contenitore principale dell'app */
+
+/* Main Content (Calculator) */
+#main-content {
+  padding-top: 20px;
+}
+
+
 .container {
     background-color: white;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    position: relative;
-    margin-top: 20px; /* Reduced top margin */
-    /* Removed margin-bottom */
-}
-#history-box {
-     margin: 20px;
+    margin-top: 60px; /* Space for user name and banners */
 }
 
 h1 {
@@ -92,7 +96,7 @@ h1 {
     margin-bottom: 30px;
 }
 
-/* Sezione input */
+/* Input Section */
 .input-section {
     margin: 20px 0;
     padding: 25px;
@@ -122,16 +126,14 @@ input {
     border-radius: 6px;
     margin: 6px 0;
     display: block;
-    margin-left: auto; /* Centra orizzontalmente */
+    margin-left: auto;
     margin-right: auto;
-    box-sizing: border-box;
 }
 
 .button-container {
     text-align: center;
 }
 
-/* Stile per i pulsanti principali (Calculate, Reset) */
 button {
     padding: 12px 28px;
     font-size: 16px;
@@ -142,16 +144,15 @@ button {
     cursor: pointer;
     margin: 8px;
     transition: background-color 0.3s, transform 0.3s;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 button:hover {
     background-color: #45a049;
-    transform: translateY(-2px); /* Effetto sollevamento */
-    box-shadow: 0 4px 7px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.2);
 }
 
-/* Stile specifico per il pulsante Reset */
 button#reset-button {
     background-color: #f44336;
     padding: 8px 15px;
@@ -163,38 +164,33 @@ button#reset-button:hover {
     background-color: #d32f2f;
 }
 
-/* Sezione risultato */
+/* Result Section */
 #result {
     margin-top: 30px;
     padding: 25px;
     border-radius: 10px;
-    display: none; /* Nascosto all'inizio */
+    display: none;
     text-align: center;
     background-color: #fff;
-    box-shadow: 0 2px 7px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
 }
 
-
-/* Stili per i risultati quando c'è un pagamento dovuto */
 .payment-due {
     background-color: #ffebee;
     border: 2px solid #ff5252;
 }
 
-/* Stili per i risultati quando c'è un pagamento da ricevere */
 .payment-receivable {
     background-color: #e8f5e9;
     border: 2px solid #4CAF50;
 }
 
-/* Stile per le singole righe di risultato */
 .result-line {
     margin: 12px 0;
     font-size: 18px;
     color: #444;
 }
 
-/* Stile per il totale */
 .total-amount {
     font-size: 26px;
     font-weight: bold;
@@ -202,14 +198,14 @@ button#reset-button:hover {
     color: #2e7d32;
 }
 
-/* Sezione istruzioni (inizialmente nascosta) */
+/* Instructions Section */
 .instructions {
     margin: 20px 0;
     padding: 18px;
     background-color: #fffde7;
-     border-left: 5px solid #ffca28; /* Bordo sinistro giallo */
+    border-left: 5px solid #ffca28;
     border-radius: 0 5px 5px 0;
-    box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .highlight {
@@ -217,10 +213,68 @@ button#reset-button:hover {
     font-weight: bold;
 }
 
-/* Banner per l'installazione (PWA) */
+.instructions-container {
+    margin: 20px 0;
+    padding: 5px;
+    background-color: #fffde7;
+    border: 3px solid #ffca28;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.instructions-container:not(.collapsed) .instructions {
+    border-left: none;
+}
+
+.instructions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+.instructions-header span {
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+#toggle-instructions-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ddd;
+    color: #444;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#toggle-instructions-btn:hover {
+    background-color: #ccc;
+    color: #333;
+}
+
+#instructions-content {
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    max-height: 500px;
+}
+
+#instructions-content.collapsed {
+    max-height: 0;
+    padding: 0;
+}
+
+.instructions-container.collapsed .instructions-header {
+    margin-bottom: 0px;
+}
+
+/* Installation Banners */
 .install-banner {
     padding: 15px;
-    margin: 15px 0;
+    margin-top: 60px; /* Space from the user name */
+    margin-bottom: 15px;
     border-radius: 8px;
     display: flex;
     justify-content: space-between;
@@ -228,19 +282,19 @@ button#reset-button:hover {
     position: relative;
     background-color: #f0f4c3;
     border: 1px solid #e0e0b0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-/* Stili specifici per il banner Android */
+
 #android-banner {
     background-color: #e8f5e9;
     border: 2px solid #4CAF50;
 }
-/* Stili specifici per il banner iOS */
+
 #ios-banner {
     background-color: #fff3e0;
     border: 2px solid #ff9800;
 }
-/* Stile per i pulsanti nei banner */
+
 .install-banner button {
     background: none;
     border: none;
@@ -269,7 +323,7 @@ button#reset-button:hover {
     color: #666;
 }
 
-/* Calendar styles - Modernized */
+/* Calendar Styles */
 .calendar-header {
     display: flex;
     justify-content: space-between;
@@ -303,12 +357,13 @@ button#reset-button:hover {
     border-collapse: collapse;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 7px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
     background-color: #fff;
 }
 
-.calendar th, .calendar td {
+.calendar th,
+.calendar td {
     padding: 10px;
     text-align: center;
     border: none;
@@ -358,7 +413,7 @@ button#reset-button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .payment-details {
@@ -399,34 +454,32 @@ button#reset-button:hover {
 
 .note-input-area {
     margin-top: 12px;
-    display: flex; /* Usa Flexbox */
-    align-items: center; /* Allinea verticalmente */
-    flex-wrap: wrap; /* Permetti il wrapping su piÃ¹ righe se necessario */
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .note-input-area textarea {
-    width: 100%; /* Usa tutta la larghezza disponibile */
-    max-width: calc(100% - 16px); /* Considera il padding */
+    width: 100%;
+    max-width: calc(100% - 16px);
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ddd;
-    margin-bottom: 8px; /* Spazio sotto il textarea */
-    box-sizing: border-box; /* Include padding e border nella larghezza */
-
+    margin-bottom: 8px;
+    box-sizing: border-box;
 }
 
-/* Stili generali per i pulsanti nell'area note, piÃ¹ piccoli */
 .note-input-area button {
-    padding: 5px 10px;  /* Riduci il padding */
-    font-size: 12px;   /* Riduci la dimensione del font */
+    padding: 5px 10px;
+    font-size: 12px;
     border-radius: 5px;
     border: none;
     background-color: #ddd;
     color: #444;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    margin-right: 5px; /* Spazio tra i pulsanti, ma non dopo l'ultimo */
-    white-space: nowrap; /* Impedisci al testo di andare a capo */
+    margin-right: 5px;
+    white-space: nowrap;
 }
 
 .note-input-area button:hover {
@@ -434,11 +487,9 @@ button#reset-button:hover {
     color: #333;
 }
 
-/* Stile specifico per il pulsante Remove, piÃ¹ piccolo e rosso */
 .note-input-area button.remove-note-button {
     background-color: #f44336;
     color: white;
-    /* Altre proprietÃ  ereditate da .note-input-area button */
 }
 
 .note-input-area button.remove-note-button:hover {
@@ -446,26 +497,23 @@ button#reset-button:hover {
     color: white;
 }
 
-/* Added styles */
 #back-to-calculator-btn {
-  padding: 5px 10px; /* Smaller padding */
-  font-size: 0.8em; /* Smaller font size */
-  /* Add any other styling you want for the button */
+    padding: 5px 10px;
+    font-size: 0.8em;
 }
 
-/* Removed history overlay specific styles */
-
 #calendar-navigation {
-  display:flex;
-  justify-content: space-between;
-  align-items: center; /* Vertically center items */
-  margin-bottom: 10px; /* Add some space below the navigation */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 #calendar-month-year {
-  font-size: 1.2em; /* Adjust as needed */
-  font-weight: bold;
+    font-size: 1.2em;
+    font-weight: bold;
 }
+
 #today-button {
     padding: 5px 10px;
     font-size: 12px;
@@ -477,10 +525,12 @@ button#reset-button:hover {
     transition: background-color 0.3s, color 0.3s;
     margin-left: 10px;
 }
+
 #today-button:hover {
     background-color: #ccc;
     color: #333;
 }
+
 .monthly-total {
     font-size: 1.1em;
     font-weight: bold;
@@ -491,101 +541,41 @@ button#reset-button:hover {
     border: 1px solid #add8e6;
     text-align: center;
 }
+
 .monthly-total.total-earnings {
     color: #2e7d32;
     border-color: #2e7d32;
     background-color: #e8f5e9;
 }
+
 .payment-due-amount {
     font-size: 20px;
     font-weight: bold;
     color: #d32f2f;
     margin-bottom: 10px;
 }
+
 .payment-receivable-amount {
     font-size: 20px;
     font-weight: bold;
     color: #2e7d32;
     margin-bottom: 10px;
 }
+
 .result-line-total {
-  font-size: 16px;
+    font-size: 16px;
 }
 
-/* ---------- */
-
-.instructions-container {
-    margin: 20px 0;
-    padding: 5px;
-    background-color: #fffde7;
-    border: 3px solid #ffca28;
-    border-radius: 5px;
-    box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
-}
-
-/* Rimuovi il bordo specifico quando Ã¨ aperto */
-.instructions-container:not(.collapsed) .instructions {
-  border-left: none;
-}
-
-.instructions-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0px;
-}
-
-.instructions-header span {
-    font-size: 18px;
-    font-weight: bold;
-    margin-left: 8px;
-}
-
-/* Stile per il pulsante Show/Hide */
-#toggle-instructions-btn {
-    padding: 5px 10px;
-    font-size: 12px;
-    border-radius: 5px;
-    border: none;
-    background-color: #ddd;
-    color: #444;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-#toggle-instructions-btn:hover {
-    background-color: #ccc;
-    color: #333;
-}
-
-#instructions-content {
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    max-height: 500px; /* Inizialmente aperto */
-}
-
-/* Stile per quando Ã¨ chiuso */
-#instructions-content.collapsed {
-  max-height: 0;
-   padding: 0; /* Rimuovi il padding quando Ã¨ chiuso */
-}
-
-/* Stile per l'header quando Ã¨ chiuso */
-.instructions-container.collapsed .instructions-header{
-  margin-bottom: 0px; /* Assicurati che non ci sia spazio extra */
-}
-
-/* Modals for Date and Location - Stili */
+/* Modals for Date and Location */
 .modal {
-    display: none; /* Nascondi per default */
+    display: none;
     position: fixed;
-    z-index: 1000; /* Sopra a tutto il resto */
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Sfondo semi-trasparente */
-    /* Centratura del contenuto */
+    background-color: rgba(0, 0, 0, 0.7);
     justify-content: center;
     align-items: center;
 }
@@ -595,9 +585,9 @@ button#reset-button:hover {
     padding: 20px;
     border-radius: 8px;
     text-align: center;
-    width: 80%; /* Larghezza */
-    max-width: 400px; /* Larghezza massima */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    width: 80%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .modal-content h2 {
@@ -606,7 +596,7 @@ button#reset-button:hover {
 }
 
 .modal-content select {
-    width: 100%;  /* Occupa l'intera larghezza */
+    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -614,19 +604,19 @@ button#reset-button:hover {
     font-size: 16px;
 }
 
-/* Stile per i pulsanti nei modali */
 .modal-content button {
     padding: 10px 20px;
     font-size: 16px;
     border-radius: 5px;
     border: none;
-    background-color: #376FE9; /* Blu */
+    background-color: #376FE9;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
+
 .modal-content button:hover {
-   background-color: #45a049; /* Verde scuro al passaggio del mouse */
+    background-color: #45a049;
 }
 
 #payment-info {
@@ -641,7 +631,6 @@ button#reset-button:hover {
     box-sizing: border-box;
 }
 
-/* Header styling */
 .payment-header {
     font-weight: bold;
     font-size: 1.1em;
@@ -650,7 +639,6 @@ button#reset-button:hover {
     width: 100%;
 }
 
-/* Each payment field container */
 .payment-field {
     margin-bottom: 15px;
     display: flex;
@@ -658,13 +646,11 @@ button#reset-button:hover {
     width: 100%;
 }
 
-/* Label styling */
 .payment-label {
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-/* Value container */
 .payment-value-container {
     display: flex;
     flex-wrap: wrap;
@@ -672,14 +658,12 @@ button#reset-button:hover {
     gap: 10px;
 }
 
-/* Value styling */
 .payment-value {
     word-break: break-word;
     flex: 1;
     min-width: 200px;
 }
 
-/* Copy button styling */
 .copy-button {
     padding: 5px 15px;
     font-size: 14px;
@@ -694,6 +678,66 @@ button#reset-button:hover {
 
 .copy-button:hover {
     background-color: #ccc;
+}
+
+/* History Content */
+#history-content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5f5;
+    overflow-y: auto;
+    z-index: 50;
+    /* Removed padding-bottom */
+}
+
+#history-box {
+    margin: 0; /* Reset margin */
+    padding: 20px; /* Consistent padding */
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    /* Removed max-height and overflow, handled by #history-content */
+}
+
+#calendar-container {
+    overflow-x: auto; /* Allow horizontal scrolling for the calendar */
+}
+
+/* Footer Styles (Navigation Bar) */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #376FE9;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+}
+
+footer button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-size: 12px;
+}
+
+footer button img {
+    margin-bottom: 5px;
+}
+
+footer button:hover {
+    opacity: 0.8;
 }
 
 /* Media query for landscape orientation */
@@ -711,53 +755,4 @@ button#reset-button:hover {
     .payment-value-container {
         flex: 1;
     }
-}
-
-/* Footer Styles (Navigation Bar) */
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #376FE9; /* Consistent with button color */
-    display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.15);
-    z-index: 100; /* Ensure it's above other content */
-}
-
-footer button {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: white; /* Icon color */
-    font-size: 12px; /* Text label size */
-}
-
-
-footer button img {
-     margin-bottom: 5px;
-}
-
-footer button:hover {
-    opacity: 0.8; /* Subtle hover effect */
-}
-
-/* Make history content full-screen */
-#history-content {
-  position: fixed; /* Or absolute, depending on your needs */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #f5f5f5;
-  overflow-y: auto; /* Enable scrolling if needed */
-  z-index: 50; /* Below the auth overlay, but above main content */
-  padding-bottom: 60px; /* Make space for the fixed footer */
-
 }
