@@ -6,6 +6,7 @@ body {
     padding: 20px;
     background-color: #f5f5f5;
     position: relative;
+    overflow-x: hidden; /* Previene scrolling orizzontale a livello di body */
 }
 
 /* Overlay per l'autenticazione */
@@ -80,6 +81,10 @@ body {
     position: relative;
     margin-top: 60px;
     display: none; /* Inizialmente nascosto */
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow-x: hidden; /* Previene scrolling orizzontale */
 }
 
 h1 {
@@ -95,6 +100,8 @@ h1 {
     border: 1px solid #ddd;
     border-radius: 10px;
     background-color: #fafafa;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .input-group {
@@ -167,6 +174,8 @@ button#reset-button:hover {
     text-align: center;
     background-color: #fff;
     box-shadow: 0 2px 7px rgba(0,0,0,0.1);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .payment-due {
@@ -200,6 +209,8 @@ button#reset-button:hover {
     border-left: 5px solid #ffca28;
     border-radius: 0 5px 5px 0;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .highlight {
@@ -219,6 +230,8 @@ button#reset-button:hover {
     background-color: #f0f4c3;
     border: 1px solid #e0e0b0;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #android-banner {
@@ -265,6 +278,8 @@ button#reset-button:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .calendar-header button {
@@ -297,13 +312,16 @@ button#reset-button:hover {
     margin-bottom: 20px;
     background-color: #fff;
     font-size: 1em; /* Dimensione base del font */
+    box-sizing: border-box;
+    table-layout: fixed; /* Impedisce alla tabella di espandersi oltre il contenitore */
 }
-
 
 .calendar th, .calendar td {
     padding: 10px;
     text-align: center;
     border: none;
+    word-wrap: break-word; /* Permette il wrapping del testo */
+    overflow: hidden;
 }
 
 .calendar th {
@@ -339,8 +357,10 @@ button#reset-button:hover {
 #daily-payments-section {
     text-align: left;
     margin-top: 20px;
-    max-width: 100%; /* Aggiungi questa riga! */
-    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Previene scrolling orizzontale */
 }
 
 .daily-payment-item {
@@ -350,17 +370,29 @@ button#reset-button:hover {
     border-radius: 8px;
     background-color: #f9f9f9;
     display: flex;
+    flex-wrap: wrap; /* Permette il wrapping su schermi piccoli */
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .payment-details {
-    flex-grow: 1;
+    flex: 1 1 60%; /* Permette al contenuto di essere flessibile ma di occupare almeno il 60% */
+    min-width: 150px; /* Larghezza minima */
+    word-break: break-word; /* Permette il wrapping del testo */
+}
+
+.payment-actions {
+    display: flex;
+    flex-wrap: wrap; /* Permette ai pulsanti di andare a capo se necessario */
+    justify-content: flex-end;
+    margin-top: 8px; /* Spazio sopra i pulsanti quando vanno a capo */
 }
 
 .payment-actions button {
-    margin-left: 10px;
+    margin: 4px;
     padding: 7px 12px;
     font-size: 14px;
     border-radius: 5px;
@@ -389,26 +421,35 @@ button#reset-button:hover {
     margin-top: 8px;
     font-style: italic;
     color: #777;
+    width: 100%;
+    word-wrap: break-word; /* Permette il wrapping del testo nelle note */
 }
 
 .note-input-area {
     margin-top: 12px;
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+    flex-direction: column; /* Imposta la direzione in colonna per evitare overflow orizzontale */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .note-input-area textarea {
     width: 100%;
-    max-width: calc(100% - 16px);
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ddd;
     margin-bottom: 8px;
     box-sizing: border-box;
+    resize: vertical; /* Permette solo il ridimensionamento verticale */
 }
 
 /* Pulsanti note (più piccoli) */
+.note-input-area .buttons-container {
+    display: flex;
+    flex-wrap: wrap; /* Permette ai pulsanti di andare a capo */
+    gap: 5px;
+}
+
 .note-input-area button {
     padding: 5px 10px;
     font-size: 12px;
@@ -418,8 +459,8 @@ button#reset-button:hover {
     color: #444;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    margin-right: 5px;
     white-space: nowrap;
+    margin: 2px;
 }
 
 .note-input-area button:hover {
@@ -439,8 +480,8 @@ button#reset-button:hover {
 
 /* Bottone per tornare alla Calculator (se usato) */
 #back-to-calculator-btn {
-  padding: 5px 10px;
-  font-size: 0.8em;
+    padding: 5px 10px;
+    font-size: 0.8em;
 }
 
 /* --- Modifiche per Payment History a schermo intero --- */
@@ -451,7 +492,7 @@ button#reset-button:hover {
     background-color: #f5f5f5;
     padding: 20px 10px;
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow-x: hidden; /* Previene scrolling orizzontale */
 }
 
 #history-box {
@@ -464,8 +505,8 @@ button#reset-button:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     overflow-x: hidden; /* Manteniamo questo */
+    box-sizing: border-box;
 }
-
 
 /* Media query per schermi piccoli */
 @media (max-width: 500px) {
@@ -477,18 +518,42 @@ button#reset-button:hover {
         padding: 5px; /* Riduci il padding */
     }
 
-     .calendar-header button {
+    .calendar-header button {
         font-size: 1em; /* Ridimensiona pulsanti */
     }
 
     .calendar-month-year{
         font-size: 1em; /* Ridimensiona testo*/
     }
-      #today-button{
+    
+    #today-button{
         font-size: 0.8em;
     }
-      .monthly-total {
-      font-size: 0.9em;
+    
+    .monthly-total {
+        font-size: 0.9em;
+    }
+    
+    /* Ridurre il padding sui contenitori principali */
+    .container, 
+    #history-box {
+        padding: 15px;
+    }
+    
+    /* Ridurre il padding degli elementi interni */
+    .daily-payment-item {
+        padding: 10px;
+    }
+    
+    /* Gestione migliore degli elementi flessibili su schermi piccoli */
+    .payment-details,
+    .payment-actions {
+        flex: 1 1 100%;
+    }
+    
+    .payment-actions {
+        justify-content: flex-start;
+        margin-top: 10px;
     }
 }
 
@@ -498,6 +563,20 @@ button#reset-button:hover {
     }
     .calendar {
         font-size: 0.7em; /* Riduci ulteriormente la dimensione del font */
+    }
+    
+    /* Ridurre ulteriormente il padding e i margini */
+    .container, 
+    #history-box,
+    .input-section,
+    #result {
+        padding: 10px;
+    }
+    
+    /* Ridurre le dimensioni dei pulsanti */
+    button {
+        padding: 8px 15px;
+        font-size: 14px;
     }
 }
 
@@ -535,11 +614,15 @@ button#reset-button:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    flex-wrap: wrap; /* Permette il wrapping su schermi piccoli */
 }
 
 #calendar-month-year {
     font-size: 1.2em;
     font-weight: bold;
+    margin-bottom: 5px; /* Spazio quando va a capo */
 }
 
 #today-button {
@@ -568,6 +651,8 @@ button#reset-button:hover {
     background-color: #f0f8ff;
     border: 1px solid #add8e6;
     text-align: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .monthly-total.total-earnings {
@@ -602,10 +687,12 @@ button#reset-button:hover {
     border: 3px solid #ffca28;
     border-radius: 5px;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .instructions-container:not(.collapsed) .instructions {
-  border-left: none;
+    border-left: none;
 }
 
 .instructions-header {
@@ -613,6 +700,7 @@ button#reset-button:hover {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0px;
+    width: 100%;
 }
 
 .instructions-header span {
@@ -641,15 +729,16 @@ button#reset-button:hover {
     overflow: hidden;
     transition: max-height 0.3s ease;
     max-height: 500px;
+    width: 100%;
 }
 
 #instructions-content.collapsed {
-  max-height: 0;
-  padding: 0;
+    max-height: 0;
+    padding: 0;
 }
 
 .instructions-container.collapsed .instructions-header{
-  margin-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 /* Modals per Data e Location */
@@ -674,6 +763,7 @@ button#reset-button:hover {
     width: 80%;
     max-width: 400px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    overflow-x: hidden; /* Previene scrolling orizzontale */
 }
 
 .modal-content h2 {
@@ -688,6 +778,7 @@ button#reset-button:hover {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
+    box-sizing: border-box;
 }
 
 .modal-content button {
@@ -702,7 +793,7 @@ button#reset-button:hover {
 }
 
 .modal-content button:hover {
-   background-color: #45a049;
+    background-color: #45a049;
 }
 
 #payment-info {
@@ -715,6 +806,7 @@ button#reset-button:hover {
     line-height: 1.6;
     max-width: 100%;
     box-sizing: border-box;
+    word-wrap: break-word; /* Permette il wrapping del testo */
 }
 
 .payment-header {
@@ -730,6 +822,7 @@ button#reset-button:hover {
     display: flex;
     flex-direction: column;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .payment-label {
@@ -742,12 +835,14 @@ button#reset-button:hover {
     flex-wrap: wrap;
     align-items: center;
     gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .payment-value {
     word-break: break-word;
     flex: 1;
-    min-width: 200px;
+    min-width: 0; /* Permette al contenuto di stringersi se necessario */
 }
 
 .copy-button {
@@ -780,5 +875,17 @@ button#reset-button:hover {
 
     .payment-value-container {
         flex: 1;
+    }
+    
+    /* Migliorare la gestione della note-input-area su schermi più larghi */
+    .note-input-area {
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .note-input-area textarea {
+        flex: 1;
+        margin-right: 10px;
+        margin-bottom: 0;
     }
 }
