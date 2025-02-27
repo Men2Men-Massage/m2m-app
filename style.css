@@ -75,11 +75,12 @@ body {
 /* Contenitore principale dell'app (Calculator) */
 .container {
     background-color: white;
-    padding: 30px 30px 80px;
+    padding: 30px 30px 100px; /* Aumentato il padding-bottom a 100px per la barra di navigazione */
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     position: relative;
     margin-top: 60px;
+    margin-bottom: 20px; /* Aggiunto un po' di margine sotto */
     display: none; /* Inizialmente nascosto */
     width: 100%;
     box-sizing: border-box;
@@ -490,18 +491,18 @@ button#reset-button:hover {
     width: 100%;
     min-height: 100vh;
     background-color: #f5f5f5;
-    padding: 20px 10px;
+    padding: 20px 10px 70px; /* Aumentato il padding-bottom a 70px */
     box-sizing: border-box;
     overflow-x: hidden; /* Previene scrolling orizzontale */
 }
 
 #history-box {
     background: white;
-    padding: 20px;
+    padding: 20px 20px 90px; /* Aumentato il padding-bottom a 90px */
     text-align: left;
     width: 100%;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto 20px; /* Aggiunto margine inferiore */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     overflow-x: hidden; /* Manteniamo questo */
@@ -534,10 +535,13 @@ button#reset-button:hover {
         font-size: 0.9em;
     }
     
-    /* Ridurre il padding sui contenitori principali */
-    .container, 
+    /* Ridurre il padding sui contenitori principali ma mantenere lo spazio in basso */
+    .container {
+        padding: 15px 15px 90px;
+    }
+    
     #history-box {
-        padding: 15px;
+        padding: 15px 15px 80px;
     }
     
     /* Ridurre il padding degli elementi interni */
@@ -565,9 +569,15 @@ button#reset-button:hover {
         font-size: 0.7em; /* Riduci ulteriormente la dimensione del font */
     }
     
-    /* Ridurre ulteriormente il padding e i margini */
-    .container, 
-    #history-box,
+    /* Ridurre ulteriormente il padding mantenendo lo spazio in basso */
+    .container {
+        padding: 10px 10px 80px;
+    }
+    
+    #history-box {
+        padding: 10px 10px 75px;
+    }
+    
     .input-section,
     #result {
         padding: 10px;
@@ -596,6 +606,7 @@ button#reset-button:hover {
     padding: 10px 0;
     box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
     z-index: 1001;
+    height: 60px; /* Altezza esplicita per la barra di navigazione */
 }
 
 .bottom-nav button {
