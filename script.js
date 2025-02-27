@@ -9,70 +9,43 @@ let currentCalendarYear = new Date().getFullYear();
 let selectedShiftDate = '';
 let selectedLocation = '';
 
-// Date formatting function (YYYY-MM-DD)
+// Funzione per formattare la data (YYYY-MM-DD)
 function formatDate(date) {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 perché getMonth() è 0-based
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() è 0-based
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
 
-// Logout function
+// Funzione di logout
 function logout() {
     localStorage.removeItem('m2m_access');
     localStorage.removeItem('m2m_name');
-     // Show auth overlay and reset input fields
-    showAuthScreen();  // Usa una funzione dedicata
+    document.querySelector('.container').style.display = 'none';
+    document.getElementById('user-name').style.display = 'none';
+    // Ora la Payment History è una pagina a schermo intero (history-page)
+    document.getElementById('history-page').style.display = 'none';
+    document.getElementById('auth-overlay').style.display = 'flex';
     document.getElementById('access-code').value = '';
     document.getElementById('user-name-input').value = '';
     document.getElementById('code-section').style.display = 'block';
     document.getElementById('name-section').style.display = 'none';
-
 }
 
-// Function to check authentication on app startup
+// Funzione per controllare l'autenticazione all'avvio dell'app
 function checkAuth() {
     const savedCode = localStorage.getItem('m2m_access');
     const userName = localStorage.getItem('m2m_name');
 
     if (savedCode === AUTH_CODE && userName) {
-        showHomePage(userName); // Show home page directly
+        showApp(userName);
         return true;
     }
-    showAuthScreen(); // Show auth screen
+    document.getElementById('auth-overlay').style.display = 'flex';
     return false;
 }
 
-// Function to show the authentication screen
-function showAuthScreen() {
-    document.getElementById('auth-overlay').style.display = 'flex';
-    document.getElementById('main-content').style.display = 'none';
-    document.getElementById('history-content').style.display = 'none';
-    document.getElementById('user-name').style.display = 'none';
-}
-// Function to show the Home Page
-function showHomePage(userName) {
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('main-content').style.display = 'block';
-    document.getElementById('history-content').style.display = 'none';
-    if (userName) { // Only set the name if it's provided (i.e., after login)
-      document.getElementById('user-name').textContent = `Hello ${userName}`;
-      document.getElementById('user-name').style.display = 'block';
-    }
-    showInstallBanners();
-    initInstructionsToggle(); // Inizializza le istruzioni
-}
-
-// Function to show the History Page
-function showHistoryPage() {
-    document.getElementById('main-content').style.display = 'none';
-    document.getElementById('history-content').style.display = 'block';
-     document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('daily-payments-section').style.display = 'none';
-    generateCalendar(currentCalendarMonth, currentCalendarYear);
-}
-
-// Function to check the access code entered by the user
+// Funzione per controllare il codice di accesso inserito dall'utente
 function checkCode() {
     const codeInput = document.getElementById('access-code');
     if (codeInput.value === AUTH_CODE) {
@@ -83,19 +56,29 @@ function checkCode() {
     }
 }
 
-// Function to save the username
+// Funzione per salvare il nome utente
 function saveName() {
     const nameInput = document.getElementById('user-name-input');
     if (nameInput.value.trim().length > 0) {
         localStorage.setItem('m2m_access', AUTH_CODE);
         localStorage.setItem('m2m_name', nameInput.value.trim());
-        showHomePage(nameInput.value.trim()); // Show home page after saving name
+        showApp(nameInput.value.trim());
     } else {
         alert('Please enter a valid name');
     }
 }
 
-// Function to show installation banners for PWA
+// Funzione per mostrare l'interfaccia principale dell'app
+function showApp(userName) {
+    document.getElementById('auth-overlay').style.display = 'none';
+    document.getElementById('user-name').textContent = `Hello ${userName}`;
+    document.getElementById('user-name').style.display = 'block';
+    document.querySelector('.container').style.display = 'block';
+    showInstallBanners();
+    initInstructionsToggle(); // Inizializza le istruzioni
+}
+
+// Funzione per mostrare i banner di installazione della PWA
 function showInstallBanners() {
     let deferredPrompt;
 
@@ -127,13 +110,12 @@ function showInstallBanners() {
     }
 }
 
-// Check authentication on app startup.  Important:  This MUST happen *before* any UI is displayed.
+// Controlla l'autenticazione all'avvio
 if (!checkAuth()) {
-    showAuthScreen(); // Show authentication screen initially
+    document.getElementById('auth-overlay').style.display = 'flex';
 }
 
-
-// Function to calculate the payment
+// Funzione per calcolare il pagamento
 function calculatePayment() {
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
@@ -147,33 +129,31 @@ function calculatePayment() {
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
         <button id="save-payment-button" onclick="generatePayment()">Generate Payment</button>
     `;
-
     resultDiv.className = 'payment-due';
     resultDiv.style.display = 'block';
     document.getElementById('save-payment-button').style.display = 'inline-block';
 }
 
-// Function to reset all form fields
+// Funzione per resettare tutti i campi del form
 function resetAll() {
     document.getElementById('regular-payments').value = '';
     document.getElementById('giftcard-payments').value = '';
-    document.getElementById('result').innerHTML = ''; // Pulisci completamente il div result
-    document.getElementById('result').style.display = 'none'; // e nascondilo
-    document.getElementById('save-payment-button').style.display = 'none'; // Assicurati che il pulsante sia nascosto
+    document.getElementById('result').innerHTML = ''; // Pulisce completamente il div result
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('save-payment-button').style.display = 'none';
     currentGiftCardAmount = 0;
 }
 
-// MODIFICATA: Ora mostra i modali
+// MODIFICATA: Mostra il modal della data per generare il pagamento
 function generatePayment() {
-    // Mostra il modal della data
     showDateModal();
 }
 
-// NUOVA FUNZIONE: Mostra il modal per la selezione della data
+// Mostra il modal per la selezione della data
 function showDateModal() {
     const dateModal = document.getElementById('date-modal');
     const dateSelect = document.getElementById('shift-date-select');
-    dateSelect.innerHTML = ''; // Pulisci eventuali opzioni precedenti
+    dateSelect.innerHTML = ''; // Pulisce eventuali opzioni precedenti
 
     const today = new Date();
     const yesterday = new Date(today);
@@ -182,51 +162,50 @@ function showDateModal() {
     const todayStr = formatDate(today);
     const yesterdayStr = formatDate(yesterday);
 
-    // Aggiungi le opzioni al select
+    // Aggiunge le opzioni al select
     dateSelect.add(new Option(`Today (${todayStr})`, todayStr));
     dateSelect.add(new Option(`Yesterday (${yesterdayStr})`, yesterdayStr));
 
     dateModal.style.display = 'flex'; // Mostra il modal
 }
 
-// NUOVA FUNZIONE: Salva la data selezionata e mostra il modal del luogo
+// Salva la data selezionata e mostra il modal per la scelta del luogo
 function saveDateAndShowLocation() {
     const dateSelect = document.getElementById('shift-date-select');
     selectedShiftDate = dateSelect.value; // Salva la data selezionata
 
-    document.getElementById('date-modal').style.display = 'none'; // Nascondi il modal della data
+    document.getElementById('date-modal').style.display = 'none'; // Nasconde il modal della data
     showLocationModal(); // Mostra il modal del luogo
 }
 
-// NUOVA FUNZIONE: Mostra il modal per la selezione del luogo
+// Mostra il modal per la selezione del luogo
 function showLocationModal() {
     document.getElementById('location-modal').style.display = 'flex';
 }
 
-// NUOVA FUNZIONE: Salva il luogo, esegue i calcoli e salva il pagamento
-//MODIFICATA: Layout a griglia
+// Salva il luogo selezionato, esegue i calcoli e salva il pagamento
 function saveLocationAndGeneratePayment() {
-     selectedLocation = document.getElementById('location-select').value;
-     document.getElementById('location-modal').style.display = 'none';
+    selectedLocation = document.getElementById('location-select').value;
+    document.getElementById('location-modal').style.display = 'none';
 
     // Calcola l'importo dovuto
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
     const dueAmount = (regular + giftcard) * 0.4;
 
-    //Salva il pagamento
+    // Salva il pagamento
     savePaymentData(selectedShiftDate, dueAmount, giftcard);
 
     // Genera i dati per il bonifico
     const userName = localStorage.getItem('m2m_name');
-    const iban = "DE12 3456 7890 1234 5678 90"; // IBAN di esempio corretto
+    const iban = "DE12 3456 7890 1234 5678 90"; // IBAN di esempio
     const accountHolder = "M2M Massagen"; // Intestatario del conto
     const purpose = `${userName}, ${selectedShiftDate}, ${selectedLocation}`;
 
-   // Rimuovi il pulsante "Generate Payment" e mostra le informazioni al suo posto
+    // Rimuove il pulsante "Generate Payment" e mostra le informazioni al suo posto
     const resultDiv = document.getElementById('result');
     document.getElementById('save-payment-button').style.display = 'none';
-        resultDiv.innerHTML = `
+    resultDiv.innerHTML = `
         <div class="payment-due-amount">Payment to Center (40%): €${dueAmount.toFixed(2)}</div>
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
         <div id="payment-info">
@@ -238,29 +217,42 @@ function saveLocationAndGeneratePayment() {
         </div>
     `;
     resultDiv.style.display = 'block';
-
 }
 
-// Funzione separata per salvare i dati (per riutilizzo)
+// Salva i dati del pagamento (per eventuale riutilizzo)
 function savePaymentData(date, dueAmount, giftCardAmount) {
-     const paymentData = {
+    const paymentData = {
         date: date,
         dueAmount: dueAmount,
         giftCardAmount: giftCardAmount,
-        note: '' // Puoi aggiungere una nota qui se necessario
+        note: '' // Nota opzionale
     };
 
     savedPayments.push(paymentData);
     localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
 
-      // Aggiorna il calendario se siamo nel mese corrente
+    // Se il mese corrente è in corso, aggiorna il calendario
     const now = new Date();
-      if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
+    if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
         generateCalendar(currentCalendarMonth, currentCalendarYear);
     }
 }
 
-// Function to generate the calendar (English localization)
+// Funzione per mostrare la Payment History (pagina a schermo intero)
+function showPaymentHistory() {
+    document.querySelector('.container').style.display = 'none';
+    document.getElementById('history-page').style.display = 'block';
+    document.getElementById('daily-payments-section').style.display = 'none';
+    generateCalendar(currentCalendarMonth, currentCalendarYear);
+}
+
+// Funzione per tornare alla pagina Calculator (Home)
+function showCalculator() {
+    document.querySelector('.container').style.display = 'block';
+    document.getElementById('history-page').style.display = 'none';
+}
+
+// Funzione per generare il calendario (localizzazione in inglese)
 function generateCalendar(month, year) {
     const calendarContainer = document.getElementById('calendar-container');
     calendarContainer.innerHTML = '';
@@ -275,12 +267,12 @@ function generateCalendar(month, year) {
     ];
     monthYearDisplay.textContent = `${monthNames[month]} ${year}`;
 
+    // Aggiunge un pulsante "Today" al calendario
     const todayButton = document.createElement('button');
     todayButton.id = 'today-button';
     todayButton.textContent = 'Today';
     todayButton.onclick = goToToday;
     monthYearDisplay.appendChild(todayButton);
-
 
     const calendarTable = document.createElement('table');
     calendarTable.className = 'calendar';
@@ -295,6 +287,7 @@ function generateCalendar(month, year) {
 
     let tbody = calendarTable.createTBody();
     let date = 1;
+    // Imposta il contatore: se startingDayOfWeek è 0 (domenica) allora partiamo da 6, altrimenti -1
     let dayOfWeekCounter = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
 
     for (let i = 0; i < 6; i++) {
@@ -351,9 +344,7 @@ function generateCalendar(month, year) {
     totalEarningsDiv.className = 'monthly-total total-earnings';
     totalEarningsDiv.textContent = `Total Earnings: €${monthlyEarningsTotal.toFixed(2)}`;
     calendarContainer.appendChild(totalEarningsDiv);
-
 }
-
 
 // Riporta alla data odierna
 function goToToday() {
@@ -363,7 +354,7 @@ function goToToday() {
     document.getElementById('daily-payments-section').style.display = 'none';
 }
 
-//  calcolare *tre* totali
+// Calcola tre totali: dovuto, gift card e guadagni
 function calculateMonthlyTotals(month, year) {
     let dueTotal = 0;
     let giftCardTotal = 0;
@@ -380,9 +371,10 @@ function calculateMonthlyTotals(month, year) {
     return [dueTotal, giftCardTotal, earningsTotal];
 }
 
+// Mostra i pagamenti giornalieri per una data specifica
 function showDailyPayments(dateString) {
     document.getElementById('daily-payments-section').style.display = 'block';
-    document.getElementById('selected-date').textContent = formatDate(new Date(dateString)); // Format the date here
+    document.getElementById('selected-date').textContent = formatDate(new Date(dateString));
     const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
     dailyPaymentsListDiv.innerHTML = '';
 
@@ -428,7 +420,7 @@ function showDailyPayments(dateString) {
     });
 }
 
-// Function to delete a payment
+// Funzione per eliminare un pagamento
 function deletePayment(paymentIndex, dateString) {
     if (confirm('Are you sure you want to delete this payment?')) {
         savedPayments.splice(paymentIndex, 1);
@@ -438,7 +430,7 @@ function deletePayment(paymentIndex, dateString) {
     }
 }
 
-// Function to handle adding or editing a note
+// Gestisce l'aggiunta o la modifica di una nota per un pagamento
 function handleNoteForPayment(paymentIndex, existingNote) {
     const dailyPaymentItem = document.querySelector(`.daily-payment-item[data-payment-index="${paymentIndex}"]`);
     let noteArea = dailyPaymentItem.querySelector('.note-input-area');
@@ -458,7 +450,6 @@ function handleNoteForPayment(paymentIndex, existingNote) {
         saveNoteButton.onclick = () => saveNote(paymentIndex, textarea.value, dailyPaymentItem);
         noteArea.appendChild(saveNoteButton);
 
-
         if (existingNote) {
             let removeNoteButton = document.createElement('button');
             removeNoteButton.textContent = 'Remove';
@@ -471,7 +462,7 @@ function handleNoteForPayment(paymentIndex, existingNote) {
     }
 }
 
-// Function to save the note of a payment
+// Salva la nota di un pagamento
 function saveNote(paymentIndex, noteText, dailyPaymentItem) {
     const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
 
@@ -479,15 +470,15 @@ function saveNote(paymentIndex, noteText, dailyPaymentItem) {
         paymentToUpdate.note = noteText;
         localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
         dailyPaymentItem.removeChild(dailyPaymentItem.querySelector('.note-input-area'));
-        showDailyPayments(paymentToUpdate.date); // Refresh to show updated note
+        showDailyPayments(paymentToUpdate.date); // Aggiorna la visualizzazione con la nota aggiornata
     } else {
         console.error("Payment not found at index:", paymentIndex);
     }
 }
 
-// Remove the note
+// Rimuove la nota da un pagamento
 function removeNote(paymentIndex, dailyPaymentItem) {
-     const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
+    const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
 
     if (paymentToUpdate) {
         paymentToUpdate.note = '';
@@ -499,7 +490,7 @@ function removeNote(paymentIndex, dailyPaymentItem) {
     }
 }
 
-// Event listener for the "Previous Month" button
+// Event listener per il pulsante "Previous Month"
 document.getElementById('prev-month-btn').addEventListener('click', () => {
     currentCalendarMonth--;
     if (currentCalendarMonth < 0) {
@@ -510,7 +501,7 @@ document.getElementById('prev-month-btn').addEventListener('click', () => {
     document.getElementById('daily-payments-section').style.display = 'none';
 });
 
-// Event listener for the "Next Month" button
+// Event listener per il pulsante "Next Month"
 document.getElementById('next-month-btn').addEventListener('click', () => {
     currentCalendarMonth++;
     if (currentCalendarMonth > 11) {
@@ -521,7 +512,7 @@ document.getElementById('next-month-btn').addEventListener('click', () => {
     document.getElementById('daily-payments-section').style.display = 'none';
 });
 
-// Event listener for the "Enter" key press in input fields
+// Aggiunge un listener per il tasto "Enter" in tutti gli input
 document.querySelectorAll('input').forEach(input => {
     input.addEventListener('keypress', e => {
         if (e.key === 'Enter') {
@@ -530,37 +521,35 @@ document.querySelectorAll('input').forEach(input => {
     });
 });
 
-// Inizializza la sezione istruzioni (chiamata quando l'app si carica)
+// Inizializza la sezione delle istruzioni all'avvio dell'app
 function initInstructionsToggle() {
     const toggleBtn = document.getElementById('toggle-instructions-btn');
     const instructionsContent = document.getElementById('instructions-content');
     const instructionsContainer = document.querySelector('.instructions-container');
 
-    // Imposta lo stato iniziale (aperto)
+    // Stato iniziale: istruzioni visibili
     instructionsContent.classList.remove('collapsed');
-    instructionsContainer.classList.remove('collapsed'); // Da container
-    toggleBtn.textContent = 'Hide'; // Mostra "Hide" inizialmente
-
+    instructionsContainer.classList.remove('collapsed');
+    toggleBtn.textContent = 'Hide';
 
     toggleBtn.addEventListener('click', () => {
         instructionsContent.classList.toggle('collapsed');
-        instructionsContainer.classList.toggle('collapsed'); // Su container
-        toggleBtn.textContent = instructionsContent.classList.contains('collapsed') ? 'Show' : 'Hide'; //Aggiorna pulsante
+        instructionsContainer.classList.toggle('collapsed');
+        toggleBtn.textContent = instructionsContent.classList.contains('collapsed') ? 'Show' : 'Hide';
     });
 }
 
-// NUOVA FUNZIONE: Copia il testo negli appunti
+// Funzione per copiare il testo negli appunti
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
-        // Feedback visivo (opzionale, ma consigliato)
         alert(`Copied: ${text}`);
     }).catch(err => {
         console.error('Failed to copy: ', err);
-        alert('Failed to copy text. Please copy manually.'); // Fallback in caso di errore
+        alert('Failed to copy text. Please copy manually.');
     });
 }
 
-// Service Worker registration (for PWA functionality)
+// Registrazione del Service Worker (per le funzionalità PWA)
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
@@ -572,3 +561,11 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+// Aggiunge i listener per la barra di navigazione in basso
+window.addEventListener('load', () => {
+    // Associa i pulsanti della bottom navigation alle funzioni di navigazione
+    document.getElementById('nav-home').addEventListener('click', showCalculator);
+    document.getElementById('nav-history').addEventListener('click', showPaymentHistory);
+});
+
