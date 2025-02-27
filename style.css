@@ -19,7 +19,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Assicura che sia sopra a tutto */
+    z-index: 1000;
 }
 
 /* Contenitore per il box di autenticazione */
@@ -30,7 +30,7 @@ body {
     text-align: center;
     width: 90%;
     max-width: 450px;
-    overflow-y: auto; /* Abilita lo scrolling se il contenuto è troppo alto */
+    overflow-y: auto;
     max-height: 85%;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
@@ -42,9 +42,9 @@ body {
     padding: 12px;
     font-size: 16px;
     display: block;
-    margin-left: auto; /* Centra orizzontalmente */
+    margin-left: auto;
     margin-right: auto;
-    box-sizing: border-box; /* Include padding e border nella larghezza */
+    box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 8px;
 }
@@ -58,7 +58,7 @@ body {
     color: white;
     padding: 8px 15px;
     border-radius: 24px;
-    display: none;  /* Nascosto all'inizio */
+    display: none;
     z-index: 1000;
     font-size: 16px;
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
@@ -74,11 +74,11 @@ body {
 /* Contenitore principale dell'app (Calculator) */
 .container {
     background-color: white;
-    padding: 30px 30px 80px; /* Aggiunto padding-bottom extra per evitare che il contenuto tocchi la barra di navigazione */
+    padding: 30px 30px 80px; /* Aggiunto padding-bottom extra per lasciare spazio alla barra di navigazione */
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     position: relative;
-    margin-top: 60px; /* Spazio per il nome utente */
+    margin-top: 60px;
 }
 
 h1 {
@@ -117,7 +117,7 @@ input {
     border-radius: 6px;
     margin: 6px 0;
     display: block;
-    margin-left: auto; /* Centra orizzontalmente */
+    margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
 }
@@ -126,7 +126,7 @@ input {
     text-align: center;
 }
 
-/* Stile per i pulsanti principali (Calculate, Reset) */
+/* Pulsanti principali */
 button {
     padding: 12px 28px;
     font-size: 16px;
@@ -142,11 +142,10 @@ button {
 
 button:hover {
     background-color: #45a049;
-    transform: translateY(-2px); /* Effetto sollevamento */
+    transform: translateY(-2px);
     box-shadow: 0 4px 7px rgba(0,0,0,0.2);
 }
 
-/* Stile specifico per il pulsante Reset */
 button#reset-button {
     background-color: #f44336;
     padding: 8px 15px;
@@ -163,32 +162,28 @@ button#reset-button:hover {
     margin-top: 30px;
     padding: 25px;
     border-radius: 10px;
-    display: none; /* Nascosto all'inizio */
+    display: none;
     text-align: center;
     background-color: #fff;
     box-shadow: 0 2px 7px rgba(0,0,0,0.1);
 }
 
-/* Stili per i risultati quando c'è un pagamento dovuto */
 .payment-due {
     background-color: #ffebee;
     border: 2px solid #ff5252;
 }
 
-/* Stili per i risultati quando c'è un pagamento da ricevere */
 .payment-receivable {
     background-color: #e8f5e9;
     border: 2px solid #4CAF50;
 }
 
-/* Stile per le singole righe di risultato */
 .result-line {
     margin: 12px 0;
     font-size: 18px;
     color: #444;
 }
 
-/* Stile per il totale */
 .total-amount {
     font-size: 26px;
     font-weight: bold;
@@ -196,12 +191,12 @@ button#reset-button:hover {
     color: #2e7d32;
 }
 
-/* Sezione istruzioni (inizialmente nascosta) */
+/* Istruzioni */
 .instructions {
     margin: 20px 0;
     padding: 18px;
     background-color: #fffde7;
-    border-left: 5px solid #ffca28; /* Bordo sinistro giallo */
+    border-left: 5px solid #ffca28;
     border-radius: 0 5px 5px 0;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
 }
@@ -211,7 +206,7 @@ button#reset-button:hover {
     font-weight: bold;
 }
 
-/* Banner per l'installazione (PWA) */
+/* Banner installazione (PWA) */
 .install-banner {
     padding: 15px;
     margin: 15px 0;
@@ -225,19 +220,16 @@ button#reset-button:hover {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-/* Stili specifici per il banner Android */
 #android-banner {
     background-color: #e8f5e9;
     border: 2px solid #4CAF50;
 }
 
-/* Stili specifici per il banner iOS */
 #ios-banner {
     background-color: #fff3e0;
     border: 2px solid #ff9800;
 }
 
-/* Stile per i pulsanti nei banner */
 .install-banner button {
     background: none;
     border: none;
@@ -266,7 +258,7 @@ button#reset-button:hover {
     color: #666;
 }
 
-/* Calendar styles - Modernized */
+/* Calendar */
 .calendar-header {
     display: flex;
     justify-content: space-between;
@@ -407,22 +399,22 @@ button#reset-button:hover {
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ddd;
-    margin-bottom: 8px; /* Spazio sotto il textarea */
-    box-sizing: border-box; /* Include padding e border nella larghezza */
+    margin-bottom: 8px;
+    box-sizing: border-box;
 }
 
-/* Stili generali per i pulsanti nell'area note, più piccoli */
+/* Pulsanti note (più piccoli) */
 .note-input-area button {
-    padding: 5px 10px;  /* Riduci il padding */
-    font-size: 12px;   /* Riduci la dimensione del font */
+    padding: 5px 10px;
+    font-size: 12px;
     border-radius: 5px;
     border: none;
     background-color: #ddd;
     color: #444;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    margin-right: 5px; /* Spazio tra i pulsanti, ma non dopo l'ultimo */
-    white-space: nowrap; /* Impedisci al testo di andare a capo */
+    margin-right: 5px;
+    white-space: nowrap;
 }
 
 .note-input-area button:hover {
@@ -430,11 +422,9 @@ button#reset-button:hover {
     color: #333;
 }
 
-/* Stile specifico per il pulsante Remove, più piccolo e rosso */
 .note-input-area button.remove-note-button {
     background-color: #f44336;
     color: white;
-    /* Altre proprietà ereditate da .note-input-area button */
 }
 
 .note-input-area button.remove-note-button:hover {
@@ -444,13 +434,11 @@ button#reset-button:hover {
 
 /* Bottone per tornare alla Calculator (se usato) */
 #back-to-calculator-btn {
-  padding: 5px 10px; /* Smaller padding */
-  font-size: 0.8em; /* Smaller font size */
+  padding: 5px 10px;
+  font-size: 0.8em;
 }
 
 /* --- Modifiche per Payment History a schermo intero --- */
-
-/* Invece di usare #history-overlay, usiamo #history-page per la pagina intera */
 #history-page {
     display: none;
     width: 100%;
@@ -474,6 +462,7 @@ button#reset-button:hover {
 
 /* --- Barra di Navigazione in Fondo --- */
 .bottom-nav {
+    display: none; /* Nascondi di default: la mostreremo dopo l'autenticazione */
     position: fixed;
     bottom: 0;
     left: 0;
@@ -497,16 +486,16 @@ button#reset-button:hover {
 
 /* --- Fine Barra di Navigazione --- */
 
-/* Calendar Navigation (separato, se necessario) */
+/* Calendar Navigation */
 #calendar-navigation {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Vertically center items */
-    margin-bottom: 10px; /* Add some space below the navigation */
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 #calendar-month-year {
-    font-size: 1.2em; /* Adjust as needed */
+    font-size: 1.2em;
     font-weight: bold;
 }
 
@@ -572,7 +561,6 @@ button#reset-button:hover {
     box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
 }
 
-/* Rimuovi il bordo specifico quando è aperto */
 .instructions-container:not(.collapsed) .instructions {
   border-left: none;
 }
@@ -590,7 +578,6 @@ button#reset-button:hover {
     margin-left: 8px;
 }
 
-/* Stile per il pulsante Show/Hide */
 #toggle-instructions-btn {
     padding: 5px 10px;
     font-size: 12px;
@@ -610,31 +597,28 @@ button#reset-button:hover {
 #instructions-content {
     overflow: hidden;
     transition: max-height 0.3s ease;
-    max-height: 500px; /* Inizialmente aperto */
+    max-height: 500px;
 }
 
-/* Stile per quando è chiuso */
 #instructions-content.collapsed {
   max-height: 0;
-  padding: 0; /* Rimuovi il padding quando è chiuso */
+  padding: 0;
 }
 
-/* Stile per l'header quando è chiuso */
 .instructions-container.collapsed .instructions-header{
-  margin-bottom: 0px; /* Assicura che non ci sia spazio extra */
+  margin-bottom: 0px;
 }
 
-/* Modals for Date and Location - Stili */
+/* Modals per Data e Location */
 .modal {
-    display: none; /* Nascondi per default */
+    display: none;
     position: fixed;
-    z-index: 1000; /* Sopra a tutto il resto */
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Sfondo semi-trasparente */
-    /* Centratura del contenuto */
+    background-color: rgba(0, 0, 0, 0.7);
     justify-content: center;
     align-items: center;
 }
@@ -644,8 +628,8 @@ button#reset-button:hover {
     padding: 20px;
     border-radius: 8px;
     text-align: center;
-    width: 80%; /* Larghezza */
-    max-width: 400px; /* Larghezza massima */
+    width: 80%;
+    max-width: 400px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
@@ -655,7 +639,7 @@ button#reset-button:hover {
 }
 
 .modal-content select {
-    width: 100%;  /* Occupa l'intera larghezza */
+    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -663,20 +647,19 @@ button#reset-button:hover {
     font-size: 16px;
 }
 
-/* Stile per i pulsanti nei modali */
 .modal-content button {
     padding: 10px 20px;
     font-size: 16px;
     border-radius: 5px;
     border: none;
-    background-color: #376FE9; /* Blu */
+    background-color: #376FE9;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .modal-content button:hover {
-   background-color: #45a049; /* Verde scuro al passaggio del mouse */
+   background-color: #45a049;
 }
 
 #payment-info {
@@ -691,7 +674,6 @@ button#reset-button:hover {
     box-sizing: border-box;
 }
 
-/* Header styling */
 .payment-header {
     font-weight: bold;
     font-size: 1.1em;
@@ -700,7 +682,6 @@ button#reset-button:hover {
     width: 100%;
 }
 
-/* Each payment field container */
 .payment-field {
     margin-bottom: 15px;
     display: flex;
@@ -708,13 +689,11 @@ button#reset-button:hover {
     width: 100%;
 }
 
-/* Label styling */
 .payment-label {
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-/* Value container */
 .payment-value-container {
     display: flex;
     flex-wrap: wrap;
@@ -722,14 +701,12 @@ button#reset-button:hover {
     gap: 10px;
 }
 
-/* Value styling */
 .payment-value {
     word-break: break-word;
     flex: 1;
     min-width: 200px;
 }
 
-/* Copy button styling */
 .copy-button {
     padding: 5px 15px;
     font-size: 14px;
@@ -746,7 +723,7 @@ button#reset-button:hover {
     background-color: #ccc;
 }
 
-/* Media query for landscape orientation */
+/* Media query per orientamento landscape */
 @media (min-width: 568px) {
     .payment-field {
         flex-direction: row;
@@ -762,5 +739,3 @@ button#reset-button:hover {
         flex: 1;
     }
 }
-
-
