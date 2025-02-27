@@ -628,19 +628,21 @@ button#reset-button:hover {
     width: 100%;
     position: relative;
     transition: all 0.3s ease;
-    border-radius: 12px;
+    border-radius: 12px; /* Arrotondamento SEMPRE presente */
     height: 100%;
     cursor: pointer;
     user-select: none;
 }
 
+/* Stile quando l'elemento è attivo */
 .nav-item.active {
-    background-color: rgba(55, 111, 233, 0.1);
+    background-color: rgba(55, 111, 233, 0.15); /* Colore di sfondo leggermente più opaco */
+    transition: background-color 0.3s ease; /* Transizione più fluida */
 }
 
 .nav-item.active .nav-icon {
     color: #376FE9;
-    transform: translateY(-5px);
+    transform: translateY(-2px); /* Riduci leggermente lo spostamento verticale */
 }
 
 .nav-item.active .nav-text {
@@ -662,18 +664,6 @@ button#reset-button:hover {
     margin-top: 2px;
     transition: all 0.3s ease;
     opacity: 0.8;
-}
-
-/* Indicator dot for active nav item */
-.nav-item.active::after {
-    content: '';
-    position: absolute;
-    bottom: 10px;
-    width: 5px;
-    height: 5px;
-    background-color: #376FE9;
-    border-radius: 50%;
-    transition: all 0.3s ease;
 }
 
 /* Hover effect */
