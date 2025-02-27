@@ -643,3 +643,26 @@ button#reset-button:hover {
 .result-line-total{
     font-size: 18px;
 }
+
+.copy-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ddd; /* Colore di sfondo */
+    color: #444; /* Colore del testo */
+    cursor: pointer;
+    vertical-align: middle; /* Allinea verticalmente con il testo */
+}
+  .copy-button:hover {
+    background-color: #ccc; /* Colore al passaggio del mouse */
+  }
+
+/* Aggiunto per spaziare i pulsanti copia */
+#payment-info p {
+    margin: 10px 0;       /* Aumenta lo spazio sopra/sotto */
+    display: flex;        /* Usa Flexbox */
+    align-items: center;  /* Allinea verticalmente gli elementi */
+    justify-content: space-between; /* Distribuisci lo spazio */
+}
