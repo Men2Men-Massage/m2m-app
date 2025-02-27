@@ -1,3 +1,5 @@
+// --- (script.js) ---
+
 const AUTH_CODE = "1228";
 let currentPaymentAmount = 0;
 let currentGiftCardAmount = 0;
@@ -25,6 +27,7 @@ function logout() {
     document.getElementById('user-name').style.display = 'none';
     // Ora la Payment History è una pagina a schermo intero (history-page)
     document.getElementById('history-page').style.display = 'none';
+    document.getElementById('profile-page').style.display = 'none'; // Nascondi la pagina del profilo
     document.getElementById('auth-overlay').style.display = 'flex';
     document.getElementById('access-code').value = '';
     document.getElementById('user-name-input').value = '';
@@ -33,6 +36,7 @@ function logout() {
     // Nascondi la barra di navigazione al logout
     document.querySelector('.bottom-nav').style.display = 'none';
 }
+
 
 // Funzione per controllare l'autenticazione all'avvio dell'app
 function checkAuth() {
@@ -249,6 +253,7 @@ function showPaymentHistory() {
     document.querySelector('.container').style.display = 'none';
     document.getElementById('history-page').style.display = 'block';
     document.getElementById('daily-payments-section').style.display = 'none';
+      document.getElementById('profile-page').style.display = 'none'; // Assicurati che sia nascosta
     generateCalendar(currentCalendarMonth, currentCalendarYear);
 }
 
@@ -256,6 +261,7 @@ function showPaymentHistory() {
 function showCalculator() {
     document.querySelector('.container').style.display = 'block';
     document.getElementById('history-page').style.display = 'none';
+    document.getElementById('profile-page').style.display = 'none'; // Assicurati che sia nascosta
 }
 
 // Funzione per generare il calendario (localizzazione in inglese)
@@ -571,29 +577,29 @@ if ('serviceWorker' in navigator) {
 // NUOVA FUNZIONE: Crea l'effetto ripple per i pulsanti della navbar
 function createRipple(event) {
     const button = event.currentTarget;
-    
+
     // Rimuovi eventuali ripple esistenti prima di aggiungerne uno nuovo
     const ripples = button.getElementsByClassName("ripple");
     while(ripples.length > 0) {
         ripples[0].remove();
     }
-    
+
     const circle = document.createElement("span");
     const diameter = Math.max(button.clientWidth, button.clientHeight);
     const radius = diameter / 2;
-    
+
     // Calcola la posizione del click in relazione all'elemento
     const rect = button.getBoundingClientRect();
     const x = event.clientX - rect.left - radius;
     const y = event.clientY - rect.top - radius;
-    
+
     circle.style.width = circle.style.height = `${diameter}px`;
     circle.style.left = `${x}px`;
     circle.style.top = `${y}px`;
     circle.classList.add("ripple");
-    
+
     button.appendChild(circle);
-    
+
     // Rimuovi il ripple dopo l'animazione
     setTimeout(() => {
         circle.remove();
@@ -605,10 +611,10 @@ function handleNavigation(target) {
     // Rimuovi la classe active da tutti gli elementi della navigazione
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => item.classList.remove('active'));
-    
+
     // Aggiungi la classe active all'elemento cliccato
     target.classList.add('active');
-    
+
     // Gestisci il cambio di vista in base all'id dell'elemento
     if (target.id === 'home-nav') {
         showCalculator();
@@ -617,11 +623,37 @@ function handleNavigation(target) {
     }
 }
 
+
+// NUOVE FUNZIONI: Mostra e aggiorna il profilo utente
+
+function showUserProfile() {
+    const userName = localStorage.getItem('m2m_name');
+    if (userName) {
+        document.getElementById('profile-name').textContent = userName;
+        document.getElementById('edit-name-input').value = userName; // Pre-popola il campo
+    }
+    document.querySelector('.container').style.display = 'none';
+    document.getElementById('history-page').style.display = 'none';
+    document.getElementById('profile-page').style.display = 'block';
+}
+
+function updateUserName() {
+    const newName = document.getElementById('edit-name-input').value.trim();
+    if (newName) {
+        localStorage.setItem('m2m_name', newName);
+        document.getElementById('user-name').textContent = `Hello ${newName}`;
+        showCalculator(); // Torna alla calcolatrice dopo l'aggiornamento
+    } else {
+        alert('Please enter a valid name');
+    }
+}
+
+
 // Event Listeners per la Navigazione
 document.addEventListener('DOMContentLoaded', function() {
     // Funzione iniziale per assicurarsi che i listener siano aggiunti correttamente
     const navItems = document.querySelectorAll('.nav-item');
-    
+
     navItems.forEach(item => {
         // Aggiungi l'effetto ripple al click
         item.addEventListener('click', function(e) {
@@ -629,14 +661,10 @@ document.addEventListener('DOMContentLoaded', function() {
             handleNavigation(this);
         });
     });
-    
+
     // Imposta il tab Home come attivo all'avvio
     const homeNav = document.getElementById('home-nav');
     if (homeNav) {
         homeNav.classList.add('active');
     }
-    
-    // Configura i listener per la navigazione
-    document.getElementById('home-nav').addEventListener('click', showCalculator);
-    document.getElementById('history-nav').addEventListener('click', showPaymentHistory);
 });
