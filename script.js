@@ -185,7 +185,7 @@ function showLocationModal() {
 }
 
 // NUOVA FUNZIONE: Salva il luogo, esegue i calcoli e salva il pagamento
-//MODIFICATA
+//MODIFICATA: Layout a griglia
 function saveLocationAndGeneratePayment() {
      selectedLocation = document.getElementById('location-select').value;
      document.getElementById('location-modal').style.display = 'none';
@@ -207,18 +207,18 @@ function saveLocationAndGeneratePayment() {
    // Rimuovi il pulsante "Generate Payment" e mostra le informazioni al suo posto
     const resultDiv = document.getElementById('result');
     document.getElementById('save-payment-button').style.display = 'none';
-    resultDiv.innerHTML = `
+        resultDiv.innerHTML = `
         <div class="payment-due-amount">Payment to Center (40%): €${dueAmount.toFixed(2)}</div>
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
         <div id="payment-info">
             <p><strong>Please make an instant bank transfer:</strong></p>
-            <p><strong>Account Holder:</strong> ${accountHolder} <button class="copy-button" onclick="copyToClipboard('${accountHolder}')">Copy</button></p>
-            <p><strong>IBAN:</strong> ${iban} <button class="copy-button" onclick="copyToClipboard('${iban}')">Copy</button></p>
-            <p><strong>Amount:</strong> €${dueAmount.toFixed(2)} <button class="copy-button" onclick="copyToClipboard('${dueAmount.toFixed(2)}')">Copy</button></p>
-            <p><strong>Purpose:</strong> ${purpose} <button class="copy-button" onclick="copyToClipboard('${purpose}')">Copy</button></p>
+            <p><strong>Account Holder:</strong> <span>${accountHolder}</span> <button class="copy-button" onclick="copyToClipboard('${accountHolder}')">Copy</button></p>
+            <p><strong>IBAN:</strong> <span>${iban}</span> <button class="copy-button" onclick="copyToClipboard('${iban}')">Copy</button></p>
+            <p><strong>Amount:</strong> <span>€${dueAmount.toFixed(2)}</span> <button class="copy-button" onclick="copyToClipboard('${dueAmount.toFixed(2)}')">Copy</button></p>
+            <p><strong>Purpose:</strong> <span>${purpose}</span> <button class="copy-button" onclick="copyToClipboard('${purpose}')">Copy</button></p>
         </div>
     `;
-    resultDiv.style.display = 'block'; // Assicurati che sia visibile
+    resultDiv.style.display = 'block';
 
 }
 
