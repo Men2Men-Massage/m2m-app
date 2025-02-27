@@ -21,14 +21,13 @@ function formatDate(date) {
 function logout() {
     localStorage.removeItem('m2m_access');
     localStorage.removeItem('m2m_name');
-    document.querySelector('.container').style.display = 'none';
-    document.getElementById('user-name').style.display = 'none';
-    document.getElementById('history-overlay').style.display = 'none';
-    document.getElementById('auth-overlay').style.display = 'flex';
+     // Show auth overlay and reset input fields
+    showAuthScreen();  // Usa una funzione dedicata
     document.getElementById('access-code').value = '';
     document.getElementById('user-name-input').value = '';
     document.getElementById('code-section').style.display = 'block';
     document.getElementById('name-section').style.display = 'none';
+
 }
 
 // Function to check authentication on app startup
@@ -37,11 +36,40 @@ function checkAuth() {
     const userName = localStorage.getItem('m2m_name');
 
     if (savedCode === AUTH_CODE && userName) {
-        showApp(userName);
+        showHomePage(userName); // Show home page directly
         return true;
     }
-    document.getElementById('auth-overlay').style.display = 'flex';
+    showAuthScreen(); // Show auth screen
     return false;
+}
+
+// Function to show the authentication screen
+function showAuthScreen() {
+    document.getElementById('auth-overlay').style.display = 'flex';
+    document.getElementById('main-content').style.display = 'none';
+    document.getElementById('history-content').style.display = 'none';
+    document.getElementById('user-name').style.display = 'none';
+}
+// Function to show the Home Page
+function showHomePage(userName) {
+    document.getElementById('auth-overlay').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
+    document.getElementById('history-content').style.display = 'none';
+    if (userName) { // Only set the name if it's provided (i.e., after login)
+      document.getElementById('user-name').textContent = `Hello ${userName}`;
+      document.getElementById('user-name').style.display = 'block';
+    }
+    showInstallBanners();
+    initInstructionsToggle(); // Inizializza le istruzioni
+}
+
+// Function to show the History Page
+function showHistoryPage() {
+    document.getElementById('main-content').style.display = 'none';
+    document.getElementById('history-content').style.display = 'block';
+     document.getElementById('auth-overlay').style.display = 'none';
+    document.getElementById('daily-payments-section').style.display = 'none';
+    generateCalendar(currentCalendarMonth, currentCalendarYear);
 }
 
 // Function to check the access code entered by the user
@@ -61,20 +89,10 @@ function saveName() {
     if (nameInput.value.trim().length > 0) {
         localStorage.setItem('m2m_access', AUTH_CODE);
         localStorage.setItem('m2m_name', nameInput.value.trim());
-        showApp(nameInput.value.trim());
+        showHomePage(nameInput.value.trim()); // Show home page after saving name
     } else {
         alert('Please enter a valid name');
     }
-}
-
-// Function to show the main app interface
-function showApp(userName) {
-    document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('user-name').textContent = `Hello ${userName}`;
-    document.getElementById('user-name').style.display = 'block';
-    document.querySelector('.container').style.display = 'block';
-    showInstallBanners();
-    initInstructionsToggle(); // Inizializza le istruzioni
 }
 
 // Function to show installation banners for PWA
@@ -109,10 +127,11 @@ function showInstallBanners() {
     }
 }
 
-// Check authentication on app startup
+// Check authentication on app startup.  Important:  This MUST happen *before* any UI is displayed.
 if (!checkAuth()) {
-    document.getElementById('auth-overlay').style.display = 'flex';
+    showAuthScreen(); // Show authentication screen initially
 }
+
 
 // Function to calculate the payment
 function calculatePayment() {
@@ -239,20 +258,6 @@ function savePaymentData(date, dueAmount, giftCardAmount) {
       if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
         generateCalendar(currentCalendarMonth, currentCalendarYear);
     }
-}
-
-// Function to show the payment history
-function showPaymentHistory() {
-    document.querySelector('.container').style.display = 'none';
-    document.getElementById('history-overlay').style.display = 'flex';
-    document.getElementById('daily-payments-section').style.display = 'none';
-    generateCalendar(currentCalendarMonth, currentCalendarYear);
-}
-
-// Function to return to the calculator from the payment history
-function showCalculator() {
-    document.querySelector('.container').style.display = 'block';
-    document.getElementById('history-overlay').style.display = 'none';
 }
 
 // Function to generate the calendar (English localization)
