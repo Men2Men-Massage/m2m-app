@@ -34,6 +34,23 @@
     </div>
   </div>
 
+  <!-- User Profile Page (Full Screen) -->
+    <div id="profile-page" style="display: none;">
+        <div id="profile-box">
+            <h2>User Profile</h2>
+            <div class="profile-info">
+                <p><strong>Name:</strong> <span id="profile-name"></span></p>
+                <p><strong>Contact:</strong> <span id="profile-contact">Add your contact info here</span></p> <!-- Placeholder -->
+            </div>
+            <div class="profile-edit">
+                <label for="edit-name-input">Change Name:</label>
+                <input type="text" id="edit-name-input" placeholder="Enter new name">
+                <button onclick="updateUserName()">Update Name</button>
+            </div>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
   <!-- Payment History Page (Full Screen) -->
   <div id="history-page" style="display: none;">
     <div id="history-box">
@@ -59,7 +76,7 @@
   </div>
 
   <!-- User Name (in alto a destra) -->
-  <div id="user-name" onclick="showPaymentHistory()"></div>
+  <div id="user-name" onclick="showUserProfile()"></div>
 
   <!-- Main Container (Calculator) -->
   <div class="container" style="display: none;">
