@@ -569,49 +569,45 @@ if ('serviceWorker' in navigator) {
 }
 
 // Aggiunge i listener per la barra di navigazione in basso.  CORRETTO!
-window.addEventListener('load', () => {
-    document.getElementById('home-nav').addEventListener('click', showCalculator);
-    document.getElementById('history-nav').addEventListener('click', showPaymentHistory);
-});
-
-
-
 // Gestione dell'effetto ripple e attivazione dei pulsanti della navbar
 document.addEventListener("DOMContentLoaded", function() {
-  // Gestione dell'effetto ripple sui pulsanti della navbar
-  const navItems = document.querySelectorAll('.nav-item');
+    const navItems = document.querySelectorAll('.nav-item');
 
-  navItems.forEach(item => {
-    item.addEventListener('click', function(e) {
-      // Rimuovi la classe active da tutti gli elementi
-      navItems.forEach(navItem => {
-        navItem.classList.remove('active');
-      });
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Rimuovi la classe active da tutti gli elementi e resetta le transizioni
+            navItems.forEach(navItem => {
+                navItem.classList.remove('active');
+                navItem.style.transition = 'none'; // Importante: Resetta la transizione
+            });
 
-      // Aggiungi la classe active all'elemento cliccato
-      this.classList.add('active');
+            // Aggiungi la classe active all'elemento cliccato
+            this.classList.add('active');
+            // Applica la transizione DOPO aver aggiunto la classe 'active'
+            this.style.transition = 'background-color 0.3s ease';
 
-      // Effetto ripple
-      const ripple = document.createElement('span');
-      ripple.classList.add('ripple');
-      this.appendChild(ripple);
 
-      const x = e.clientX - e.target.getBoundingClientRect().left;
-      const y = e.clientY - e.target.getBoundingClientRect().top;
+            // Effetto ripple (questo rimane invariato)
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            this.appendChild(ripple);
 
-      ripple.style.left = `${x}px`;
-      ripple.style.top = `${y}px`;
+            const x = e.clientX - e.target.getBoundingClientRect().left;
+            const y = e.clientY - e.target.getBoundingClientRect().top;
 
-      setTimeout(() => {
-        ripple.remove();
-      }, 600); // Rimuovi l'effetto dopo l'animazione
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
     });
-  });
 
-  // Imposta l'elemento home come attivo all'avvio.  Spostato dentro DOMContentLoaded,
-  // per assicurarsi che l'elemento esista prima di tentare di accedervi.
-  const homeNav = document.getElementById('home-nav');
-  if (homeNav) {
-    homeNav.classList.add('active');
-  }
+    // Imposta l'elemento home come attivo all'avvio
+    const homeNav = document.getElementById('home-nav');
+    if (homeNav) {
+        homeNav.classList.add('active');
+        homeNav.style.transition = 'background-color 0.3s ease'; // Transizione anche all'avvio
+    }
 });
