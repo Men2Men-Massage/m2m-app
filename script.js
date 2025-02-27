@@ -74,8 +74,10 @@ function showApp(userName) {
     document.getElementById('user-name').textContent = `Hello ${userName}`;
     document.getElementById('user-name').style.display = 'block';
     document.querySelector('.container').style.display = 'block';
+    // Mostra la barra di navigazione solo dopo l'accesso
+    document.querySelector('.bottom-nav').style.display = 'flex';
     showInstallBanners();
-    initInstructionsToggle(); // Inizializza le istruzioni
+    initInstructionsToggle();
 }
 
 // Funzione per mostrare i banner di installazione della PWA
