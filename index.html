@@ -113,6 +113,25 @@
         <!-- Result -->
         <div id="result">
             <button id="save-payment-button" onclick="generatePayment()" style="display: none;">Generate Payment</button>
+            <!-- Qui verranno mostrate le informazioni per il bonifico -->
+            <div id="payment-info" style="display: none;">
+                <p>Please make an instant bank transfer:</p>
+                <div class="copy-container">
+                    <span>IBAN:</span>
+                    <span id="iban">DE12 3456 7890 1234 5678 90</span>
+                    <button class="copy-button" data-copy="iban">Copy</button>
+                </div>
+                <div class="copy-container">
+                    <span>Amount:</span>
+                    <span id="amount"></span>
+                    <button class="copy-button" data-copy="amount">Copy</button>
+                </div>
+                 <div class="copy-container">
+                    <span>Purpose:</span>
+                    <span id="purpose"></span>
+                    <button class="copy-button" data-copy="purpose">Copy</button>
+                </div>
+            </div>
         </div>
 
          <!-- Modals for Date and Location -->
