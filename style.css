@@ -1,14 +1,16 @@
 body {
     font-family: Arial, sans-serif;
     max-width: 800px;
-    margin: 60px auto 20px;  /* Margine superiore più ampio per fare spazio a nome utente */
-    padding: 20px;
+    margin: 0 auto;  /* Removed top margin */
+    padding: 0; /* Reset padding */
     background-color: #f5f5f5;
     position: relative;
+    padding-bottom: 60px; /* Space for the footer */
 }
 
-/* Overlay per l'autenticazione e la cronologia */
-#auth-overlay, #history-overlay {
+
+/* Overlay per l'autenticazione */
+#auth-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -21,18 +23,18 @@ body {
     z-index: 1000; /* Assicura che sia sopra a tutto */
 }
 
-/* Contenitore per il box di autenticazione/cronologia */
-#auth-box, #history-box {
+/* Contenitore per il box di autenticazione */
+#auth-box {
     background: white;
     padding: 20px;
     border-radius: 12px;
     text-align: center;
     width: 90%;
     max-width: 450px;
-    overflow-y: auto; /* Abilita lo scrolling se il contenuto è troppo alto */
-    max-height: 85%;
+    /* Removed max-height and overflow-y */
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
+
 
 /* Stile per gli input nel box di autenticazione */
 #auth-box input {
@@ -77,7 +79,11 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     position: relative;
-    margin-top: 60px; /* Spazio per il nome utente */
+    margin-top: 20px; /* Reduced top margin */
+    /* Removed margin-bottom */
+}
+#history-box {
+     margin: 20px;
 }
 
 h1 {
@@ -447,10 +453,7 @@ button#reset-button:hover {
   /* Add any other styling you want for the button */
 }
 
-#history-overlay {
-  display: flex;
-  flex-direction: column; /* Stack elements vertically */
-}
+/* Removed history overlay specific styles */
 
 #calendar-navigation {
   display:flex;
@@ -699,13 +702,62 @@ button#reset-button:hover {
         flex-direction: row;
         align-items: baseline;
     }
-    
+
     .payment-label {
         width: 150px;
         margin-bottom: 0;
     }
-    
+
     .payment-value-container {
         flex: 1;
     }
+}
+
+/* Footer Styles (Navigation Bar) */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #376FE9; /* Consistent with button color */
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.15);
+    z-index: 100; /* Ensure it's above other content */
+}
+
+footer button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white; /* Icon color */
+    font-size: 12px; /* Text label size */
+}
+
+
+footer button img {
+     margin-bottom: 5px;
+}
+
+footer button:hover {
+    opacity: 0.8; /* Subtle hover effect */
+}
+
+/* Make history content full-screen */
+#history-content {
+  position: fixed; /* Or absolute, depending on your needs */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5;
+  overflow-y: auto; /* Enable scrolling if needed */
+  z-index: 50; /* Below the auth overlay, but above main content */
+  padding-bottom: 60px; /* Make space for the fixed footer */
+
 }
