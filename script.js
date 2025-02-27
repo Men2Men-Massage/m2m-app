@@ -75,7 +75,6 @@ function showApp(userName) {
     document.querySelector('.container').style.display = 'block';
     showInstallBanners();
     initInstructionsToggle(); // Inizializza le istruzioni
-    initCopyButtons();     // Inizializza i pulsanti di copia
 }
 
 // Function to show installation banners for PWA
@@ -116,7 +115,6 @@ if (!checkAuth()) {
 }
 
 // Function to calculate the payment
-// MODIFICATA: Disabilita il pulsante durante il calcolo
 function calculatePayment() {
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
@@ -124,32 +122,27 @@ function calculatePayment() {
     currentGiftCardAmount = giftcard;
 
     const resultDiv = document.getElementById('result');
-     // Rimuovi le classi *prima* di mostrare/nascondere
-    resultDiv.classList.remove('payment-due', 'payment-receivable');
-
     resultDiv.innerHTML = `
         <div class="result-line-total">• Total: €${(regular + giftcard).toFixed(2)}</div>
         <div class="payment-due-amount">Payment to Center (40%): €${dueAmount.toFixed(2)}</div>
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
-        <button id="save-payment-button" onclick="generatePayment()" >Generate Payment</button>
+        <button id="save-payment-button" onclick="generatePayment()">Generate Payment</button>
     `;
 
     resultDiv.className = 'payment-due';
     resultDiv.style.display = 'block';
     document.getElementById('save-payment-button').style.display = 'inline-block';
-    document.getElementById('payment-info').style.display = 'none'; // Assicurati che sia nascosto
-
 }
 
 // Function to reset all form fields
+//MODIFICATO
 function resetAll() {
     document.getElementById('regular-payments').value = '';
     document.getElementById('giftcard-payments').value = '';
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('save-payment-button').style.display = 'none';
+    document.getElementById('result').innerHTML = ''; // Pulisci completamente il div result
+    document.getElementById('result').style.display = 'none'; // e nascondilo
+    document.getElementById('save-payment-button').style.display = 'none'; // Assicurati che il pulsante sia nascosto
     currentGiftCardAmount = 0;
-    // Nascondi le informazioni di pagamento
-    document.getElementById('payment-info').style.display = 'none';
 }
 
 // MODIFICATA: Ora mostra i modali
@@ -193,17 +186,17 @@ function showLocationModal() {
 }
 
 // NUOVA FUNZIONE: Salva il luogo, esegue i calcoli e salva il pagamento
-// MODIFICATA: Corretta gestione della visibilità degli elementi
+//MODIFICATA
 function saveLocationAndGeneratePayment() {
-    selectedLocation = document.getElementById('location-select').value;
-    document.getElementById('location-modal').style.display = 'none';
+     selectedLocation = document.getElementById('location-select').value;
+     document.getElementById('location-modal').style.display = 'none';
 
     // Calcola l'importo dovuto
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
     const dueAmount = (regular + giftcard) * 0.4;
 
-    // Salva il pagamento
+    //Salva il pagamento
     savePaymentData(selectedShiftDate, dueAmount, giftcard);
 
     // Genera i dati per il bonifico
@@ -211,16 +204,21 @@ function saveLocationAndGeneratePayment() {
     const iban = "DE12 3456 7890 1234 5678 90"; // IBAN di esempio corretto
     const purpose = `${userName}, ${selectedShiftDate}, ${selectedLocation}`;
 
-    // Mostra le informazioni per il bonifico (non più con alert)
-    document.getElementById('iban').textContent = iban;
-    document.getElementById('amount').textContent = `€${dueAmount.toFixed(2)}`;
-    document.getElementById('purpose').textContent = purpose;
-
-    // Nascondi il pulsante "Generate Payment" e mostra le informazioni
+   // Rimuovi il pulsante "Generate Payment" e mostra le informazioni al suo posto
+    const resultDiv = document.getElementById('result');
     document.getElementById('save-payment-button').style.display = 'none';
-    document.getElementById('payment-info').style.display = 'block'; // Mostra le info
-    //  rimuovi le classi per evitare conflitti
-    document.getElementById('result').classList.remove('payment-due', 'payment-receivable');
+    resultDiv.innerHTML = `
+        <div class="payment-due-amount">Payment to Center (40%): €${dueAmount.toFixed(2)}</div>
+        <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
+        <div id="payment-info">
+            <p><strong>Please make an instant bank transfer:</strong></p>
+            <p><strong>IBAN:</strong> ${iban}</p>
+            <p><strong>Amount:</strong> €${dueAmount.toFixed(2)}</p>
+            <p><strong>Purpose:</strong> ${purpose}</p>
+        </div>
+    `;
+    resultDiv.style.display = 'block'; // Assicurati che sia visibile
+
 }
 
 // Funzione separata per salvare i dati (per riutilizzo)
@@ -542,29 +540,6 @@ function initInstructionsToggle() {
         instructionsContent.classList.toggle('collapsed');
         instructionsContainer.classList.toggle('collapsed'); // Su container
         toggleBtn.textContent = instructionsContent.classList.contains('collapsed') ? 'Show' : 'Hide'; //Aggiorna pulsante
-    });
-}
-
-// NUOVA FUNZIONE: Inizializza i pulsanti di copia
-function initCopyButtons() {
-    const copyButtons = document.querySelectorAll('.copy-button');
-    copyButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const fieldToCopy = button.dataset.copy; // Ottieni il nome del campo da copiare (es., "iban")
-            const textToCopy = document.getElementById(fieldToCopy).textContent;
-
-            // Copia il testo negli appunti (metodo moderno, più sicuro)
-            navigator.clipboard.writeText(textToCopy)
-                .then(() => {
-                    // Feedback visivo (opzionale, ma consigliato)
-                    button.textContent = 'Copied!';
-                    setTimeout(() => { button.textContent = 'Copy'; }, 1500); // Ripristina dopo 1.5 secondi
-                })
-                .catch(err => {
-                    console.error('Failed to copy text: ', err);
-                    alert('Failed to copy text. Please copy manually.'); // Fallback in caso di errore
-                });
-        });
     });
 }
 
