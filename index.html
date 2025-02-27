@@ -1,151 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M2M Payment Calculator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M2M Payment Calculator</title>
 
-    <!-- Meta tags for PWA -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Payment Calc">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
-    <link rel="manifest" href="/manifest.json">
+  <!-- Meta tags for PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Payment Calc">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+  <link rel="manifest" href="/manifest.json">
 
-    <!-- Collegamento al file CSS esterno -->
-    <link rel="stylesheet" href="style.css">
+  <!-- Collegamento al file CSS esterno -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Authentication Overlay -->
-    <div id="auth-overlay" style="display: none;">
-        <div id="auth-box">
-            <h2>Welcome to M2M Calculator</h2>
-            <div id="code-section">
-                <input type="password" id="access-code" placeholder="Enter access code">
-                <button onclick="checkCode()">Continue</button>
-            </div>
-            <div id="name-section" style="display: none;">
-                <input type="text" id="user-name-input" placeholder="Enter your name">
-                <button onclick="saveName()">Save</button>
-            </div>
+  <!-- Authentication Overlay -->
+  <div id="auth-overlay" style="display: none;">
+    <div id="auth-box">
+      <h2>Welcome to M2M Calculator</h2>
+      <div id="code-section">
+        <input type="password" id="access-code" placeholder="Enter access code">
+        <button onclick="checkCode()">Continue</button>
+      </div>
+      <div id="name-section" style="display: none;">
+        <input type="text" id="user-name-input" placeholder="Enter your name">
+        <button onclick="saveName()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment History Page (Full Screen) -->
+  <div id="history-page" style="display: none;">
+    <div id="history-box">
+      <h2>Payment History</h2>
+      <!-- Il bottone "Back" è nascosto perché ora la navigazione avviene tramite la barra in basso -->
+      <button id="back-to-calculator-btn" onclick="showCalculator()" style="display: none;">Back</button>
+      <div id="calendar-header" class="calendar-header">
+        <button id="prev-month-btn"><</button>
+        <span id="calendar-month-year" class="calendar-month-year"></span>
+        <button id="next-month-btn">></button>
+      </div>
+      <div id="calendar-container">
+        <!-- Calendar will be generated here -->
+      </div>
+      <div id="daily-payments-section" style="display: none;">
+        <h3>Payments for <span id="selected-date"></span></h3>
+        <div id="daily-payments-list">
+          <!-- Daily payments will be listed here -->
         </div>
+      </div>
+      <button onclick="logout()" style="margin-top: 20px;">Logout</button>
+    </div>
+  </div>
+
+  <!-- User Name (in alto a destra) -->
+  <div id="user-name" onclick="showPaymentHistory()"></div>
+
+  <!-- Main Container (Calculator) -->
+  <div class="container" style="display: none;">
+    <!-- Installation Banners (iOS e Android) -->
+    <div id="ios-banner" class="install-banner" style="display: none;">
+      <div>
+        📲 Install this app: Tap <img src="icons/share-icon.png" style="height:18px; vertical-align:middle">
+        then "Add to Home Screen"
+      </div>
+      <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
     </div>
 
-    <!-- Main Content (Calculator) -->
-    <div id="main-content" style="display: none;">
-        <!-- User Name -->
-        <div id="user-name" onclick="showHistoryPage()"></div>
-
-        <!-- Installation Banners (iOS and Android) -->
-        <div id="ios-banner" class="install-banner" style="display: none;">
-            <div>
-                📲 Install this app: Tap <img src="icons/share-icon.png" style="height:18px; vertical-align:middle">
-                then "Add to Home Screen"
-            </div>
-            <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
-        </div>
-
-        <div id="android-banner" class="install-banner" style="display: none;">
-            <div>📲 Install this app for a better experience</div>
-            <button id="install-button">Install</button>
-            <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
-        </div>
-
-        <div class="container">
-            <h1>M2M Payment Calculator</h1>
-
-            <!-- Instructions -->
-            <div class="instructions-container">
-                <div class="instructions-header">
-                    <span>How to use:</span>
-                     <button id="toggle-instructions-btn">Show</button>
-                </div>
-                <div class="instructions" id="instructions-content">
-                    <ol>
-                        <li>Enter <span class="highlight">regular payments</span> (cash/card payments handled by therapist)</li>
-                        <li>Enter <span class="highlight">gift card payments</span> (processed by the center)</li>
-                        <li>Click Calculate to see net amount</li>
-                        <li>Make sure you've checked out all appointments in Fresha and entered any gift cards correctly!</li>
-                    </ol>
-                </div>
-            </div>
-
-            <!-- Input Section -->
-            <div class="input-section">
-                <div class="input-group">
-                    <label for="regular-payments">Regular Payments (€):</label>
-                    <input type="number" id="regular-payments" placeholder="Enter amount" step="0.01" min="0">
-                </div>
-
-                <div class="input-group">
-                    <label for="giftcard-payments">Gift Card Payments (€):</label>
-                    <input type="number" id="giftcard-payments" placeholder="Enter amount" step="0.01" min="0">
-                </div>
-
-                <div class="button-container">
-                    <button onclick="calculatePayment()">Calculate</button>
-                    <button id="reset-button" onclick="resetAll()">Reset</button>
-                </div>
-            </div>
-
-            <!-- Result -->
-            <div id="result">
-                <button id="save-payment-button" onclick="generatePayment()" style="display: none;">Generate Payment</button>
-            </div>
-
-             <!-- Modals for Date and Location -->
-            <div id="date-modal" class="modal">
-                <div class="modal-content">
-                    <h2>Select Shift Date</h2>
-                    <select id="shift-date-select">
-                        <!-- Options will be added dynamically -->
-                    </select>
-                    <button onclick="saveDateAndShowLocation()">Next</button>
-                </div>
-            </div>
-
-            <div id="location-modal" class="modal">
-                <div class="modal-content">
-                    <h2>Select Location</h2>
-                    <select id="location-select">
-                        <option value="Prenzlauer Berg">Prenzlauer Berg</option>
-                        <option value="Schoeneberg">Schoeneberg</option>
-                    </select>
-                    <button onclick="saveLocationAndGeneratePayment()">Generate Payment</button>
-                </div>
-            </div>
-        </div>
+    <div id="android-banner" class="install-banner" style="display: none;">
+      <div>📲 Install this app for a better experience</div>
+      <button id="install-button">Install</button>
+      <span class="close-banner" onclick="this.parentElement.style.display='none'">×</span>
     </div>
 
-    <!-- History Content -->
-    <div id="history-content" style="display: none;">
-        <div id="history-box">
-            <h2>Payment History</h2>
-             <div id="calendar-header" class="calendar-header">
-                <button id="prev-month-btn"><</button>
-                <span id="calendar-month-year" class="calendar-month-year"></span>
-                <button id="next-month-btn">></button>
-            </div>
-            <div id="calendar-container">
-                <!-- Calendar will be generated here -->
-            </div>
-            <div id="daily-payments-section" style="display: none;">
-                <h3>Payments for <span id="selected-date"></span></h3>
-                <div id="daily-payments-list">
-                    <!-- Daily payments will be listed here -->
-                </div>
-            </div>
-            <button onclick="logout()" style="margin-top: 20px;">Logout</button>
-        </div>
+    <h1>M2M Payment Calculator</h1>
+
+    <!-- Instructions -->
+    <div class="instructions-container">
+      <div class="instructions-header">
+        <span>How to use:</span>
+         <button id="toggle-instructions-btn">Show</button>
+      </div>
+      <div class="instructions" id="instructions-content">
+        <ol>
+          <li>Enter <span class="highlight">regular payments</span> (cash/card payments handled by therapist)</li>
+          <li>Enter <span class="highlight">gift card payments</span> (processed by the center)</li>
+          <li>Click Calculate to see net amount</li>
+          <li>Make sure you've checked out all appointments in Fresha and entered any gift cards correctly!</li>
+        </ol>
+      </div>
     </div>
 
+    <!-- Input Section -->
+    <div class="input-section">
+      <div class="input-group">
+        <label for="regular-payments">Regular Payments (€):</label>
+        <input type="number" id="regular-payments" placeholder="Enter amount" step="0.01" min="0">
+      </div>
 
+      <div class="input-group">
+        <label for="giftcard-payments">Gift Card Payments (€):</label>
+        <input type="number" id="giftcard-payments" placeholder="Enter amount" step="0.01" min="0">
+      </div>
 
-     <footer>
-        <button onclick="showHomePage()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAARlJREFUSEvt1jFqwzAQBuDPEf0BeICXoEXoKgy9haBD6Ag8Qk9gs4WFoEMQ2gg9RKGLMLVMPVv/yZzDB7mY3UkkO5+SSRaLBd7zPF9wzPP8tWiaVo5T1P0G0yS5h2AsR/iPMa4h/AM4zhF/AC4zBAu4pC4n6/yU/iU0SWIdwDHG8oA8q/8dO+0B2CuM8wq98kGv4w7HkBCo/jAAe8549/wH2W4EynOIPwF7G4z6X+Bq74kE9Y8i+w4gXq+Y5l4DHvO4k5N/C9hXmP0TewV7xGqXvMHob9gTXc6J5z3v/J8wSxvOA877E6B8m3AMu8w+7n8F9Cgza/l9hXmKUp+k6T5sO8JkAAAAAElFTkSuQmCC" alt="Home" width="24" height="24"></button>
-        <button onclick="showHistoryPage()"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAWNJREFUSEvtlr1qwkAQhv/NQAipfWwQUAMrUVBRxN8gVFBQQHEB0V8gE0HFBD0EUUEPQT+mE7m5m9mdw5ZtZnZ3drg7+7E7M7szu4uV+xKqI6B91R1zYlVXa94NfS29h54o4iT1KupX7L/1D2R24C/vW1f9+Pz+U7lF1H9m2o6s30m7iR8m7jH0Pdxu4j6X1T627tC3L/1K2hH04/g54l3eI+p7U1H1m2o6s5d6R3jH0B5uX4gvaR1Fvpt4NfQeGz/z/g/t8F9f8+T/G1uG5XJbb7w+lUql/W43G671Q6FQ+Fc7HVgWixG7HA+gGzJ2W6Zp3kYgYjPzDqD/073lW8M+w/Hh5/J+5FHH9G6wEAAAAASUVORK5CYII=" alt="History" width="24" height="24"></button>
-    </footer>
+      <div class="button-container">
+        <button onclick="calculatePayment()">Calculate</button>
+        <button id="reset-button" onclick="resetAll()">Reset</button>
+      </div>
+    </div>
 
-    <script src="script.js"></script>
+    <!-- Result -->
+    <div id="result">
+      <button id="save-payment-button" onclick="generatePayment()" style="display: none;">Generate Payment</button>
+    </div>
+
+     <!-- Modals per Data e Location -->
+    <div id="date-modal" class="modal">
+      <div class="modal-content">
+        <h2>Select Shift Date</h2>
+        <select id="shift-date-select">
+          <!-- Options will be added dynamically -->
+        </select>
+        <button onclick="saveDateAndShowLocation()">Next</button>
+      </div>
+    </div>
+
+    <div id="location-modal" class="modal">
+      <div class="modal-content">
+        <h2>Select Location</h2>
+        <select id="location-select">
+          <option value="Prenzlauer Berg">Prenzlauer Berg</option>
+          <option value="Schoeneberg">Schoeneberg</option>
+        </select>
+        <button onclick="saveLocationAndGeneratePayment()">Generate Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra di Navigazione in Fondo -->
+  <nav class="bottom-nav">
+    <button id="nav-home">Home</button>
+    <button id="nav-history">Payment History</button>
+  </nav>
+
+  <script src="script.js"></script>
 </body>
 </html>
+
