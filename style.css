@@ -632,44 +632,52 @@ button#reset-button:hover {
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
-    text-align: left; /* Allineamento generale a sinistra */
+    text-align: left;
     line-height: 1.6;
-    display: grid; /* Mantieni la griglia */
-    grid-template-columns: auto 1fr; /* Cambiato a 'auto 1fr' */
-    gap: 10px 20px;  /* Aggiunto spazio orizzontale tra le colonne */
-    align-items: center; /* Allinea verticalmente */
+    /* RIMOSSO COMPLETAMENTE IL DISPLAY GRID */
+    /* display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px 20px;
+    align-items: center; */
 }
 
 /* Intestazione "Please make..." */
-#payment-info > p:first-child { /* Seleziona solo il *primo* paragrafo figlio diretto */
-    grid-column: 1 / -1;  /* Occupa l'intera riga */
-    text-align: center;    /* Centra il testo */
-    margin-bottom: 15px; /* Aggiungi spazio sotto */
-    font-weight: bold;   /* Rendi il testo in grassetto */
-    font-size: 1.1em;      /* Aumenta leggermente la dimensione */
+#payment-info > p:first-child { /* Seleziona solo il *primo* paragrafo */
+    /* grid-column: 1 / -1;  RIMOSSO */
+    text-align: left;    /* Allineato a SINISTRA */
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 1.1em;
 }
 
+/* Stile per i paragrafi dentro #payment-info */
 #payment-info p {
-    margin: 5px 0;       /* Mantieni lo spazio verticale */
-    /* display: flex;  RIMUOVI display: flex */
-    /* align-items: center; RIMUOVI, gestito da grid */
-    /* justify-content: space-between;  RIMUOVI */
+    margin: 5px 0;  /* Spaziatura verticale */
+    display: block;      /* Ripristina il comportamento normale del paragrafo */
+    /* RIMOSSI align-items e justify-content */
 }
 
 /* Stile per le etichette (Account Holder, IBAN, ecc.) */
 #payment-info strong {
     font-weight: bold;
-    text-align: right;  /* Allinea a destra (nella prima colonna) */
-    display: block;      /* Occupa l'intera larghezza della colonna */
+     display: block;  /* Importante: visualizza come blocco */
+    /* text-align: right; RIMOSSO */
+    float: left;         /* Allinea a sinistra */
+    clear: both;        /* Importante:  va a capo dopo l'etichetta */
+    width: 130px;       /* Larghezza fissa per l'etichetta (puoi regolarla) */
 }
 
 /* Stile per i valori (e i pulsanti Copy) */
 #payment-info p span {
-  /*  display: block;  Non più necessario, gestito dalla griglia */
+   display: inline-block; /*  inline-block */
+    margin-bottom: 5px;  /* Aggiunto margine inferiore */
+    word-break: break-word; /* Permette di andare a capo se il testo è troppo lungo */
 }
 
+
 .copy-button {
-    margin-left: 10px; /*  spazio a sinistra del pulsante */
+    margin-left: 0px;        /* Nessun margine sinistro */
+    margin-top: 5px;         /* Margine superiore per separare dal testo */
     padding: 5px 10px;
     font-size: 12px;
     border-radius: 5px;
@@ -678,7 +686,10 @@ button#reset-button:hover {
     color: #444;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-     white-space: nowrap; /* Evita che il testo del pulsante vada a capo */
+    white-space: nowrap;
+    display: block;       /*  block */
+    width: auto;          /*  auto */
+
 }
 
 .copy-button:hover {
@@ -686,5 +697,5 @@ button#reset-button:hover {
 }
 
 .result-line-total{
-  font-size: 16px;
+    font-size: 18px; /* Aumenta per visibilità */
 }
