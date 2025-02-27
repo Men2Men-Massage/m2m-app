@@ -75,6 +75,8 @@ function showApp(userName) {
     document.querySelector('.container').style.display = 'block';
     showInstallBanners();
     initInstructionsToggle(); // Inizializza le istruzioni
+    // Aggiunto: Inizializza i pulsanti di copia
+    initCopyButtons();
 }
 
 // Function to show installation banners for PWA
@@ -132,15 +134,20 @@ function calculatePayment() {
     resultDiv.className = 'payment-due';
     resultDiv.style.display = 'block';
     document.getElementById('save-payment-button').style.display = 'inline-block';
+      // Nascondi le informazioni di pagamento quando si fa un nuovo calcolo
+    document.getElementById('payment-info').style.display = 'none';
 }
 
 // Function to reset all form fields
+// MODIFICATA: Resetta anche le informazioni di pagamento
 function resetAll() {
     document.getElementById('regular-payments').value = '';
     document.getElementById('giftcard-payments').value = '';
     document.getElementById('result').style.display = 'none';
     document.getElementById('save-payment-button').style.display = 'none';
     currentGiftCardAmount = 0;
+    // Nascondi le informazioni di pagamento
+    document.getElementById('payment-info').style.display = 'none';
 }
 
 // MODIFICATA: Ora mostra i modali
@@ -184,25 +191,33 @@ function showLocationModal() {
 }
 
 // NUOVA FUNZIONE: Salva il luogo, esegue i calcoli e salva il pagamento
+// MODIFICATA: Ora mostra/nasconde gli elementi corretti
 function saveLocationAndGeneratePayment() {
-     selectedLocation = document.getElementById('location-select').value;
-     document.getElementById('location-modal').style.display = 'none';
+    selectedLocation = document.getElementById('location-select').value;
+    document.getElementById('location-modal').style.display = 'none';
 
     // Calcola l'importo dovuto
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
     const dueAmount = (regular + giftcard) * 0.4;
 
-    //Salva il pagamento
+    // Salva il pagamento
     savePaymentData(selectedShiftDate, dueAmount, giftcard);
 
     // Genera i dati per il bonifico
     const userName = localStorage.getItem('m2m_name');
-    const iban = "DE12 3456 7890 1234 5678 90"; // IBAN di esempio corretto
+    const iban = "DE12 3456 7890 1234 5678 90";
     const purpose = `${userName}, ${selectedShiftDate}, ${selectedLocation}`;
 
-    // Mostra i dati all'utente
-    alert(`Please make an instant bank transfer:\n\nIBAN: ${iban}\nAmount: €${dueAmount.toFixed(2)}\nPurpose: ${purpose}`);
+    // Mostra le informazioni per il bonifico (non più con alert)
+    document.getElementById('iban').textContent = iban;
+    document.getElementById('amount').textContent = `€${dueAmount.toFixed(2)}`;
+    document.getElementById('purpose').textContent = purpose;
+
+    // Nascondi il pulsante "Generate Payment" e mostra le informazioni
+    document.getElementById('save-payment-button').style.display = 'none';
+    document.getElementById('payment-info').style.display = 'block'; // Mostra le info
+     document.getElementById('result').classList.remove('payment-due', 'payment-receivable');
 }
 
 // Funzione separata per salvare i dati (per riutilizzo)
@@ -225,7 +240,6 @@ function savePaymentData(date, dueAmount, giftCardAmount) {
 }
 
 // Function to show the payment history
-//REINSERITA
 function showPaymentHistory() {
     document.querySelector('.container').style.display = 'none';
     document.getElementById('history-overlay').style.display = 'flex';
@@ -234,14 +248,12 @@ function showPaymentHistory() {
 }
 
 // Function to return to the calculator from the payment history
-//REINSERITA
 function showCalculator() {
     document.querySelector('.container').style.display = 'block';
     document.getElementById('history-overlay').style.display = 'none';
 }
 
 // Function to generate the calendar (English localization)
-//REINSERITA
 function generateCalendar(month, year) {
     const calendarContainer = document.getElementById('calendar-container');
     calendarContainer.innerHTML = '';
@@ -337,7 +349,6 @@ function generateCalendar(month, year) {
 
 
 // Riporta alla data odierna
-//REINSERITA
 function goToToday() {
     currentCalendarMonth = new Date().getMonth();
     currentCalendarYear = new Date().getFullYear();
@@ -346,7 +357,6 @@ function goToToday() {
 }
 
 //  calcolare *tre* totali
-//REINSERITA
 function calculateMonthlyTotals(month, year) {
     let dueTotal = 0;
     let giftCardTotal = 0;
@@ -363,10 +373,9 @@ function calculateMonthlyTotals(month, year) {
     return [dueTotal, giftCardTotal, earningsTotal];
 }
 
-//REINSERITA
 function showDailyPayments(dateString) {
     document.getElementById('daily-payments-section').style.display = 'block';
-    document.getElementById('selected-date').textContent = formatDate(new Date(dateString)); // ফরম্যাট the date here
+    document.getElementById('selected-date').textContent = formatDate(new Date(dateString)); // Format the date here
     const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
     dailyPaymentsListDiv.innerHTML = '';
 
@@ -413,7 +422,6 @@ function showDailyPayments(dateString) {
 }
 
 // Function to delete a payment
-//REINSERITA
 function deletePayment(paymentIndex, dateString) {
     if (confirm('Are you sure you want to delete this payment?')) {
         savedPayments.splice(paymentIndex, 1);
@@ -424,7 +432,6 @@ function deletePayment(paymentIndex, dateString) {
 }
 
 // Function to handle adding or editing a note
-//REINSERITA
 function handleNoteForPayment(paymentIndex, existingNote) {
     const dailyPaymentItem = document.querySelector(`.daily-payment-item[data-payment-index="${paymentIndex}"]`);
     let noteArea = dailyPaymentItem.querySelector('.note-input-area');
@@ -458,7 +465,6 @@ function handleNoteForPayment(paymentIndex, existingNote) {
 }
 
 // Function to save the note of a payment
-//REINSERITA
 function saveNote(paymentIndex, noteText, dailyPaymentItem) {
     const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
 
@@ -473,7 +479,6 @@ function saveNote(paymentIndex, noteText, dailyPaymentItem) {
 }
 
 // Remove the note
-//REINSERITA
 function removeNote(paymentIndex, dailyPaymentItem) {
      const paymentToUpdate = savedPayments.find((payment, index) => index === paymentIndex);
 
@@ -488,7 +493,6 @@ function removeNote(paymentIndex, dailyPaymentItem) {
 }
 
 // Event listener for the "Previous Month" button
-//REINSERITA
 document.getElementById('prev-month-btn').addEventListener('click', () => {
     currentCalendarMonth--;
     if (currentCalendarMonth < 0) {
@@ -500,7 +504,6 @@ document.getElementById('prev-month-btn').addEventListener('click', () => {
 });
 
 // Event listener for the "Next Month" button
-//REINSERITA
 document.getElementById('next-month-btn').addEventListener('click', () => {
     currentCalendarMonth++;
     if (currentCalendarMonth > 11) {
@@ -512,7 +515,6 @@ document.getElementById('next-month-btn').addEventListener('click', () => {
 });
 
 // Event listener for the "Enter" key press in input fields
-//REINSERITA
 document.querySelectorAll('input').forEach(input => {
     input.addEventListener('keypress', e => {
         if (e.key === 'Enter') {
@@ -522,7 +524,6 @@ document.querySelectorAll('input').forEach(input => {
 });
 
 // Inizializza la sezione istruzioni (chiamata quando l'app si carica)
-//REINSERITA
 function initInstructionsToggle() {
     const toggleBtn = document.getElementById('toggle-instructions-btn');
     const instructionsContent = document.getElementById('instructions-content');
@@ -538,6 +539,29 @@ function initInstructionsToggle() {
         instructionsContent.classList.toggle('collapsed');
         instructionsContainer.classList.toggle('collapsed'); // Su container
         toggleBtn.textContent = instructionsContent.classList.contains('collapsed') ? 'Show' : 'Hide'; //Aggiorna pulsante
+    });
+}
+
+// NUOVA FUNZIONE: Inizializza i pulsanti di copia
+function initCopyButtons() {
+    const copyButtons = document.querySelectorAll('.copy-button');
+    copyButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const fieldToCopy = button.dataset.copy; // Ottieni il nome del campo da copiare (es., "iban")
+            const textToCopy = document.getElementById(fieldToCopy).textContent;
+
+            // Copia il testo negli appunti (metodo moderno, più sicuro)
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    // Feedback visivo (opzionale, ma consigliato)
+                    button.textContent = 'Copied!';
+                    setTimeout(() => { button.textContent = 'Copy'; }, 1500); // Ripristina dopo 1.5 secondi
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    alert('Failed to copy text. Please copy manually.'); // Fallback in caso di errore
+                });
+        });
     });
 }
 
