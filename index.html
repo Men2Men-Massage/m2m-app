@@ -14,6 +14,9 @@
 
   <!-- Collegamento al file CSS esterno -->
   <link rel="stylesheet" href="style.css">
+  
+  <!-- Font Awesome for navigation icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
   <!-- Authentication Overlay -->
@@ -139,13 +142,20 @@
     </div>
   </div>
 
-  <!-- Barra di Navigazione in Fondo -->
-  <nav class="bottom-nav">
-    <button id="nav-home">Home</button>
-    <button id="nav-history">Payment History</button>
-  </nav>
+  <!-- Nuova barra di navigazione -->
+  <div class="bottom-nav">
+    <div class="nav-container">
+      <div class="nav-item active" id="home-nav">
+        <i class="nav-icon fas fa-home"></i>
+        <span class="nav-text">Home</span>
+      </div>
+      <div class="nav-item" id="history-nav">
+        <i class="nav-icon fas fa-history"></i>
+        <span class="nav-text">Storico</span>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
