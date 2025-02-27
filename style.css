@@ -445,8 +445,9 @@ button#reset-button:hover {
     width: 100%;
     min-height: 100vh;
     background-color: #f5f5f5;
-    padding: 20px 10px;  /* Ridotto il padding laterale per evitare troppo margine sinistro */
+    padding: 20px 10px;  /* Ridotto il padding laterale */
     box-sizing: border-box;
+    overflow-y: auto; /* Aggiunto overflow-y */
 }
 
 #history-box {
@@ -454,9 +455,11 @@ button#reset-button:hover {
     padding: 20px;
     text-align: left;
     width: 100%;
-    max-width: none;
-    box-shadow: none;
-    border-radius: 0;
+    max-width: 800px; /* Aggiunto max-width */
+    margin: 0 auto;   /* Aggiunto margin: 0 auto per centrare */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Aggiunta ombra */
+    border-radius: 12px; /* Aggiunto border-radius */
+    overflow-x: hidden; /* Aggiunto per gestire eventuale contenuto orizzontale */
 }
 
 /* --- Fine modifiche per Payment History --- */
@@ -730,12 +733,12 @@ button#reset-button:hover {
         flex-direction: row;
         align-items: baseline;
     }
-    
+
     .payment-label {
         width: 150px;
         margin-bottom: 0;
     }
-    
+
     .payment-value-container {
         flex: 1;
     }
