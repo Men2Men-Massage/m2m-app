@@ -622,3 +622,51 @@ button#reset-button:hover {
 .modal-content button:hover {
     background-color: #45a049;
 }
+
+#payment-info {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: left; /* Allinea il testo a sinistra */
+}
+
+#payment-info p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.copy-container {
+    display: flex; /* Allinea elementi orizzontalmente */
+    align-items: center; /* Allinea verticalmente al centro */
+    margin-bottom: 8px;
+}
+
+.copy-container span:first-child {
+    font-weight: bold;
+    margin-right: 10px; /* Spazio tra etichetta e valore */
+    width: 80px; /* Larghezza fissa per l'etichetta (migliora l'allineamento) */
+}
+
+.copy-container span + span {
+     flex-grow: 1; /* Il valore occupa lo spazio rimanente */
+    word-break: break-all; /* Permetti al testo di andare a capo se è lungo */
+}
+
+
+.copy-button {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ddd;
+    color: #444;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-left: 5px; /* Spazio tra valore e pulsante */
+}
+
+.copy-button:hover {
+    background-color: #ccc;
+    color: #333;
+}
