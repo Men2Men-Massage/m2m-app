@@ -628,58 +628,58 @@ button#reset-button:hover {
 
 #payment-info {
     margin-top: 20px;
-    padding: 15px;
+    padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
     text-align: left;
     line-height: 1.6;
-    /* RIMOSSO COMPLETAMENTE IL DISPLAY GRID */
-    /* display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 10px 20px;
-    align-items: center; */
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
-/* Intestazione "Please make..." */
-#payment-info > p:first-child { /* Seleziona solo il *primo* paragrafo */
-    /* grid-column: 1 / -1;  RIMOSSO */
-    text-align: left;    /* Allineato a SINISTRA */
-    margin-bottom: 15px;
+/* Header styling */
+.payment-header {
     font-weight: bold;
     font-size: 1.1em;
+    margin-bottom: 20px;
+    display: block;
+    width: 100%;
 }
 
-/* Stile per i paragrafi dentro #payment-info */
-#payment-info p {
-    margin: 5px 0;  /* Spaziatura verticale */
-    display: block;      /* Ripristina il comportamento normale del paragrafo */
-    /* RIMOSSI align-items e justify-content */
+/* Each payment field container */
+.payment-field {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
-/* Stile per le etichette (Account Holder, IBAN, ecc.) */
-#payment-info strong {
+/* Label styling */
+.payment-label {
     font-weight: bold;
-     display: block;  /* Importante: visualizza come blocco */
-    /* text-align: right; RIMOSSO */
-    float: left;         /* Allinea a sinistra */
-    clear: both;        /* Importante:  va a capo dopo l'etichetta */
-    width: 130px;       /* Larghezza fissa per l'etichetta (puoi regolarla) */
+    margin-bottom: 5px;
 }
 
-/* Stile per i valori (e i pulsanti Copy) */
-#payment-info p span {
-   display: inline-block; /*  inline-block */
-    margin-bottom: 5px;  /* Aggiunto margine inferiore */
-    word-break: break-word; /* Permette di andare a capo se il testo è troppo lungo */
+/* Value container */
+.payment-value-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
 }
 
+/* Value styling */
+.payment-value {
+    word-break: break-word;
+    flex: 1;
+    min-width: 200px;
+}
 
+/* Copy button styling */
 .copy-button {
-    margin-left: 0px;        /* Nessun margine sinistro */
-    margin-top: 5px;         /* Margine superiore per separare dal testo */
-    padding: 5px 10px;
-    font-size: 12px;
+    padding: 5px 15px;
+    font-size: 14px;
     border-radius: 5px;
     border: none;
     background-color: #ddd;
@@ -687,15 +687,25 @@ button#reset-button:hover {
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
     white-space: nowrap;
-    display: block;       /*  block */
-    width: auto;          /*  auto */
-
 }
 
 .copy-button:hover {
     background-color: #ccc;
 }
 
-.result-line-total{
-    font-size: 18px; /* Aumenta per visibilità */
+/* Media query for landscape orientation */
+@media (min-width: 568px) {
+    .payment-field {
+        flex-direction: row;
+        align-items: baseline;
+    }
+    
+    .payment-label {
+        width: 150px;
+        margin-bottom: 0;
+    }
+    
+    .payment-value-container {
+        flex: 1;
+    }
 }
