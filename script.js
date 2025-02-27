@@ -30,6 +30,8 @@ function logout() {
     document.getElementById('user-name-input').value = '';
     document.getElementById('code-section').style.display = 'block';
     document.getElementById('name-section').style.display = 'none';
+    // Nascondi la barra di navigazione al logout
+    document.querySelector('.bottom-nav').style.display = 'none';
 }
 
 // Funzione per controllare l'autenticazione all'avvio dell'app
@@ -42,6 +44,8 @@ function checkAuth() {
         return true;
     }
     document.getElementById('auth-overlay').style.display = 'flex';
+     // Nascondi la barra di navigazione se non autenticato
+    document.querySelector('.bottom-nav').style.display = 'none';
     return false;
 }
 
@@ -570,4 +574,3 @@ window.addEventListener('load', () => {
     document.getElementById('nav-home').addEventListener('click', showCalculator);
     document.getElementById('nav-history').addEventListener('click', showPaymentHistory);
 });
-
