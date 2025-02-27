@@ -1,3 +1,5 @@
+/* --- (style.css) --- */
+
 body {
     font-family: Arial, sans-serif;
     max-width: 800px;
@@ -990,4 +992,72 @@ button#reset-button:hover {
         margin-right: 10px;
         margin-bottom: 0;
     }
+}
+
+/* --- NUOVO: Stile per la pagina del profilo --- */
+#profile-page {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#profile-box {
+    background: white;
+    padding: 20px;
+    text-align: left; /* Allineamento del testo a sinistra */
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+
+.profile-info p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.profile-info strong {
+    font-weight: bold;
+}
+
+.profile-edit {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+.profile-edit label{
+    margin-top: 10px;
+}
+
+.profile-edit input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px; /* Spazio tra l'input e il pulsante */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box; /* Include padding e border nella larghezza */
+}
+
+#profile-box button { /* Stile generale per i pulsanti in profile-box */
+    margin-top: 15px; /* Spazio sopra il pulsante */
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #376FE9;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block; /* Occupa l'intera larghezza */
+    width: 100%; /* Larghezza al 100% */
+    box-sizing: border-box;
+}
+
+#profile-box button:hover {
+    background-color: #45a049;
 }
