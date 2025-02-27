@@ -10,12 +10,10 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f5f5f5;
-    position: relative; /* Important for footer positioning */
-    min-height: 100vh; /* Ensure body takes at least full viewport height */
+    position: relative;
+    min-height: 100vh;
     padding-bottom: 60px; /* Space for the footer */
-
 }
-
 
 /* Authentication Overlay */
 #auth-overlay {
@@ -63,7 +61,7 @@ body {
     padding: 8px 15px;
     border-radius: 24px;
     display: none;
-    z-index: 1000;
+    z-index: 999; /* Lower z-index than auth-overlay */
     font-size: 16px;
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
     cursor: pointer;
@@ -75,10 +73,10 @@ body {
     box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
 }
 
-
 /* Main Content (Calculator) */
 #main-content {
-  padding-top: 20px;
+  padding-top: 20px; /* Space at the top */
+    display: none; /* Initially hidden */
 }
 
 
@@ -87,7 +85,7 @@ body {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    margin-top: 60px; /* Space for user name and banners */
+    /* Removed margin-top */
 }
 
 h1 {
@@ -270,11 +268,10 @@ button#reset-button:hover {
     margin-bottom: 0px;
 }
 
-/* Installation Banners */
+/* Installation Banners (Inside .container) */
 .install-banner {
     padding: 15px;
-    margin-top: 60px; /* Space from the user name */
-    margin-bottom: 15px;
+    margin: 15px 0; /* Space above and below */
     border-radius: 8px;
     display: flex;
     justify-content: space-between;
@@ -690,20 +687,19 @@ button#reset-button:hover {
     background-color: #f5f5f5;
     overflow-y: auto;
     z-index: 50;
-    /* Removed padding-bottom */
+    display: none; /* Initially hidden */
 }
 
 #history-box {
-    margin: 0; /* Reset margin */
-    padding: 20px; /* Consistent padding */
+    margin: 0;
+    padding: 20px;
     background-color: white;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    /* Removed max-height and overflow, handled by #history-content */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 #calendar-container {
-    overflow-x: auto; /* Allow horizontal scrolling for the calendar */
+    overflow-x: auto;
 }
 
 /* Footer Styles (Navigation Bar) */
@@ -755,4 +751,51 @@ footer button:hover {
     .payment-value-container {
         flex: 1;
     }
+}
+
+/* Stili per il pulsante "Today" nel calendario */
+
+#calendar-header #today-button {
+background-color: #ddd; /* Colore di sfondo */
+    color: #444; /* Colore del testo */
+    border: none;
+     padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+      margin-left: 10px;
+}
+
+/* Stili per gli elementi all'interno di .payment-info */
+#payment-info p {
+  margin-bottom: 10px; /* Spaziatura tra i paragrafi */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Contenitore per tenere insieme label e valore + bottone */
+#payment-info .value-container {
+    display: flex; /* Allinea orizzontalmente */
+    align-items: center;
+    gap: 10px; /* Spazio tra valore e bottone */
+    flex-wrap: wrap; /* Permette al contenuto di andare a capo se necessario */
+
+}
+
+/* Stili per i bottoni "Copy" */
+#payment-info .copy-button {
+  padding: 5px 15px; /* Padding piÃ¹ piccolo */
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ddd;
+    color: #444;
+    cursor: pointer;
+     transition: background-color 0.3s, color 0.3s;
+     white-space: nowrap;
+}
+#payment-info strong {
+    min-width: 150px;
 }
