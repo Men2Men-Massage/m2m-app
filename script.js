@@ -568,47 +568,49 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// Aggiunge i listener per la barra di navigazione in basso
+// Aggiunge i listener per la barra di navigazione in basso.  CORRETTO!
 window.addEventListener('load', () => {
-    // Associa i pulsanti della bottom navigation alle funzioni di navigazione
-    document.getElementById('nav-home').addEventListener('click', showCalculator);
-    document.getElementById('nav-history').addEventListener('click', showPaymentHistory);
+    document.getElementById('home-nav').addEventListener('click', showCalculator);
+    document.getElementById('history-nav').addEventListener('click', showPaymentHistory);
 });
+
+
 
 // Gestione dell'effetto ripple e attivazione dei pulsanti della navbar
 document.addEventListener("DOMContentLoaded", function() {
   // Gestione dell'effetto ripple sui pulsanti della navbar
   const navItems = document.querySelectorAll('.nav-item');
-  
+
   navItems.forEach(item => {
     item.addEventListener('click', function(e) {
       // Rimuovi la classe active da tutti gli elementi
       navItems.forEach(navItem => {
         navItem.classList.remove('active');
       });
-      
+
       // Aggiungi la classe active all'elemento cliccato
       this.classList.add('active');
-      
+
       // Effetto ripple
       const ripple = document.createElement('span');
       ripple.classList.add('ripple');
       this.appendChild(ripple);
-      
+
       const x = e.clientX - e.target.getBoundingClientRect().left;
       const y = e.clientY - e.target.getBoundingClientRect().top;
-      
+
       ripple.style.left = `${x}px`;
       ripple.style.top = `${y}px`;
-      
+
       setTimeout(() => {
         ripple.remove();
       }, 600); // Rimuovi l'effetto dopo l'animazione
     });
   });
-  
-  // Imposta l'elemento home come attivo all'avvio
-  const homeNav = document.getElementById('nav-home');
+
+  // Imposta l'elemento home come attivo all'avvio.  Spostato dentro DOMContentLoaded,
+  // per assicurarsi che l'elemento esista prima di tentare di accedervi.
+  const homeNav = document.getElementById('home-nav');
   if (homeNav) {
     homeNav.classList.add('active');
   }
