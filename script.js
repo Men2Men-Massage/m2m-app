@@ -568,50 +568,75 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// Aggiunge i listener per la barra di navigazione in basso.  CORRETTO!
-window.addEventListener('load', () => {
+// NUOVA FUNZIONE: Crea l'effetto ripple per i pulsanti della navbar
+function createRipple(event) {
+    const button = event.currentTarget;
+    
+    // Rimuovi eventuali ripple esistenti prima di aggiungerne uno nuovo
+    const ripples = button.getElementsByClassName("ripple");
+    while(ripples.length > 0) {
+        ripples[0].remove();
+    }
+    
+    const circle = document.createElement("span");
+    const diameter = Math.max(button.clientWidth, button.clientHeight);
+    const radius = diameter / 2;
+    
+    // Calcola la posizione del click in relazione all'elemento
+    const rect = button.getBoundingClientRect();
+    const x = event.clientX - rect.left - radius;
+    const y = event.clientY - rect.top - radius;
+    
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${x}px`;
+    circle.style.top = `${y}px`;
+    circle.classList.add("ripple");
+    
+    button.appendChild(circle);
+    
+    // Rimuovi il ripple dopo l'animazione
+    setTimeout(() => {
+        circle.remove();
+    }, 600);
+}
+
+// NUOVA FUNZIONE: Gestisce la navigazione e cambia la vista attiva
+function handleNavigation(target) {
+    // Rimuovi la classe active da tutti gli elementi della navigazione
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => item.classList.remove('active'));
+    
+    // Aggiungi la classe active all'elemento cliccato
+    target.classList.add('active');
+    
+    // Gestisci il cambio di vista in base all'id dell'elemento
+    if (target.id === 'home-nav') {
+        showCalculator();
+    } else if (target.id === 'history-nav') {
+        showPaymentHistory();
+    }
+}
+
+// Event Listeners per la Navigazione
+document.addEventListener('DOMContentLoaded', function() {
+    // Funzione iniziale per assicurarsi che i listener siano aggiunti correttamente
+    const navItems = document.querySelectorAll('.nav-item');
+    
+    navItems.forEach(item => {
+        // Aggiungi l'effetto ripple al click
+        item.addEventListener('click', function(e) {
+            createRipple(e);
+            handleNavigation(this);
+        });
+    });
+    
+    // Imposta il tab Home come attivo all'avvio
+    const homeNav = document.getElementById('home-nav');
+    if (homeNav) {
+        homeNav.classList.add('active');
+    }
+    
+    // Configura i listener per la navigazione
     document.getElementById('home-nav').addEventListener('click', showCalculator);
     document.getElementById('history-nav').addEventListener('click', showPaymentHistory);
-});
-
-
-
-// Gestione dell'effetto ripple e attivazione dei pulsanti della navbar
-document.addEventListener("DOMContentLoaded", function() {
-  // Gestione dell'effetto ripple sui pulsanti della navbar
-  const navItems = document.querySelectorAll('.nav-item');
-
-  navItems.forEach(item => {
-    item.addEventListener('click', function(e) {
-      // Rimuovi la classe active da tutti gli elementi
-      navItems.forEach(navItem => {
-        navItem.classList.remove('active');
-      });
-
-      // Aggiungi la classe active all'elemento cliccato
-      this.classList.add('active');
-
-      // Effetto ripple
-      const ripple = document.createElement('span');
-      ripple.classList.add('ripple');
-      this.appendChild(ripple);
-
-      const x = e.clientX - e.target.getBoundingClientRect().left;
-      const y = e.clientY - e.target.getBoundingClientRect().top;
-
-      ripple.style.left = `${x}px`;
-      ripple.style.top = `${y}px`;
-
-      setTimeout(() => {
-        ripple.remove();
-      }, 600); // Rimuovi l'effetto dopo l'animazione
-    });
-  });
-
-  // Imposta l'elemento home come attivo all'avvio.  Spostato dentro DOMContentLoaded,
-  // per assicurarsi che l'elemento esista prima di tentare di accedervi.
-  const homeNav = document.getElementById('home-nav');
-  if (homeNav) {
-    homeNav.classList.add('active');
-  }
 });
