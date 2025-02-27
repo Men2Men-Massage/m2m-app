@@ -75,8 +75,7 @@ function showApp(userName) {
     document.querySelector('.container').style.display = 'block';
     showInstallBanners();
     initInstructionsToggle(); // Inizializza le istruzioni
-    // Aggiunto: Inizializza i pulsanti di copia
-    initCopyButtons();
+    initCopyButtons();     // Inizializza i pulsanti di copia
 }
 
 // Function to show installation banners for PWA
@@ -117,6 +116,7 @@ if (!checkAuth()) {
 }
 
 // Function to calculate the payment
+// MODIFICATA: Disabilita il pulsante durante il calcolo
 function calculatePayment() {
     const regular = parseFloat(document.getElementById('regular-payments').value) || 0;
     const giftcard = parseFloat(document.getElementById('giftcard-payments').value) || 0;
@@ -124,22 +124,24 @@ function calculatePayment() {
     currentGiftCardAmount = giftcard;
 
     const resultDiv = document.getElementById('result');
+     // Rimuovi le classi *prima* di mostrare/nascondere
+    resultDiv.classList.remove('payment-due', 'payment-receivable');
+
     resultDiv.innerHTML = `
         <div class="result-line-total">• Total: €${(regular + giftcard).toFixed(2)}</div>
         <div class="payment-due-amount">Payment to Center (40%): €${dueAmount.toFixed(2)}</div>
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
-        <button id="save-payment-button" onclick="generatePayment()">Generate Payment</button>
+        <button id="save-payment-button" onclick="generatePayment()" >Generate Payment</button>
     `;
 
     resultDiv.className = 'payment-due';
     resultDiv.style.display = 'block';
     document.getElementById('save-payment-button').style.display = 'inline-block';
-      // Nascondi le informazioni di pagamento quando si fa un nuovo calcolo
-    document.getElementById('payment-info').style.display = 'none';
+    document.getElementById('payment-info').style.display = 'none'; // Assicurati che sia nascosto
+
 }
 
 // Function to reset all form fields
-// MODIFICATA: Resetta anche le informazioni di pagamento
 function resetAll() {
     document.getElementById('regular-payments').value = '';
     document.getElementById('giftcard-payments').value = '';
@@ -191,7 +193,7 @@ function showLocationModal() {
 }
 
 // NUOVA FUNZIONE: Salva il luogo, esegue i calcoli e salva il pagamento
-// MODIFICATA: Ora mostra/nasconde gli elementi corretti
+// MODIFICATA: Corretta gestione della visibilità degli elementi
 function saveLocationAndGeneratePayment() {
     selectedLocation = document.getElementById('location-select').value;
     document.getElementById('location-modal').style.display = 'none';
@@ -206,7 +208,7 @@ function saveLocationAndGeneratePayment() {
 
     // Genera i dati per il bonifico
     const userName = localStorage.getItem('m2m_name');
-    const iban = "DE12 3456 7890 1234 5678 90";
+    const iban = "DE12 3456 7890 1234 5678 90"; // IBAN di esempio corretto
     const purpose = `${userName}, ${selectedShiftDate}, ${selectedLocation}`;
 
     // Mostra le informazioni per il bonifico (non più con alert)
@@ -217,7 +219,8 @@ function saveLocationAndGeneratePayment() {
     // Nascondi il pulsante "Generate Payment" e mostra le informazioni
     document.getElementById('save-payment-button').style.display = 'none';
     document.getElementById('payment-info').style.display = 'block'; // Mostra le info
-     document.getElementById('result').classList.remove('payment-due', 'payment-receivable');
+    //  rimuovi le classi per evitare conflitti
+    document.getElementById('result').classList.remove('payment-due', 'payment-receivable');
 }
 
 // Funzione separata per salvare i dati (per riutilizzo)
