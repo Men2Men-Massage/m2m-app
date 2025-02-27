@@ -2,7 +2,7 @@
 body {
     font-family: Arial, sans-serif;
     max-width: 800px;
-    margin: 60px auto 20px;  /* Margine superiore più ampio per fare spazio a nome utente */
+    margin: 60px auto 20px;
     padding: 20px;
     background-color: #f5f5f5;
     position: relative;
@@ -74,7 +74,7 @@ body {
 /* Contenitore principale dell'app (Calculator) */
 .container {
     background-color: white;
-    padding: 30px 30px 80px; /* Aggiunto padding-bottom extra per lasciare spazio alla barra di navigazione */
+    padding: 30px 30px 80px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     position: relative;
@@ -296,7 +296,9 @@ button#reset-button:hover {
     box-shadow: 0 2px 7px rgba(0,0,0,0.1);
     margin-bottom: 20px;
     background-color: #fff;
+    font-size: 1em; /* Dimensione base del font */
 }
+
 
 .calendar th, .calendar td {
     padding: 10px;
@@ -389,14 +391,14 @@ button#reset-button:hover {
 
 .note-input-area {
     margin-top: 12px;
-    display: flex; /* Usa Flexbox */
-    align-items: center; /* Allinea verticalmente */
-    flex-wrap: wrap; /* Permetti il wrapping su più righe se necessario */
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .note-input-area textarea {
-    width: 100%; /* Usa tutta la larghezza disponibile */
-    max-width: calc(100% - 16px); /* Considera il padding */
+    width: 100%;
+    max-width: calc(100% - 16px);
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ddd;
@@ -445,9 +447,9 @@ button#reset-button:hover {
     width: 100%;
     min-height: 100vh;
     background-color: #f5f5f5;
-    padding: 20px 10px;  /* Ridotto il padding laterale */
+    padding: 20px 10px;
     box-sizing: border-box;
-    overflow-y: auto; /* Aggiunto overflow-y */
+    overflow-y: auto;
 }
 
 #history-box {
@@ -455,11 +457,46 @@ button#reset-button:hover {
     padding: 20px;
     text-align: left;
     width: 100%;
-    max-width: 800px; /* Aggiunto max-width */
-    margin: 0 auto;   /* Aggiunto margin: 0 auto per centrare */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Aggiunta ombra */
-    border-radius: 12px; /* Aggiunto border-radius */
-    overflow-x: hidden; /* Aggiunto per gestire eventuale contenuto orizzontale */
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow-x: hidden; /* Manteniamo questo per sicurezza */
+}
+
+
+/* Media query per schermi piccoli */
+@media (max-width: 500px) {
+    .calendar {
+        font-size: 0.8em; /* Riduci la dimensione del font */
+    }
+
+    .calendar th, .calendar td {
+        padding: 5px; /* Riduci il padding */
+    }
+
+     .calendar-header button {
+        font-size: 1em; /* Ridimensiona pulsanti */
+    }
+
+    .calendar-month-year{
+        font-size: 1em; /* Ridimensiona testo*/
+    }
+      #today-button{
+        font-size: 0.8em;
+    }
+      .monthly-total {
+      font-size: 0.9em;
+    }
+}
+
+@media (max-width: 370px){
+    .calendar th, .calendar td {
+        padding: 3px; /* Riduci ulteriormente il padding */
+    }
+    .calendar {
+        font-size: 0.7em; /* Riduci ulteriormente la dimensione del font */
+    }
 }
 
 /* --- Fine modifiche per Payment History --- */
