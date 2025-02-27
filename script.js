@@ -212,13 +212,13 @@ function saveLocationAndGeneratePayment() {
         <div class="payment-receivable-amount">Gift Card Payment to Therapist: €${giftcard.toFixed(2)}</div>
         <div id="payment-info">
             <p><strong>Please make an instant bank transfer:</strong></p>
-            <p><strong>Account Holder:</strong> ${accountHolder}</p>
+            <p><strong>Account Holder:</strong> ${accountHolder} <button class="copy-button" onclick="copyToClipboard('${accountHolder}')">Copy</button></p>
             <p><strong>IBAN:</strong> ${iban} <button class="copy-button" onclick="copyToClipboard('${iban}')">Copy</button></p>
             <p><strong>Amount:</strong> €${dueAmount.toFixed(2)} <button class="copy-button" onclick="copyToClipboard('${dueAmount.toFixed(2)}')">Copy</button></p>
             <p><strong>Purpose:</strong> ${purpose} <button class="copy-button" onclick="copyToClipboard('${purpose}')">Copy</button></p>
         </div>
     `;
-    resultDiv.style.display = 'block';
+    resultDiv.style.display = 'block'; // Assicurati che sia visibile
 
 }
 
