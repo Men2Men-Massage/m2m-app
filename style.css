@@ -791,6 +791,14 @@ button#reset-button:hover {
     box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
     width: 100%;
     box-sizing: border-box;
+    transition: all 0.3s ease; /* Aggiungiamo una transizione fluida per tutto il container */
+}
+
+/* Quando è collassato, modifichiamo padding e altezza */
+.instructions-container.collapsed {
+    padding: 0;
+    border-width: 2px; /* Border più sottile quando è chiuso */
+    max-height: 45px; /* Altezza fissa quando chiuso */
 }
 
 .instructions-container:not(.collapsed) .instructions {
@@ -803,12 +811,14 @@ button#reset-button:hover {
     align-items: center;
     margin-bottom: 0px;
     width: 100%;
+    padding: 8px 10px; /* Padding fisso per evitare spostamenti */
 }
 
 .instructions-header span {
     font-size: 18px;
     font-weight: bold;
-    margin-left: 8px;
+    /* Rimuoviamo il margin-left per evitare spostamenti */
+    transition: all 0.3s ease; /* Transizione fluida per il testo */
 }
 
 #toggle-instructions-btn {
@@ -820,6 +830,8 @@ button#reset-button:hover {
     color: #444;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
+    min-width: 60px; /* Larghezza minima per evitare cambiamenti di dimensione */
+    text-align: center; /* Centrato il testo */
 }
 
 #toggle-instructions-btn:hover {
@@ -829,18 +841,31 @@ button#reset-button:hover {
 
 #instructions-content {
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease; /* Aggiungiamo transizione per opacità e padding */
     max-height: 500px;
     width: 100%;
+    opacity: 1;
+    padding: 10px;
 }
 
 #instructions-content.collapsed {
     max-height: 0;
-    padding: 0;
+    padding: 0 10px; /* Manteniamo il padding orizzontale ma rimuoviamo quello verticale */
+    opacity: 0; /* Facciamo scomparire il contenuto con l'opacità */
 }
 
-.instructions-container.collapsed .instructions-header{
+.instructions-container.collapsed .instructions-header {
     margin-bottom: 0px;
+}
+
+/* Istruzioni (contenuto interno) */
+.instructions {
+    margin: 0; /* Rimuoviamo i margini che potrebbero causare spostamenti */
+    background-color: transparent; /* Rimuoviamo il colore di sfondo */
+    border-left: none; /* Rimuoviamo il bordo sinistro che causa problemi */
+    box-shadow: none; /* Rimuoviamo l'ombra che può causare problemi */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Modals per Data e Location */
