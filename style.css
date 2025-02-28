@@ -1,5 +1,3 @@
-/* --- (style.css) --- */
-
 body {
     font-family: Arial, sans-serif;
     max-width: 800px;
@@ -1000,24 +998,29 @@ button#reset-button:hover {
     width: 100%;
     min-height: 100vh;
     background-color: #f5f5f5;
-    padding: 20px;
+    padding: 20px 10px 70px; /* Ridotto padding laterale e aumentato in basso per la barra di navigazione */
     box-sizing: border-box;
+    overflow-x: hidden; /* Previene scrolling orizzontale */
 }
 
 #profile-box {
     background: white;
-    padding: 20px;
-    text-align: left; /* Allineamento del testo a sinistra */
+    padding: 20px 15px; /* Ridotto padding laterale su schermi piccoli */
+    text-align: left;
     width: 100%;
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0 auto 20px; /* Aggiunto margine in basso */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Previene scrolling orizzontale */
 }
 
 .profile-info p {
     margin: 10px 0;
     line-height: 1.6;
+    word-wrap: break-word; /* Permette il wrapping del testo */
+    max-width: 100%; /* Limita la larghezza massima */
 }
 
 .profile-info strong {
@@ -1028,36 +1031,80 @@ button#reset-button:hover {
     margin-top: 20px;
     border-top: 1px solid #ddd;
     padding-top: 20px;
+    width: 100%; /* Assicura larghezza completa */
+    box-sizing: border-box;
 }
-.profile-edit label{
+
+.profile-edit label {
     margin-top: 10px;
+    display: block; /* Assicura che l'etichetta occupi tutta la larghezza */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .profile-edit input {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 15px; /* Spazio tra l'input e il pulsante */
+    padding: 12px; /* Aumentato padding per migliore usabilità su touch */
+    margin-bottom: 15px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px; /* Aumentato leggermente il raggio del bordo */
     font-size: 16px;
-    box-sizing: border-box; /* Include padding e border nella larghezza */
+    box-sizing: border-box;
+    max-width: 100%; /* Assicura che non superi la larghezza del contenitore */
 }
 
-#profile-box button { /* Stile generale per i pulsanti in profile-box */
-    margin-top: 15px; /* Spazio sopra il pulsante */
-    padding: 10px 20px;
+#profile-box button {
+    margin-top: 15px;
+    padding: 12px 20px; /* Aumentato padding verticale */
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 6px;
     border: none;
     background-color: #376FE9;
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s;
-    display: block; /* Occupa l'intera larghezza */
-    width: 100%; /* Larghezza al 100% */
+    transition: background-color 0.3s, transform 0.3s;
+    display: block;
+    width: 100%;
     box-sizing: border-box;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
 #profile-box button:hover {
     background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 7px rgba(0,0,0,0.2);
+}
+
+/* Media query per schermi molto piccoli */
+@media (max-width: 370px) {
+    #profile-page {
+        padding: 10px 5px 70px; /* Ulteriormente ridotto il padding laterale */
+    }
+    
+    #profile-box {
+        padding: 15px 10px; /* Ridotto ulteriormente il padding */
+    }
+    
+    .profile-edit input, 
+    #profile-box button {
+        padding: 10px; /* Ridotto padding per elementi interattivi */
+        font-size: 14px; /* Ridotto font size */
+    }
+}
+
+/* Media query per orientamento landscape o schermi più larghi */
+@media (min-width: 568px) {
+    #profile-page {
+        padding: 30px 15px 70px; /* Maggiore padding laterale su schermi più larghi */
+    }
+    
+    #profile-box {
+        padding: 25px; /* Maggiore padding su schermi più larghi */
+    }
+    
+    .profile-edit input {
+        max-width: 80%; /* Limita la larghezza massima su schermi più grandi */
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
