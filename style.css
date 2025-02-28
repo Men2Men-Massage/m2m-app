@@ -784,41 +784,28 @@ button#reset-button:hover {
 /* Istruzioni container */
 .instructions-container {
     margin: 20px 0;
-    padding: 5px;
     background-color: #fffde7;
     border: 3px solid #ffca28;
     border-radius: 5px;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
     width: 100%;
     box-sizing: border-box;
-    transition: all 0.3s ease; /* Aggiungiamo una transizione fluida per tutto il container */
-}
-
-/* Quando è collassato, modifichiamo padding e altezza */
-.instructions-container.collapsed {
-    padding: 0;
-    border-width: 2px; /* Border più sottile quando è chiuso */
-    max-height: 45px; /* Altezza fissa quando chiuso */
-}
-
-.instructions-container:not(.collapsed) .instructions {
-    border-left: none;
+    overflow: hidden; /* Prevent content from overflowing during animation */
 }
 
 .instructions-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0px;
+    padding: 8px 10px;
+    background-color: #fffde7;
     width: 100%;
-    padding: 8px 10px; /* Padding fisso per evitare spostamenti */
+    box-sizing: border-box;
 }
 
 .instructions-header span {
     font-size: 18px;
     font-weight: bold;
-    /* Rimuoviamo il margin-left per evitare spostamenti */
-    transition: all 0.3s ease; /* Transizione fluida per il testo */
 }
 
 #toggle-instructions-btn {
@@ -829,9 +816,9 @@ button#reset-button:hover {
     background-color: #ddd;
     color: #444;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-    min-width: 60px; /* Larghezza minima per evitare cambiamenti di dimensione */
-    text-align: center; /* Centrato il testo */
+    transition: background-color 0.3s;
+    min-width: 60px;
+    text-align: center;
 }
 
 #toggle-instructions-btn:hover {
@@ -839,33 +826,35 @@ button#reset-button:hover {
     color: #333;
 }
 
+/* Content container with smooth transition */
 #instructions-content {
+    max-height: 0;
+    opacity: 0;
     overflow: hidden;
-    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease; /* Aggiungiamo transizione per opacità e padding */
-    max-height: 500px;
-    width: 100%;
+    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+    padding: 0 10px;
+}
+
+#instructions-content.open {
+    max-height: 200px; /* Set an appropriate max height */
     opacity: 1;
     padding: 10px;
 }
 
-#instructions-content.collapsed {
-    max-height: 0;
-    padding: 0 10px; /* Manteniamo il padding orizzontale ma rimuoviamo quello verticale */
-    opacity: 0; /* Facciamo scomparire il contenuto con l'opacità */
-}
-
-.instructions-container.collapsed .instructions-header {
-    margin-bottom: 0px;
-}
-
-/* Istruzioni (contenuto interno) */
+/* Instructions styling */
 .instructions {
-    margin: 0; /* Rimuoviamo i margini che potrebbero causare spostamenti */
-    background-color: transparent; /* Rimuoviamo il colore di sfondo */
-    border-left: none; /* Rimuoviamo il bordo sinistro che causa problemi */
-    box-shadow: none; /* Rimuoviamo l'ombra che può causare problemi */
     width: 100%;
     box-sizing: border-box;
+}
+
+.instructions ol {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.highlight {
+    font-weight: bold;
+    color: #e65100;
 }
 
 /* Modals per Data e Location */
