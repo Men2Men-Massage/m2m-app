@@ -537,17 +537,27 @@ document.querySelectorAll('input').forEach(input => {
 function initInstructionsToggle() {
     const toggleBtn = document.getElementById('toggle-instructions-btn');
     const instructionsContent = document.getElementById('instructions-content');
-    const instructionsContainer = document.querySelector('.instructions-container');
-
-    // Stato iniziale: istruzioni visibili
-    instructionsContent.classList.remove('collapsed');
-    instructionsContainer.classList.remove('collapsed');
-    toggleBtn.textContent = 'Hide';
-
+    
+    // Stato iniziale - istruzioni nascoste di default
+    let isOpen = false;
+    toggleBtn.textContent = 'Show';
+    
+    // Imposta lo stato iniziale
+    if (!isOpen) {
+        instructionsContent.classList.remove('open');
+    }
+    
+    // Aggiunge il listener per il click
     toggleBtn.addEventListener('click', () => {
-        instructionsContent.classList.toggle('collapsed');
-        instructionsContainer.classList.toggle('collapsed');
-        toggleBtn.textContent = instructionsContent.classList.contains('collapsed') ? 'Show' : 'Hide';
+        isOpen = !isOpen;
+        
+        if (isOpen) {
+            instructionsContent.classList.add('open');
+            toggleBtn.textContent = 'Hide';
+        } else {
+            instructionsContent.classList.remove('open');
+            toggleBtn.textContent = 'Show';
+        }
     });
 }
 
