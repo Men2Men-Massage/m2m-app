@@ -589,7 +589,7 @@ button#reset-button:hover {
     }
 }
 
-/* --- MODERN NAVIGATION BAR - ENHANCED SPACING --- */
+/* --- MODERN NAVIGATION BAR - WITH BACKGROUND EXTENSION --- */
 .bottom-nav {
     position: fixed;
     left: 0;
@@ -608,6 +608,18 @@ button#reset-button:hover {
     bottom: 15px; /* Default spacing from bottom for non-iOS */
 }
 
+/* Background extension to fill the gap */
+.bottom-nav::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff; /* Same as navigation bar */
+    bottom: -15px; /* Match the bottom offset */
+    height: 15px; /* Height equal to bottom spacing */
+    z-index: -1; /* Behind the main navigation */
+}
+
 /* iOS standalone mode support with much more spacing from bottom */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
     .bottom-nav {
@@ -615,6 +627,12 @@ button#reset-button:hover {
         bottom: calc(env(safe-area-inset-bottom) + 15px);
         /* No need for padding as we're positioning it above the safe area */
         padding-bottom: 0;
+    }
+    
+    /* Extend the background all the way to the bottom for iOS */
+    .bottom-nav::after {
+        height: calc(env(safe-area-inset-bottom) + 15px);
+        bottom: calc(-1 * (env(safe-area-inset-bottom) + 15px));
     }
     
     /* Adjust padding for main content containers */
@@ -665,49 +683,6 @@ button#reset-button:hover {
 
 /* Styling for active state */
 .nav-item.active {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* Style for the icons */
-.nav-icon {
-    font-size: 1.4rem;
-    margin-bottom: 4px;
-}
-
-/* Style for the text */
-.nav-text {
-    font-size: 0.8rem;
-}
-
-/* Ripple effect container */
-.nav-item::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-/* Ensure everything works in portrait and landscape modes */
-@media screen and (orientation: landscape) {
-    .bottom-nav {
-        /* Adjust for landscape mode */
-        height: 70px;
-    }
-
-    @supports (padding-bottom: env(safe-area-inset-bottom)) {
-        .bottom-nav {
-            bottom: calc(env(safe-area-inset-bottom) + 10px);
-        }
-    }
-}
-
-/* Stile quando l'elemento è attivo */
-.nav-item.active {
     background-color: rgba(55, 111, 233, 0.15);
 }
 
@@ -722,6 +697,7 @@ button#reset-button:hover {
     font-weight: 600;
 }
 
+/* Style for the icons */
 .nav-icon {
     font-size: 24px;
     margin-bottom: 2px;
@@ -729,6 +705,7 @@ button#reset-button:hover {
     transition: all 0.3s ease;
 }
 
+/* Style for the text */
 .nav-text {
     font-size: 12px;
     color: #717171;
@@ -746,6 +723,19 @@ button#reset-button:hover {
     color: #376FE9;
 }
 
+/* Ripple effect container */
+.nav-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
 /* Ripple effect on click */
 .nav-item .ripple {
     position: absolute;
@@ -760,6 +750,25 @@ button#reset-button:hover {
     to {
         transform: scale(2.5);
         opacity: 0;
+    }
+}
+
+/* Ensure everything works in portrait and landscape modes */
+@media screen and (orientation: landscape) {
+    .bottom-nav {
+        /* Adjust for landscape mode */
+        height: 70px;
+    }
+
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+        .bottom-nav {
+            bottom: calc(env(safe-area-inset-bottom) + 10px);
+        }
+        
+        .bottom-nav::after {
+            height: calc(env(safe-area-inset-bottom) + 10px);
+            bottom: calc(-1 * (env(safe-area-inset-bottom) + 10px));
+        }
     }
 }
 
