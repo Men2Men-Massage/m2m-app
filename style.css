@@ -589,7 +589,7 @@ button#reset-button:hover {
     }
 }
 
-/* --- MODERN NAVIGATION BAR - OPTIMIZED VERSION --- */
+/* --- MODERN NAVIGATION BAR - FIXED SPACING VERSION --- */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -601,50 +601,42 @@ button#reset-button:hover {
     padding: 0;
     box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
     z-index: 1001;
-    /* Increased base height */
+    /* Base height */
     height: 80px;
-    /* Added margin to create space from bottom */
-    margin-bottom: 0;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
 
-/* iOS standalone mode support with better spacing */
+/* iOS standalone mode support with increased spacing from bottom */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
     .bottom-nav {
-        /* Add explicit bottom padding before the iOS home indicator area */
-        padding-bottom: env(safe-area-inset-bottom);
-        /* Update total height to include padding */
-        height: calc(80px + env(safe-area-inset-bottom));
-        /* Position the bar with slight offset from bottom to ensure proper spacing */
-        bottom: 0;
-    }
-    
-    /* Container for nav items - adjusted to respect safe area */
-    .nav-container {
-        padding-bottom: env(safe-area-inset-bottom);
-        margin-bottom: -env(safe-area-inset-bottom);
+        /* Explicitly move the nav bar up to create space */
+        bottom: env(safe-area-inset-bottom);
+        /* Add padding for content alignment */
+        padding-bottom: 0;
+        /* Keep height consistent */
+        height: 80px;
     }
     
     /* Adjust padding for main content containers */
     #profile-page, #history-page, .container {
-        /* Increase bottom padding to prevent content from being hidden */
-        padding-bottom: calc(120px + env(safe-area-inset-bottom));
+        /* Ensure content doesn't get hidden */
+        padding-bottom: calc(100px + env(safe-area-inset-bottom) * 2);
     }
 }
 
 /* For non-iOS devices or when not in standalone mode */
 @media (display-mode: standalone), (display-mode: fullscreen) {
     .bottom-nav {
-        height: 90px; /* Increased height for better touch targets */
+        height: 80px;
     }
     
     #profile-page, #history-page, .container {
-        padding-bottom: 120px; /* Increased to match new nav height */
+        padding-bottom: 100px;
     }
 }
 
-/* Navigation container - ensure proper alignment */
+/* Navigation container */
 .nav-container {
     display: flex;
     justify-content: space-around;
@@ -653,11 +645,9 @@ button#reset-button:hover {
     max-width: 500px;
     height: 100%;
     padding: 0 10px;
-    /* Ensure nav items don't overflow */
-    overflow: hidden;
 }
 
-/* Navigation items - adjusted to stay within safe areas */
+/* Navigation items - completely contained within the nav bar */
 .nav-item {
     display: flex;
     flex-direction: column;
@@ -665,24 +655,52 @@ button#reset-button:hover {
     justify-content: center;
     text-align: center;
     padding: 8px 0;
-    width: 33.33%; /* Fixed width for each item */
-    max-width: 150px; /* Maximum width limitation */
+    width: 33.33%;
+    max-width: 150px;
     position: relative;
     border-radius: 12px;
-    /* Reduced height to ensure items stay within the visible area */
-    height: calc(100% - 24px);
-    /* Increased margin for better spacing */
-    margin: 12px 8px;
+    /* Reduced height to ensure items stay within visible area */
+    height: calc(100% - 30px);
+    /* Increased margins */
+    margin: 15px 8px;
     cursor: pointer;
     user-select: none;
-    overflow: hidden; /* Contain ripple effect */
+    overflow: hidden;
 }
 
-/* Add specific iOS adjustments for nav items */
+/* Ensure ripple effect stays contained */
+.nav-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    border-radius: 12px;
+    /* Ensure highlight effects stay within bounds */
+    overflow: hidden;
+}
+
+/* Alternative approach - wrapper for extra safety */
+.bottom-nav-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
-    .nav-item {
-        /* Adjust vertical position to be higher in the bar */
-        margin-bottom: calc(12px + env(safe-area-inset-bottom)/2);
+    .bottom-nav-wrapper {
+        /* Create space between nav and system UI */
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    /* Position the nav bar at the top of the wrapper */
+    .bottom-nav-wrapper .bottom-nav {
+        bottom: auto;
+        position: relative;
     }
 }
 
