@@ -591,7 +591,6 @@ button#reset-button:hover {
 
 /* --- INIZIO NUOVA BARRA DI NAVIGAZIONE MODERNA --- */
 .bottom-nav {
-    display: none;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -602,26 +601,46 @@ button#reset-button:hover {
     padding: 0;
     box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
     z-index: 1001;
-    /* Altezza di base, verrà modificata su iOS standalone */
+    /* Base height, will be adjusted for iOS standalone */
     height: 70px;
+    /* Adding some distance from the bottom of the screen */
+    bottom: 8px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
 
-/* Aggiungi questa media query per iOS standalone */
+/* Supports query for iOS standalone mode */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
     .bottom-nav {
-        /* Aggiungi spazio extra in basso per l'indicatore home di iOS */
+        /* Add extra space at the bottom for iOS home indicator */
         padding-bottom: env(safe-area-inset-bottom);
-        /* Aggiorna l'altezza totale per includere il padding */
+        /* Update total height to include the padding */
         height: calc(70px + env(safe-area-inset-bottom));
+        /* Move up from the bottom by a fixed amount to avoid overlapping with system UI */
+        bottom: 12px;
     }
-     #profile-page, #history-page {
-        /* Aggiusta il padding inferiore delle pagine */
-        padding-bottom: calc(70px + env(safe-area-inset-bottom));
+    
+    /* Adjust padding for pages to account for the navigation bar */
+    #profile-page, #history-page, .container {
+        /* Adjust bottom padding for all main content containers */
+        padding-bottom: calc(90px + env(safe-area-inset-bottom));
     }
 }
 
+/* For non-iOS devices or when not in standalone mode */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+    .bottom-nav {
+        /* Ensure the navigation bar is always slightly elevated from the bottom */
+        bottom: 8px;
+    }
+    
+    #profile-page, #history-page, .container {
+        /* Add extra padding at the bottom to ensure content isn't hidden */
+        padding-bottom: 90px;
+    }
+}
+
+/* Rest of your existing navigation CSS remains the same */
 .nav-container {
     display: flex;
     justify-content: space-around;
