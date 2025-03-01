@@ -490,7 +490,7 @@ button#reset-button:hover {
     width: 100%;
     min-height: 100vh;
     background-color: #f5f5f5;
-    padding: 20px 10px 70px; /* Aumentato il padding-bottom a 70px */
+    padding: 20px 10px;
     box-sizing: border-box;
     overflow-x: hidden; /* Previene scrolling orizzontale */
 }
@@ -602,9 +602,24 @@ button#reset-button:hover {
     padding: 0;
     box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
     z-index: 1001;
+    /* Altezza di base, verrà modificata su iOS standalone */
     height: 70px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
+}
+
+/* Aggiungi questa media query per iOS standalone */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .bottom-nav {
+        /* Aggiungi spazio extra in basso per l'indicatore home di iOS */
+        padding-bottom: env(safe-area-inset-bottom);
+        /* Aggiorna l'altezza totale per includere il padding */
+        height: calc(70px + env(safe-area-inset-bottom));
+    }
+     #profile-page, #history-page {
+        /* Aggiusta il padding inferiore delle pagine */
+        padding-bottom: calc(70px + env(safe-area-inset-bottom));
+    }
 }
 
 .nav-container {
@@ -699,11 +714,11 @@ button#reset-button:hover {
         margin: 4px; /* Ridurre il margine */
         padding: 6px 0; /* Ridurre il padding */
     }
-    
+
     .nav-icon {
         font-size: 20px; /* Ridurre la dimensione dell'icona */
     }
-    
+
     .nav-text {
         font-size: 10px; /* Ridurre la dimensione del testo */
     }
@@ -998,7 +1013,7 @@ button#reset-button:hover {
     width: 100%;
     min-height: 100vh;
     background-color: #f5f5f5;
-    padding: 20px 10px 70px; /* Ridotto padding laterale e aumentato in basso per la barra di navigazione */
+    padding: 20px 10px;  /* Rimossa la parte specifica per il bottom padding */
     box-sizing: border-box;
     overflow-x: hidden; /* Previene scrolling orizzontale */
 }
@@ -1078,14 +1093,14 @@ button#reset-button:hover {
 /* Media query per schermi molto piccoli */
 @media (max-width: 370px) {
     #profile-page {
-        padding: 10px 5px 70px; /* Ulteriormente ridotto il padding laterale */
+        padding: 10px 5px; /* Ulteriormente ridotto il padding laterale */
     }
-    
+
     #profile-box {
         padding: 15px 10px; /* Ridotto ulteriormente il padding */
     }
-    
-    .profile-edit input, 
+
+    .profile-edit input,
     #profile-box button {
         padding: 10px; /* Ridotto padding per elementi interattivi */
         font-size: 14px; /* Ridotto font size */
@@ -1095,13 +1110,13 @@ button#reset-button:hover {
 /* Media query per orientamento landscape o schermi più larghi */
 @media (min-width: 568px) {
     #profile-page {
-        padding: 30px 15px 70px; /* Maggiore padding laterale su schermi più larghi */
+        padding: 30px 15px; /* Maggiore padding laterale su schermi più larghi */
     }
-    
+
     #profile-box {
         padding: 25px; /* Maggiore padding su schermi più larghi */
     }
-    
+
     .profile-edit input {
         max-width: 80%; /* Limita la larghezza massima su schermi più grandi */
         margin-left: auto;
