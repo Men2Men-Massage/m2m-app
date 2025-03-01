@@ -589,7 +589,7 @@ button#reset-button:hover {
     }
 }
 
-/* --- INIZIO NUOVA BARRA DI NAVIGAZIONE MODERNA --- */
+/* --- MODERN NAVIGATION BAR - OPTIMIZED VERSION --- */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -601,44 +601,50 @@ button#reset-button:hover {
     padding: 0;
     box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
     z-index: 1001;
-    /* Altezza di base */
-    height: 70px;
-    /* Rimosso il bottom: 8px per eliminare lo spazio trasparente */
+    /* Increased base height */
+    height: 80px;
+    /* Added margin to create space from bottom */
+    margin-bottom: 0;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
 
-/* Supporto per modalità standalone iOS */
+/* iOS standalone mode support with better spacing */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
     .bottom-nav {
-        /* Aggiungi spazio extra in basso per l'indicatore home di iOS */
+        /* Add explicit bottom padding before the iOS home indicator area */
         padding-bottom: env(safe-area-inset-bottom);
-        /* Aggiorna l'altezza totale per includere il padding */
-        height: calc(80px + env(safe-area-inset-bottom)); /* Aumentato da 70px a 80px */
-        /* Rimuovere bottom: 12px per eliminare lo spazio trasparente */
+        /* Update total height to include padding */
+        height: calc(80px + env(safe-area-inset-bottom));
+        /* Position the bar with slight offset from bottom to ensure proper spacing */
+        bottom: 0;
     }
     
-    /* Aggiusta il padding per le pagine per tener conto della barra di navigazione */
+    /* Container for nav items - adjusted to respect safe area */
+    .nav-container {
+        padding-bottom: env(safe-area-inset-bottom);
+        margin-bottom: -env(safe-area-inset-bottom);
+    }
+    
+    /* Adjust padding for main content containers */
     #profile-page, #history-page, .container {
-        /* Aggiusta il padding inferiore per tutti i contenitori principali */
-        padding-bottom: calc(100px + env(safe-area-inset-bottom)); /* Aumentato da 90px a 100px */
+        /* Increase bottom padding to prevent content from being hidden */
+        padding-bottom: calc(120px + env(safe-area-inset-bottom));
     }
 }
 
-/* Per dispositivi non iOS o quando non in modalità standalone */
+/* For non-iOS devices or when not in standalone mode */
 @media (display-mode: standalone), (display-mode: fullscreen) {
     .bottom-nav {
-        /* Altezza leggermente maggiore */
-        height: 80px; /* Aumentato da 70px a 80px */
+        height: 90px; /* Increased height for better touch targets */
     }
     
     #profile-page, #history-page, .container {
-        /* Aggiunto padding extra in basso per assicurare che il contenuto non sia nascosto */
-        padding-bottom: 100px; /* Aumentato da 90px a 100px */
+        padding-bottom: 120px; /* Increased to match new nav height */
     }
 }
 
-/* Il resto del CSS di navigazione rimane invariato */
+/* Navigation container - ensure proper alignment */
 .nav-container {
     display: flex;
     justify-content: space-around;
@@ -647,8 +653,11 @@ button#reset-button:hover {
     max-width: 500px;
     height: 100%;
     padding: 0 10px;
+    /* Ensure nav items don't overflow */
+    overflow: hidden;
 }
 
+/* Navigation items - adjusted to stay within safe areas */
 .nav-item {
     display: flex;
     flex-direction: column;
@@ -656,15 +665,25 @@ button#reset-button:hover {
     justify-content: center;
     text-align: center;
     padding: 8px 0;
-    width: 33.33%; /* Impostare larghezza fissa per ogni elemento */
-    max-width: 150px; /* Limitare la larghezza massima */
+    width: 33.33%; /* Fixed width for each item */
+    max-width: 150px; /* Maximum width limitation */
     position: relative;
     border-radius: 12px;
-    height: calc(100% - 16px); /* Ridurre leggermente l'altezza per garantire che rimanga all'interno */
-    margin: 8px; /* Aggiungere un margine per evitare che l'evidenziazione esca */
+    /* Reduced height to ensure items stay within the visible area */
+    height: calc(100% - 24px);
+    /* Increased margin for better spacing */
+    margin: 12px 8px;
     cursor: pointer;
     user-select: none;
-    overflow: hidden; /* Importante per contenere l'effetto ripple */
+    overflow: hidden; /* Contain ripple effect */
+}
+
+/* Add specific iOS adjustments for nav items */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .nav-item {
+        /* Adjust vertical position to be higher in the bar */
+        margin-bottom: calc(12px + env(safe-area-inset-bottom)/2);
+    }
 }
 
 /* Stile quando l'elemento è attivo */
