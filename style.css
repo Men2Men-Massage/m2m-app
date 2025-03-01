@@ -601,46 +601,44 @@ button#reset-button:hover {
     padding: 0;
     box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
     z-index: 1001;
-    /* Base height, will be adjusted for iOS standalone */
+    /* Altezza di base */
     height: 70px;
-    /* Adding some distance from the bottom of the screen */
-    bottom: 8px;
+    /* Rimosso il bottom: 8px per eliminare lo spazio trasparente */
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
 
-/* Supports query for iOS standalone mode */
+/* Supporto per modalità standalone iOS */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
     .bottom-nav {
-        /* Add extra space at the bottom for iOS home indicator */
+        /* Aggiungi spazio extra in basso per l'indicatore home di iOS */
         padding-bottom: env(safe-area-inset-bottom);
-        /* Update total height to include the padding */
-        height: calc(70px + env(safe-area-inset-bottom));
-        /* Move up from the bottom by a fixed amount to avoid overlapping with system UI */
-        bottom: 12px;
+        /* Aggiorna l'altezza totale per includere il padding */
+        height: calc(80px + env(safe-area-inset-bottom)); /* Aumentato da 70px a 80px */
+        /* Rimuovere bottom: 12px per eliminare lo spazio trasparente */
     }
     
-    /* Adjust padding for pages to account for the navigation bar */
+    /* Aggiusta il padding per le pagine per tener conto della barra di navigazione */
     #profile-page, #history-page, .container {
-        /* Adjust bottom padding for all main content containers */
-        padding-bottom: calc(90px + env(safe-area-inset-bottom));
+        /* Aggiusta il padding inferiore per tutti i contenitori principali */
+        padding-bottom: calc(100px + env(safe-area-inset-bottom)); /* Aumentato da 90px a 100px */
     }
 }
 
-/* For non-iOS devices or when not in standalone mode */
+/* Per dispositivi non iOS o quando non in modalità standalone */
 @media (display-mode: standalone), (display-mode: fullscreen) {
     .bottom-nav {
-        /* Ensure the navigation bar is always slightly elevated from the bottom */
-        bottom: 8px;
+        /* Altezza leggermente maggiore */
+        height: 80px; /* Aumentato da 70px a 80px */
     }
     
     #profile-page, #history-page, .container {
-        /* Add extra padding at the bottom to ensure content isn't hidden */
-        padding-bottom: 90px;
+        /* Aggiunto padding extra in basso per assicurare che il contenuto non sia nascosto */
+        padding-bottom: 100px; /* Aumentato da 90px a 100px */
     }
 }
 
-/* Rest of your existing navigation CSS remains the same */
+/* Il resto del CSS di navigazione rimane invariato */
 .nav-container {
     display: flex;
     justify-content: space-around;
