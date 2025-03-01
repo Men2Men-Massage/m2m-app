@@ -589,10 +589,9 @@ button#reset-button:hover {
     }
 }
 
-/* --- MODERN NAVIGATION BAR - FIXED SPACING VERSION --- */
+/* --- MODERN NAVIGATION BAR - ENHANCED SPACING --- */
 .bottom-nav {
     position: fixed;
-    bottom: 0;
     left: 0;
     width: 100%;
     background-color: #ffffff;
@@ -601,38 +600,34 @@ button#reset-button:hover {
     padding: 0;
     box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
     z-index: 1001;
-    /* Base height */
-    height: 80px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
+    
+    /* Base height and position */
+    height: 80px;
+    bottom: 15px; /* Default spacing from bottom for non-iOS */
 }
 
-/* iOS standalone mode support with increased spacing from bottom */
+/* iOS standalone mode support with much more spacing from bottom */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
     .bottom-nav {
-        /* Explicitly move the nav bar up to create space */
-        bottom: env(safe-area-inset-bottom);
-        /* Add padding for content alignment */
+        /* Position nav bar significantly higher above the home indicator */
+        bottom: calc(env(safe-area-inset-bottom) + 15px);
+        /* No need for padding as we're positioning it above the safe area */
         padding-bottom: 0;
-        /* Keep height consistent */
-        height: 80px;
     }
     
     /* Adjust padding for main content containers */
     #profile-page, #history-page, .container {
         /* Ensure content doesn't get hidden */
-        padding-bottom: calc(100px + env(safe-area-inset-bottom) * 2);
+        padding-bottom: calc(115px + env(safe-area-inset-bottom));
     }
 }
 
 /* For non-iOS devices or when not in standalone mode */
 @media (display-mode: standalone), (display-mode: fullscreen) {
-    .bottom-nav {
-        height: 80px;
-    }
-    
     #profile-page, #history-page, .container {
-        padding-bottom: 100px;
+        padding-bottom: 115px;
     }
 }
 
@@ -660,15 +655,31 @@ button#reset-button:hover {
     position: relative;
     border-radius: 12px;
     /* Reduced height to ensure items stay within visible area */
-    height: calc(100% - 30px);
-    /* Increased margins */
-    margin: 15px 8px;
+    height: calc(100% - 24px);
+    /* Margins to create safe touch areas */
+    margin: 12px 8px;
     cursor: pointer;
     user-select: none;
     overflow: hidden;
 }
 
-/* Ensure ripple effect stays contained */
+/* Styling for active state */
+.nav-item.active {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Style for the icons */
+.nav-icon {
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+}
+
+/* Style for the text */
+.nav-text {
+    font-size: 0.8rem;
+}
+
+/* Ripple effect container */
 .nav-item::after {
     content: '';
     position: absolute;
@@ -678,29 +689,20 @@ button#reset-button:hover {
     bottom: 0;
     pointer-events: none;
     border-radius: 12px;
-    /* Ensure highlight effects stay within bounds */
     overflow: hidden;
 }
 
-/* Alternative approach - wrapper for extra safety */
-.bottom-nav-wrapper {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-}
-
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-    .bottom-nav-wrapper {
-        /* Create space between nav and system UI */
-        padding-bottom: env(safe-area-inset-bottom);
+/* Ensure everything works in portrait and landscape modes */
+@media screen and (orientation: landscape) {
+    .bottom-nav {
+        /* Adjust for landscape mode */
+        height: 70px;
     }
-    
-    /* Position the nav bar at the top of the wrapper */
-    .bottom-nav-wrapper .bottom-nav {
-        bottom: auto;
-        position: relative;
+
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+        .bottom-nav {
+            bottom: calc(env(safe-area-inset-bottom) + 10px);
+        }
     }
 }
 
