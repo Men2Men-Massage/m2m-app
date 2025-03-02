@@ -1736,3 +1736,28 @@ button#reset-button:hover {
     text-align: center;
   }
 }
+
+/* Stile per l'avviso importante nel modal della gift card */
+.important-warning {
+  background-color: #fff3e0;
+  border-left: 4px solid #ff9800;
+  color: #e65100;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 0 4px 4px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.important-warning i {
+  font-size: 18px;
+  color: #ff9800;
+  margin-top: 2px;
+}
+
+.important-warning p {
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 500;
+}
