@@ -208,7 +208,7 @@ function saveLocationAndGeneratePayment() {
     const userName = localStorage.getItem('m2m_name');
     const iban = "DE12 3456 7890 1234 5678 90"; // IBAN di esempio
     const accountHolder = "M2M Massagen"; // Intestatario del conto
-    const purpose = `${userName}, ${selectedShiftDate}, ${selectedLocation}`;
+    const purpose = `Rent Payment ${userName}, ${selectedShiftDate}, ${selectedLocation}`;
 
     // Rimuove il pulsante "Generate Payment" e mostra le informazioni al suo posto
     const resultDiv = document.getElementById('result');
