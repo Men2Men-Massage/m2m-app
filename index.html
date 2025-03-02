@@ -23,36 +23,95 @@
 </head>
 <body>
   <!-- Authentication Overlay -->
-  <div id="auth-overlay" style="display: none;">
-    <div id="auth-box">
-      <h2>Welcome to M2M Calculator</h2>
-      <div id="code-section">
-        <input type="password" id="access-code" placeholder="Enter access code">
-        <button onclick="checkCode()">Continue</button>
+<div id="auth-overlay" style="display: none;">
+  <div id="auth-box">
+    <h2>Welcome to M2M Calculator</h2>
+    <div id="code-section">
+      <input type="password" id="access-code" placeholder="Enter access code">
+      <button onclick="checkCode()">Continue</button>
+    </div>
+    <div id="name-section" style="display: none;">
+      <h3>Create Your Profile</h3>
+      <div class="input-group">
+        <label for="user-name-input">Name <span class="required">*</span></label>
+        <input type="text" id="user-name-input" placeholder="Enter your name" required>
       </div>
-      <div id="name-section" style="display: none;">
-        <input type="text" id="user-name-input" placeholder="Enter your name">
-        <button onclick="saveName()">Save</button>
+      <div class="input-group">
+        <label for="user-email-input">Email (optional)</label>
+        <input type="email" id="user-email-input" placeholder="Enter your email">
       </div>
+      <div class="input-group profile-image-group">
+        <label for="profile-image-input">Profile Image (optional)</label>
+        <div class="profile-image-container">
+          <div class="profile-image-preview" id="profile-image-preview">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="profile-image-actions">
+            <button id="select-image-btn" onclick="document.getElementById('profile-image-input').click()">
+              Select Image
+            </button>
+            <input type="file" id="profile-image-input" accept="image/*" style="display: none;" onchange="previewProfileImage(this)">
+          </div>
+        </div>
+      </div>
+      <button onclick="saveUserProfile()">Save Profile</button>
     </div>
   </div>
+</div>
 
   <!-- User Profile Page (Full Screen) -->
-    <div id="profile-page" style="display: none;">
-        <div id="profile-box">
-            <h2>User Profile</h2>
-            <div class="profile-info">
-                <p><strong>Name:</strong> <span id="profile-name"></span></p>
-                <p><strong>Contact:</strong> <span id="profile-contact">Add your contact info here</span></p> <!-- Placeholder -->
-            </div>
-            <div class="profile-edit">
-                <label for="edit-name-input">Change Name:</label>
-                <input type="text" id="edit-name-input" placeholder="Enter new name">
-                <button onclick="updateUserName()">Update Name</button>
-            </div>
-            <button onclick="logout()">Logout</button>
-        </div>
+<div id="profile-page" style="display: none;">
+  <div id="profile-box">
+    <h2>User Profile</h2>
+    
+    <div class="profile-header">
+      <div class="profile-image-large" id="profile-image-large">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="profile-actions">
+        <button class="change-photo-btn" onclick="document.getElementById('profile-image-update-input').click()">
+          <i class="fas fa-camera"></i> Change Photo
+        </button>
+        <input type="file" id="profile-image-update-input" accept="image/*" style="display: none;" onchange="updateProfileImage(this)">
+      </div>
     </div>
+    
+    <div class="profile-info">
+      <p><strong>Name:</strong> <span id="profile-name"></span></p>
+      <p><strong>Email:</strong> <span id="profile-email">Not provided</span></p>
+    </div>
+    
+    <div class="profile-edit">
+      <h3>Edit Profile</h3>
+      <div class="input-group">
+        <label for="edit-name-input">Name:</label>
+        <input type="text" id="edit-name-input" placeholder="Enter new name">
+      </div>
+      <div class="input-group">
+        <label for="edit-email-input">Email:</label>
+        <input type="email" id="edit-email-input" placeholder="Enter new email">
+      </div>
+      <button class="update-btn" onclick="updateUserProfile()">Update Profile</button>
+    </div>
+    
+    <div class="profile-actions-footer">
+      <button class="logout-btn" onclick="logout()">Logout</button>
+      <button class="delete-account-btn" onclick="confirmDeleteAccount()">Delete Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Modal for Delete Account -->
+<div id="delete-account-modal" class="modal">
+  <div class="modal-content">
+    <h2>Delete Account</h2>
+    <p>Are you sure you want to delete your account? This will remove all your data and cannot be undone.</p>
+    <div class="modal-buttons">
+      <button onclick="deleteAccount()" class="delete-confirm-btn">Yes, Delete My Account</button>
+      <button onclick="document.getElementById('delete-account-modal').style.display='none'" class="cancel-btn">Cancel</button>
+    </div>
+  </div>
+</div>
 
   <!-- Payment History Page (Full Screen) -->
   <div id="history-page" style="display: none;">
