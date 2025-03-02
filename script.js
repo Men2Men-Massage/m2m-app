@@ -748,3 +748,85 @@ document.addEventListener('keydown', function(event) {
         }
     }
 });
+
+// Funzione per inviare la richiesta di pagamento gift card in modo sicuro
+function sendGiftCardPaymentRequest() {
+    const giftCardNumber = document.getElementById('giftcard-number').value.trim();
+    const comment = document.getElementById('giftcard-comment').value.trim();
+    const errorElement = document.getElementById('giftcard-request-error');
+    
+    // Validazione: il commento è obbligatorio
+    if (!comment) {
+        errorElement.textContent = 'Please enter a comment.';
+        errorElement.style.display = 'block';
+        return;
+    }
+    
+    // Disabilita il pulsante durante l'invio
+    const sendButton = document.getElementById('send-giftcard-request-btn');
+    sendButton.disabled = true;
+    sendButton.textContent = 'Sending...';
+    
+    // Raccogli i dati per l'email
+    const userName = localStorage.getItem('m2m_name');
+    const date = currentGiftCardRequestData.date;
+    const amount = currentGiftCardRequestData.amount;
+    
+    // Prepara i dati da inviare alla serverless function
+    const requestData = {
+        userName,
+        date,
+        amount,
+        giftCardNumber,
+        comment
+    };
+    
+    // Invia la richiesta alla serverless function invece che direttamente all'API di Brevo
+    fetch('/api/send-giftcard-request', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Email sent successfully:', data);
+        
+        // Aggiorna lo stato del pagamento
+        const paymentIndex = savedPayments.findIndex(
+            (payment, index) => index === currentGiftCardRequestData.paymentIndex && payment.date === currentGiftCardRequestData.date
+        );
+        
+        if (paymentIndex !== -1) {
+            savedPayments[paymentIndex].giftCardRequestSent = true;
+            localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
+        }
+        
+        // Mostra il messaggio di successo
+        document.getElementById('giftcard-request-success').style.display = 'block';
+        sendButton.textContent = 'Sent Successfully';
+        
+        // Chiudi il modal dopo un ritardo e aggiorna la visualizzazione
+        setTimeout(() => {
+            closeGiftCardRequestModal();
+            showDailyPayments(currentGiftCardRequestData.date);
+        }, 2000);
+    })
+    .catch(error => {
+        console.error('Error sending email:', error);
+        
+        // Mostra il messaggio di errore
+        errorElement.textContent = 'Failed to send email. Please try again later.';
+        errorElement.style.display = 'block';
+        
+        // Riabilita il pulsante
+        sendButton.disabled = false;
+        sendButton.textContent = 'Send Payment Request';
+    });
+}
