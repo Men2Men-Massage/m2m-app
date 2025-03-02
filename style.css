@@ -1147,6 +1147,9 @@ button#reset-button:hover {
     width: 100%;
     box-sizing: border-box;
     box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 #profile-box button:hover {
@@ -1659,8 +1662,12 @@ button#reset-button:hover {
 }
 
 .update-btn {
-  background-color: #376FE9;
+  background-color: #376FE9 !important;
   margin-bottom: 30px;
+}
+
+.update-btn:hover {
+  background-color: #2A5CD5 !important;
 }
 
 .profile-actions-footer {
@@ -1670,24 +1677,28 @@ button#reset-button:hover {
   margin-top: 30px;
   padding-top: 20px;
   border-top: 1px solid #eee;
+  width: 100%;
+  text-align: center;
 }
 
-.logout-btn {
-  background-color: #ff9800; /* Cambiato da blu a arancione */
-  color: white;
+/* Stile specifico per il pulsante Logout (arancione) */
+#profile-box .logout-btn {
+  background-color: #ff9800 !important;
+  color: white !important;
 }
 
-.logout-btn:hover {
-  background-color: #f57c00;
+#profile-box .logout-btn:hover {
+  background-color: #f57c00 !important;
 }
 
-.delete-account-btn {
-  background-color: #f44336;
-  color: white;
+/* Stile specifico per il pulsante Delete Account (rosso) */
+#profile-box .delete-account-btn {
+  background-color: #f44336 !important;
+  color: white !important;
 }
 
-.delete-account-btn:hover {
-  background-color: #d32f2f;
+#profile-box .delete-account-btn:hover {
+  background-color: #d32f2f !important;
 }
 
 /* Delete Account Modal */
