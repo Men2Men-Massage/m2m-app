@@ -1360,3 +1360,159 @@ button#reset-button:hover {
         width: 100%;
     }
 }
+
+/* Gift Card Request Button Styles */
+.request-giftcard-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 7px 12px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.request-giftcard-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.request-giftcard-button:disabled {
+    background-color: #cccccc;
+    color: #888888;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.request-giftcard-button i {
+    font-size: 12px;
+}
+
+/* Gift Card Request Modal Styles */
+.giftcard-request-modal-content {
+    width: 90%;
+    max-width: 450px;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.giftcard-request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.giftcard-request-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.close-giftcard-request {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #777;
+    transition: color 0.3s;
+}
+
+.close-giftcard-request:hover {
+    color: #333;
+}
+
+.giftcard-request-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.giftcard-request-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.giftcard-request-form label {
+    font-weight: 600;
+    color: #555;
+}
+
+.giftcard-request-form input, 
+.giftcard-request-form textarea {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.giftcard-request-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.giftcard-request-form button {
+    padding: 14px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.giftcard-request-form button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.giftcard-request-form button:disabled {
+    background-color: #cccccc;
+    color: #888888;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.error-message {
+    padding: 10px;
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    color: #d32f2f;
+    border-radius: 0 4px 4px 0;
+    margin-top: 10px;
+}
+
+.success-message {
+    padding: 15px;
+    background-color: #e8f5e9;
+    border-left: 4px solid #4CAF50;
+    color: #2e7d32;
+    border-radius: 0 4px 4px 0;
+    margin: 15px 0;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Small screen adjustments */
+@media (max-width: 480px) {
+    .giftcard-request-modal-content {
+        padding: 15px;
+    }
+    
+    .giftcard-request-form input, 
+    .giftcard-request-form textarea,
+    .giftcard-request-form button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
