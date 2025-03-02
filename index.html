@@ -112,6 +112,21 @@
       </div>
     </div>
 
+    <!-- Tools Section -->
+    <div class="tools-section">
+      <div class="tools-header">
+        <span>Tools:</span>
+      </div>
+      <div class="tools-buttons">
+        <button id="calculator-btn" onclick="openCalculator()">
+          <i class="fas fa-calculator"></i> Quick Calculator
+        </button>
+        <button id="fresha-btn" onclick="window.open('https://partners.fresha.com/reports/table/appointment-summary?appointment_status=unconfirmed%2Cconfirmed%2Carrived%2Cstarted%2Ccompleted&shortcut=today', '_blank')">
+          <i class="fas fa-chart-line"></i> Fresha Daily Report
+        </button>
+      </div>
+    </div>
+
     <!-- Input Section -->
     <div class="input-section">
       <div class="input-group">
@@ -154,6 +169,45 @@
           <option value="Schoeneberg">Schoeneberg</option>
         </select>
         <button onclick="saveLocationAndGeneratePayment()">Generate Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calculator Modal -->
+  <div id="calculator-modal" class="modal">
+    <div class="modal-content calculator-modal-content">
+      <div class="calculator-header">
+        <h2>Quick Calculator</h2>
+        <span class="close-calculator" onclick="closeCalculator()">&times;</span>
+      </div>
+      <div class="calculator-screen">
+        <input type="text" id="calculator-display" readonly>
+      </div>
+      <div class="calculator-buttons">
+        <button class="calc-btn" onclick="clearCalculator()">C</button>
+        <button class="calc-btn" onclick="appendToCalculator('(')">(</button>
+        <button class="calc-btn" onclick="appendToCalculator(')')">)</button>
+        <button class="calc-btn operator" onclick="appendToCalculator('/')">÷</button>
+        
+        <button class="calc-btn" onclick="appendToCalculator('7')">7</button>
+        <button class="calc-btn" onclick="appendToCalculator('8')">8</button>
+        <button class="calc-btn" onclick="appendToCalculator('9')">9</button>
+        <button class="calc-btn operator" onclick="appendToCalculator('*')">×</button>
+        
+        <button class="calc-btn" onclick="appendToCalculator('4')">4</button>
+        <button class="calc-btn" onclick="appendToCalculator('5')">5</button>
+        <button class="calc-btn" onclick="appendToCalculator('6')">6</button>
+        <button class="calc-btn operator" onclick="appendToCalculator('-')">−</button>
+        
+        <button class="calc-btn" onclick="appendToCalculator('1')">1</button>
+        <button class="calc-btn" onclick="appendToCalculator('2')">2</button>
+        <button class="calc-btn" onclick="appendToCalculator('3')">3</button>
+        <button class="calc-btn operator" onclick="appendToCalculator('+')">+</button>
+        
+        <button class="calc-btn" onclick="appendToCalculator('0')">0</button>
+        <button class="calc-btn" onclick="appendToCalculator('.')">.</button>
+        <button class="calc-btn" onclick="backspaceCalculator()"><i class="fas fa-backspace"></i></button>
+        <button class="calc-btn equals" onclick="calculateResult()">=</button>
       </div>
     </div>
   </div>
