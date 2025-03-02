@@ -849,6 +849,8 @@ function closeGiftCardRequestModal() {
 }
 
 // Funzione per inviare la richiesta di pagamento gift card in modo sicuro
+// Modifica alla funzione sendGiftCardPaymentRequest() per correggere il problema del calendario e della persistenza
+
 function sendGiftCardPaymentRequest() {
     const giftCardNumber = document.getElementById('giftcard-number').value.trim();
     const comment = document.getElementById('giftcard-comment').value.trim();
@@ -880,6 +882,9 @@ function sendGiftCardPaymentRequest() {
         comment
     };
     
+    // Salva la data corrente in una costante per uso successivo
+    const currentDate = date;
+    
     // Invia la richiesta alla serverless function invece che direttamente all'API di Brevo
     fetch('/api/send-giftcard-request', {
         method: 'POST',
@@ -897,13 +902,19 @@ function sendGiftCardPaymentRequest() {
     .then(data => {
         console.log('Email sent successfully:', data);
         
-        // Aggiorna lo stato del pagamento
-        const paymentIndex = savedPayments.findIndex(
-            (payment, index) => index === currentGiftCardRequestData.paymentIndex && payment.date === currentGiftCardRequestData.date
+        // Trova tutti i pagamenti per la data corrente
+        const paymentsForDate = savedPayments.filter(p => p.date === currentDate);
+        
+        // Ottieni l'indice completo nel savedPayments array
+        const globalIndex = savedPayments.findIndex(
+            (payment) => payment.date === currentDate && 
+                         payment.giftCardAmount === amount && 
+                         payment.giftCardRequestSent !== true &&
+                         payment === paymentsForDate[currentGiftCardRequestData.paymentIndex]
         );
         
-        if (paymentIndex !== -1) {
-            savedPayments[paymentIndex].giftCardRequestSent = true;
+        if (globalIndex !== -1) {
+            savedPayments[globalIndex].giftCardRequestSent = true;
             localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
         }
         
@@ -914,7 +925,8 @@ function sendGiftCardPaymentRequest() {
         // Chiudi il modal dopo un ritardo e aggiorna la visualizzazione
         setTimeout(() => {
             closeGiftCardRequestModal();
-            showDailyPayments(currentGiftCardRequestData.date);
+            // Usa la costante locale per la data
+            showDailyPayments(currentDate);
         }, 2000);
     })
     .catch(error => {
