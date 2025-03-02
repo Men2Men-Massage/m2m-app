@@ -1516,3 +1516,22 @@ button#reset-button:hover {
         padding: 10px;
     }
 }
+
+.help-text {
+    font-size: 14px;
+    color: #666;
+    margin-top: 8px;
+    background-color: #f8f9fa;
+    border-left: 3px solid #4CAF50;
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.help-text i {
+    color: #4CAF50;
+    font-size: 16px;
+}
