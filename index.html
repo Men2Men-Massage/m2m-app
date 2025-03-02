@@ -17,6 +17,9 @@
   
   <!-- Font Awesome for navigation icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+  <!-- Axios for API calls -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
   <!-- Authentication Overlay -->
@@ -208,6 +211,31 @@
         <button class="calc-btn" onclick="appendToCalculator('.')">.</button>
         <button class="calc-btn" onclick="backspaceCalculator()"><i class="fas fa-backspace"></i></button>
         <button class="calc-btn equals" onclick="calculateResult()">=</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gift Card Payment Request Modal -->
+  <div id="giftcard-request-modal" class="modal">
+    <div class="modal-content giftcard-request-modal-content">
+      <div class="giftcard-request-header">
+        <h2>Request Gift Card Payment</h2>
+        <span class="close-giftcard-request" onclick="closeGiftCardRequestModal()">&times;</span>
+      </div>
+      <div class="giftcard-request-form">
+        <div class="form-group">
+          <label for="giftcard-number">Gift Card Number (optional):</label>
+          <input type="text" id="giftcard-number" placeholder="Enter gift card number if available">
+        </div>
+        <div class="form-group">
+          <label for="giftcard-comment">Comment (required):</label>
+          <textarea id="giftcard-comment" placeholder="Enter your comment or reason for request" required></textarea>
+        </div>
+        <div id="giftcard-request-error" class="error-message" style="display: none;"></div>
+        <div id="giftcard-request-success" class="success-message" style="display: none;">
+          Payment request sent successfully!
+        </div>
+        <button id="send-giftcard-request-btn" onclick="sendGiftCardPaymentRequest()">Send Payment Request</button>
       </div>
     </div>
   </div>
