@@ -1,0 +1,8 @@
+{
+  "name": "m2m-payment-calculator",
+  "version": "1.0.0",
+  "description": "Payment calculator for M2M",
+  "dependencies": {
+    "nodemailer": "^6.9.8"
+  }
+}
