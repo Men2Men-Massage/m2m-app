@@ -749,6 +749,105 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+// Variabile globale per tenere traccia delle informazioni sul pagamento gift card corrente
+let currentGiftCardRequestData = {
+    paymentIndex: null,
+    date: null,
+    amount: 0
+};
+
+// Funzione modificata per mostrare i pagamenti giornalieri includendo il pulsante per richiedere pagamento gift card
+function showDailyPayments(dateString) {
+    document.getElementById('daily-payments-section').style.display = 'block';
+    document.getElementById('selected-date').textContent = formatDate(new Date(dateString));
+    const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
+    dailyPaymentsListDiv.innerHTML = '';
+
+    const paymentsForDate = savedPayments.filter(payment => payment.date === dateString);
+
+    if (paymentsForDate.length === 0) {
+        dailyPaymentsListDiv.innerHTML = '<p>No payments for this date.</p>';
+        return;
+    }
+
+    paymentsForDate.forEach((payment, index) => {
+        const paymentItem = document.createElement('div');
+        paymentItem.className = 'daily-payment-item';
+        paymentItem.dataset.paymentIndex = index;
+
+        const detailsDiv = document.createElement('div');
+        detailsDiv.className = 'payment-details';
+        detailsDiv.innerHTML = `
+            <div>Payment to Center (40%): €${payment.dueAmount.toFixed(2)}</div>
+            <div>Gift Card Payment: €${payment.giftCardAmount.toFixed(2)}</div>
+        `;
+        if (payment.note) {
+            detailsDiv.innerHTML += `<div class="payment-note">Note: ${payment.note}</div>`;
+        }
+        if (payment.giftCardRequestSent) {
+            detailsDiv.innerHTML += `<div class="payment-note success-note">Gift card payment request sent</div>`;
+        }
+        paymentItem.appendChild(detailsDiv);
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'payment-actions';
+
+        let noteButton = document.createElement('button');
+        noteButton.textContent = payment.note ? 'Edit Note' : 'Add Note';
+        noteButton.onclick = () => handleNoteForPayment(index, payment.note);
+        actionsDiv.appendChild(noteButton);
+
+        // Aggiungi il pulsante per richiedere il pagamento gift card solo se c'è un importo gift card
+        if (payment.giftCardAmount > 0) {
+            let requestGiftCardButton = document.createElement('button');
+            requestGiftCardButton.className = 'request-giftcard-button';
+            requestGiftCardButton.innerHTML = '<i class="fas fa-credit-card"></i> Request Gift Card Payment';
+            requestGiftCardButton.disabled = payment.giftCardRequestSent || false;
+            
+            if (!payment.giftCardRequestSent) {
+                requestGiftCardButton.onclick = () => openGiftCardRequestModal(index, dateString, payment.giftCardAmount);
+            }
+            
+            actionsDiv.appendChild(requestGiftCardButton);
+        }
+
+        let deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'delete-button';
+        deleteButton.onclick = () => deletePayment(index, dateString);
+        actionsDiv.appendChild(deleteButton);
+
+        paymentItem.appendChild(actionsDiv);
+        dailyPaymentsListDiv.appendChild(paymentItem);
+    });
+}
+
+// Funzione per aprire il modal di richiesta pagamento gift card
+function openGiftCardRequestModal(paymentIndex, dateString, giftCardAmount) {
+    // Salva i dati del pagamento corrente per l'invio successivo
+    currentGiftCardRequestData = {
+        paymentIndex: paymentIndex,
+        date: dateString,
+        amount: giftCardAmount
+    };
+    
+    // Resetta il form
+    document.getElementById('giftcard-number').value = '';
+    document.getElementById('giftcard-comment').value = '';
+    document.getElementById('giftcard-request-error').style.display = 'none';
+    document.getElementById('giftcard-request-success').style.display = 'none';
+    document.getElementById('send-giftcard-request-btn').disabled = false;
+    
+    // Mostra il modal
+    document.getElementById('giftcard-request-modal').style.display = 'flex';
+}
+
+// Funzione per chiudere il modal di richiesta pagamento gift card
+function closeGiftCardRequestModal() {
+    document.getElementById('giftcard-request-modal').style.display = 'none';
+    currentGiftCardRequestData = { paymentIndex: null, date: null, amount: 0 };
+}
+
 // Funzione per inviare la richiesta di pagamento gift card in modo sicuro
 function sendGiftCardPaymentRequest() {
     const giftCardNumber = document.getElementById('giftcard-number').value.trim();
@@ -830,3 +929,113 @@ function sendGiftCardPaymentRequest() {
         sendButton.textContent = 'Send Payment Request';
     });
 }
+
+// Event listener per chiudere il modal di richiesta gift card cliccando fuori
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('giftcard-request-modal');
+    if (event.target === modal) {
+        closeGiftCardRequestModal();
+    }
+});
+
+// Funzione modificata per salvare i dati del pagamento per includere il flag giftCardRequestSent
+function savePaymentData(date, dueAmount, giftCardAmount) {
+    const paymentData = {
+        date: date,
+        dueAmount: dueAmount,
+        giftCardAmount: giftCardAmount,
+        note: '',
+        giftCardRequestSent: false // Nuovo flag per tenere traccia dello stato della richiesta
+    };
+
+    savedPayments.push(paymentData);
+    localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
+
+    // Se il mese corrente è in corso, aggiorna il calendario
+    const now = new Date();
+    if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
+        generateCalendar(currentCalendarMonth, currentCalendarYear);
+    }
+}
+
+// Calculator Functions
+function openCalculator() {
+    document.getElementById('calculator-modal').style.display = 'flex';
+    document.getElementById('calculator-display').value = '';
+}
+
+function closeCalculator() {
+    document.getElementById('calculator-modal').style.display = 'none';
+}
+
+function appendToCalculator(value) {
+    document.getElementById('calculator-display').value += value;
+}
+
+function clearCalculator() {
+    document.getElementById('calculator-display').value = '';
+}
+
+function backspaceCalculator() {
+    const display = document.getElementById('calculator-display');
+    display.value = display.value.slice(0, -1);
+}
+
+function calculateResult() {
+    const display = document.getElementById('calculator-display');
+    try {
+        // Replace × with * and ÷ with / for evaluation
+        let expression = display.value
+            .replace(/×/g, '*')
+            .replace(/÷/g, '/');
+            
+        // Evaluate the expression
+        const result = eval(expression);
+        
+        // Display the result with 2 decimal places if it's a floating point number
+        if (result !== undefined) {
+            display.value = Number.isInteger(result) ? result : parseFloat(result.toFixed(2));
+        }
+    } catch (error) {
+        display.value = 'Error';
+        setTimeout(() => {
+            display.value = '';
+        }, 1500);
+    }
+}
+
+// Close the calculator when clicking outside of it
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('calculator-modal');
+    if (event.target === modal) {
+        closeCalculator();
+    }
+});
+
+// Add keyboard support for the calculator
+document.addEventListener('keydown', function(event) {
+    const calcModal = document.getElementById('calculator-modal');
+    
+    // Only process keyboard input if calculator is open
+    if (calcModal.style.display === 'flex') {
+        const key = event.key;
+        
+        // Check if key is a number, operator, decimal point, or parenthesis
+        if (/^[0-9+\-*/.()]$/.test(key)) {
+            appendToCalculator(key);
+            event.preventDefault();
+        } else if (key === 'Enter') {
+            calculateResult();
+            event.preventDefault();
+        } else if (key === 'Backspace') {
+            backspaceCalculator();
+            event.preventDefault();
+        } else if (key === 'Escape') {
+            closeCalculator();
+            event.preventDefault();
+        } else if (key === 'c' || key === 'C') {
+            clearCalculator();
+            event.preventDefault();
+        }
+    }
+});
