@@ -666,3 +666,85 @@ document.addEventListener('DOMContentLoaded', function() {
         homeNav.classList.add('active');
     }
 });
+
+// Calculator Functions
+function openCalculator() {
+    document.getElementById('calculator-modal').style.display = 'flex';
+    document.getElementById('calculator-display').value = '';
+}
+
+function closeCalculator() {
+    document.getElementById('calculator-modal').style.display = 'none';
+}
+
+function appendToCalculator(value) {
+    document.getElementById('calculator-display').value += value;
+}
+
+function clearCalculator() {
+    document.getElementById('calculator-display').value = '';
+}
+
+function backspaceCalculator() {
+    const display = document.getElementById('calculator-display');
+    display.value = display.value.slice(0, -1);
+}
+
+function calculateResult() {
+    const display = document.getElementById('calculator-display');
+    try {
+        // Replace × with * and ÷ with / for evaluation
+        let expression = display.value
+            .replace(/×/g, '*')
+            .replace(/÷/g, '/');
+            
+        // Evaluate the expression
+        const result = eval(expression);
+        
+        // Display the result with 2 decimal places if it's a floating point number
+        if (result !== undefined) {
+            display.value = Number.isInteger(result) ? result : parseFloat(result.toFixed(2));
+        }
+    } catch (error) {
+        display.value = 'Error';
+        setTimeout(() => {
+            display.value = '';
+        }, 1500);
+    }
+}
+
+// Close the calculator when clicking outside of it
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('calculator-modal');
+    if (event.target === modal) {
+        closeCalculator();
+    }
+});
+
+// Add keyboard support for the calculator
+document.addEventListener('keydown', function(event) {
+    const calcModal = document.getElementById('calculator-modal');
+    
+    // Only process keyboard input if calculator is open
+    if (calcModal.style.display === 'flex') {
+        const key = event.key;
+        
+        // Check if key is a number, operator, decimal point, or parenthesis
+        if (/^[0-9+\-*/.()]$/.test(key)) {
+            appendToCalculator(key);
+            event.preventDefault();
+        } else if (key === 'Enter') {
+            calculateResult();
+            event.preventDefault();
+        } else if (key === 'Backspace') {
+            backspaceCalculator();
+            event.preventDefault();
+        } else if (key === 'Escape') {
+            closeCalculator();
+            event.preventDefault();
+        } else if (key === 'c' || key === 'C') {
+            clearCalculator();
+            event.preventDefault();
+        }
+    }
+});
