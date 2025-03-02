@@ -5,6 +5,13 @@ let savedPayments = JSON.parse(localStorage.getItem('m2m_payments') || '[]');
 let currentCalendarMonth = new Date().getMonth();
 let currentCalendarYear = new Date().getFullYear();
 
+// Variabile globale per tenere traccia delle informazioni sul pagamento gift card corrente
+let currentGiftCardRequestData = {
+    paymentIndex: null,
+    date: null,
+    amount: 0
+};
+
 // Variabili globali per memorizzare data e luogo selezionati
 let selectedShiftDate = '';
 let selectedLocation = '';
@@ -17,36 +24,17 @@ function formatDate(date) {
     return `${year}-${month}-${day}`;
 }
 
-// Funzione di logout
-function logout() {
-    localStorage.removeItem('m2m_access');
-    localStorage.removeItem('m2m_name');
-    document.querySelector('.container').style.display = 'none';
-    document.getElementById('user-name').style.display = 'none';
-    // Ora la Payment History è una pagina a schermo intero (history-page)
-    document.getElementById('history-page').style.display = 'none';
-    document.getElementById('profile-page').style.display = 'none'; // Nascondi la pagina del profilo
-    document.getElementById('auth-overlay').style.display = 'flex';
-    document.getElementById('access-code').value = '';
-    document.getElementById('user-name-input').value = '';
-    document.getElementById('code-section').style.display = 'block';
-    document.getElementById('name-section').style.display = 'none';
-    // Nascondi la barra di navigazione al logout
-    document.querySelector('.bottom-nav').style.display = 'none';
-}
-
-
 // Funzione per controllare l'autenticazione all'avvio dell'app
 function checkAuth() {
     const savedCode = localStorage.getItem('m2m_access');
-    const userName = localStorage.getItem('m2m_name');
+    const userData = JSON.parse(localStorage.getItem('m2m_user_data') || '{}');
 
-    if (savedCode === AUTH_CODE && userName) {
-        showApp(userName);
+    if (savedCode === AUTH_CODE && userData.name) {
+        showApp(userData);
         return true;
     }
     document.getElementById('auth-overlay').style.display = 'flex';
-     // Nascondi la barra di navigazione se non autenticato
+    // Nascondi la barra di navigazione se non autenticato
     document.querySelector('.bottom-nav').style.display = 'none';
     return false;
 }
@@ -55,35 +43,208 @@ function checkAuth() {
 function checkCode() {
     const codeInput = document.getElementById('access-code');
     if (codeInput.value === AUTH_CODE) {
-        document.getElementById('code-section').style.display = 'none';
-        document.getElementById('name-section').style.display = 'block';
+        const userData = JSON.parse(localStorage.getItem('m2m_user_data') || '{}');
+        
+        // Se l'utente ha già un profilo, accedi direttamente
+        if (userData.name) {
+            localStorage.setItem('m2m_access', AUTH_CODE);
+            showApp(userData);
+        } else {
+            // Altrimenti mostra il form di creazione profilo
+            document.getElementById('code-section').style.display = 'none';
+            document.getElementById('name-section').style.display = 'block';
+        }
     } else {
         alert('Invalid access code');
     }
 }
 
-// Funzione per salvare il nome utente
-function saveName() {
-    const nameInput = document.getElementById('user-name-input');
-    if (nameInput.value.trim().length > 0) {
-        localStorage.setItem('m2m_access', AUTH_CODE);
-        localStorage.setItem('m2m_name', nameInput.value.trim());
-        showApp(nameInput.value.trim());
-    } else {
-        alert('Please enter a valid name');
+// Anteprima dell'immagine del profilo
+function previewProfileImage(input) {
+    const preview = document.getElementById('profile-image-preview');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            // Rimuovi l'icona e aggiungi l'immagine
+            preview.innerHTML = `<img src="${e.target.result}" alt="Profile Preview">`;
+        }
+        
+        reader.readAsDataURL(input.files[0]);
     }
 }
 
+// Funzione per salvare il profilo utente completo
+function saveUserProfile() {
+    const nameInput = document.getElementById('user-name-input');
+    const emailInput = document.getElementById('user-email-input');
+    const imagePreview = document.getElementById('profile-image-preview');
+    
+    // Validazione: il nome è obbligatorio
+    if (nameInput.value.trim().length === 0) {
+        alert('Please enter your name');
+        return;
+    }
+    
+    // Raccogli i dati del profilo
+    const userData = {
+        name: nameInput.value.trim(),
+        email: emailInput.value.trim(),
+        // Salva l'immagine se presente
+        profileImage: imagePreview.querySelector('img') ? imagePreview.querySelector('img').src : null
+    };
+    
+    // Salva i dati nel localStorage
+    localStorage.setItem('m2m_access', AUTH_CODE);
+    localStorage.setItem('m2m_user_data', JSON.stringify(userData));
+    
+    // Mostra l'app
+    showApp(userData);
+}
+
 // Funzione per mostrare l'interfaccia principale dell'app
-function showApp(userName) {
+function showApp(userData) {
     document.getElementById('auth-overlay').style.display = 'none';
-    document.getElementById('user-name').textContent = `Hello ${userName}`;
-    document.getElementById('user-name').style.display = 'block';
+    
+    // Aggiorna l'icona utente e il nome in alto a destra
+    const userNameEl = document.getElementById('user-name');
+    userNameEl.textContent = `Hello ${userData.name}`;
+    userNameEl.style.display = 'block';
+    
+    // Aggiorna le informazioni del profilo
+    document.getElementById('profile-name').textContent = userData.name || '';
+    document.getElementById('profile-email').textContent = userData.email || 'Not provided';
+    document.getElementById('edit-name-input').value = userData.name || '';
+    document.getElementById('edit-email-input').value = userData.email || '';
+    
+    // Aggiorna l'immagine del profilo se presente
+    const profileImageLarge = document.getElementById('profile-image-large');
+    if (userData.profileImage) {
+        profileImageLarge.innerHTML = `<img src="${userData.profileImage}" alt="Profile Image">`;
+    } else {
+        profileImageLarge.innerHTML = '<i class="fas fa-user"></i>';
+    }
+    
     document.querySelector('.container').style.display = 'block';
     // Mostra la barra di navigazione solo dopo l'accesso
     document.querySelector('.bottom-nav').style.display = 'flex';
     showInstallBanners();
     initInstructionsToggle();
+}
+
+// Funzione per aggiornare l'immagine del profilo
+function updateProfileImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            // Aggiorna l'immagine del profilo
+            const profileImageLarge = document.getElementById('profile-image-large');
+            profileImageLarge.innerHTML = `<img src="${e.target.result}" alt="Profile Image">`;
+            
+            // Aggiorna i dati utente nel localStorage
+            const userData = JSON.parse(localStorage.getItem('m2m_user_data') || '{}');
+            userData.profileImage = e.target.result;
+            localStorage.setItem('m2m_user_data', JSON.stringify(userData));
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Funzione per aggiornare il profilo utente
+function updateUserProfile() {
+    const nameInput = document.getElementById('edit-name-input');
+    const emailInput = document.getElementById('edit-email-input');
+    
+    // Validazione: il nome è obbligatorio
+    if (nameInput.value.trim().length === 0) {
+        alert('Please enter your name');
+        return;
+    }
+    
+    // Raccogli i dati del profilo
+    const userData = JSON.parse(localStorage.getItem('m2m_user_data') || '{}');
+    userData.name = nameInput.value.trim();
+    userData.email = emailInput.value.trim();
+    
+    // Salva i dati nel localStorage
+    localStorage.setItem('m2m_user_data', JSON.stringify(userData));
+    
+    // Aggiorna l'interfaccia
+    document.getElementById('profile-name').textContent = userData.name;
+    document.getElementById('profile-email').textContent = userData.email || 'Not provided';
+    document.getElementById('user-name').textContent = `Hello ${userData.name}`;
+    
+    // Mostra una conferma
+    alert('Profile updated successfully!');
+    
+    // Torna alla pagina principale
+    showCalculator();
+}
+
+// Funzione per mostrare il profilo utente
+function showUserProfile() {
+    document.querySelector('.container').style.display = 'none';
+    document.getElementById('history-page').style.display = 'none';
+    document.getElementById('profile-page').style.display = 'block';
+    
+    // Deseleziona tutti i tab nella barra di navigazione
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+}
+
+// Funzione per confermare l'eliminazione dell'account
+function confirmDeleteAccount() {
+    document.getElementById('delete-account-modal').style.display = 'flex';
+}
+
+// Funzione per eliminare l'account
+function deleteAccount() {
+    // Elimina tutti i dati dell'utente
+    localStorage.removeItem('m2m_access');
+    localStorage.removeItem('m2m_user_data');
+    localStorage.removeItem('m2m_payments');
+    
+    // Chiudi il modal di conferma
+    document.getElementById('delete-account-modal').style.display = 'none';
+    
+    // Reindirizza alla pagina di login
+    document.querySelector('.container').style.display = 'none';
+    document.getElementById('user-name').style.display = 'none';
+    document.getElementById('history-page').style.display = 'none';
+    document.getElementById('profile-page').style.display = 'none';
+    document.querySelector('.bottom-nav').style.display = 'none';
+    
+    // Mostra il form di login
+    document.getElementById('auth-overlay').style.display = 'flex';
+    document.getElementById('access-code').value = '';
+    document.getElementById('code-section').style.display = 'block';
+    document.getElementById('name-section').style.display = 'none';
+    document.getElementById('user-name-input').value = '';
+    document.getElementById('user-email-input').value = '';
+    
+    // Resetta l'anteprima dell'immagine
+    document.getElementById('profile-image-preview').innerHTML = '<i class="fas fa-user"></i>';
+    
+    alert('Your account has been deleted successfully');
+}
+
+// Funzione di logout
+function logout() {
+    localStorage.removeItem('m2m_access');
+    document.querySelector('.container').style.display = 'none';
+    document.getElementById('user-name').style.display = 'none';
+    document.getElementById('history-page').style.display = 'none';
+    document.getElementById('profile-page').style.display = 'none';
+    document.getElementById('auth-overlay').style.display = 'flex';
+    document.getElementById('access-code').value = '';
+    document.getElementById('code-section').style.display = 'block';
+    document.getElementById('name-section').style.display = 'none';
+    // Nascondi la barra di navigazione al logout
+    document.querySelector('.bottom-nav').style.display = 'none';
 }
 
 // Funzione per mostrare i banner di installazione della PWA
@@ -205,7 +366,8 @@ function saveLocationAndGeneratePayment() {
     savePaymentData(selectedShiftDate, dueAmount, giftcard);
 
     // Genera i dati per il bonifico
-    const userName = localStorage.getItem('m2m_name');
+    const userData = JSON.parse(localStorage.getItem('m2m_user_data') || '{}');
+    const userName = userData.name;
     const iban = "DE12 3456 7890 1234 5678 90"; // IBAN di esempio
     const accountHolder = "M2M Massagen"; // Intestatario del conto
     const purpose = `Rent Payment ${userName}, ${selectedShiftDate}, ${selectedLocation}`;
@@ -233,7 +395,8 @@ function savePaymentData(date, dueAmount, giftCardAmount) {
         date: date,
         dueAmount: dueAmount,
         giftCardAmount: giftCardAmount,
-        note: '' // Nota opzionale
+        note: '',
+        giftCardRequestSent: false // Nuovo flag per tenere traccia dello stato della richiesta
     };
 
     savedPayments.push(paymentData);
@@ -251,7 +414,7 @@ function showPaymentHistory() {
     document.querySelector('.container').style.display = 'none';
     document.getElementById('history-page').style.display = 'block';
     document.getElementById('daily-payments-section').style.display = 'none';
-      document.getElementById('profile-page').style.display = 'none'; // Assicurati che sia nascosta
+    document.getElementById('profile-page').style.display = 'none'; // Assicurati che sia nascosta
     generateCalendar(currentCalendarMonth, currentCalendarYear);
 }
 
@@ -381,7 +544,7 @@ function calculateMonthlyTotals(month, year) {
     return [dueTotal, giftCardTotal, earningsTotal];
 }
 
-// Mostra i pagamenti giornalieri per una data specifica
+// Funzione modificata per mostrare i pagamenti giornalieri includendo il pulsante per richiedere pagamento gift card
 function showDailyPayments(dateString) {
     document.getElementById('daily-payments-section').style.display = 'block';
     document.getElementById('selected-date').textContent = formatDate(new Date(dateString));
@@ -409,6 +572,9 @@ function showDailyPayments(dateString) {
         if (payment.note) {
             detailsDiv.innerHTML += `<div class="payment-note">Note: ${payment.note}</div>`;
         }
+        if (payment.giftCardRequestSent) {
+            detailsDiv.innerHTML += `<div class="payment-note success-note">Gift card payment request sent</div>`;
+        }
         paymentItem.appendChild(detailsDiv);
 
         const actionsDiv = document.createElement('div');
@@ -418,6 +584,20 @@ function showDailyPayments(dateString) {
         noteButton.textContent = payment.note ? 'Edit Note' : 'Add Note';
         noteButton.onclick = () => handleNoteForPayment(index, payment.note);
         actionsDiv.appendChild(noteButton);
+
+        // Aggiungi il pulsante per richiedere il pagamento gift card solo se c'è un importo gift card
+        if (payment.giftCardAmount > 0) {
+            let requestGiftCardButton = document.createElement('button');
+            requestGiftCardButton.className = 'request-giftcard-button';
+            requestGiftCardButton.innerHTML = '<i class="fas fa-credit-card"></i> Request Gift Card Payment';
+            requestGiftCardButton.disabled = payment.giftCardRequestSent || false;
+            
+            if (!payment.giftCardRequestSent) {
+                requestGiftCardButton.onclick = () => openGiftCardRequestModal(index, dateString, payment.giftCardAmount);
+            }
+            
+            actionsDiv.appendChild(requestGiftCardButton);
+        }
 
         let deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
@@ -621,207 +801,6 @@ function handleNavigation(target) {
     }
 }
 
-
-// NUOVE FUNZIONI: Mostra e aggiorna il profilo utente
-
-function showUserProfile() {
-    const userName = localStorage.getItem('m2m_name');
-    if (userName) {
-        document.getElementById('profile-name').textContent = userName;
-        document.getElementById('edit-name-input').value = userName; // Pre-popola il campo
-    }
-    document.querySelector('.container').style.display = 'none';
-    document.getElementById('history-page').style.display = 'none';
-    document.getElementById('profile-page').style.display = 'block';
-}
-
-function updateUserName() {
-    const newName = document.getElementById('edit-name-input').value.trim();
-    if (newName) {
-        localStorage.setItem('m2m_name', newName);
-        document.getElementById('user-name').textContent = `Hello ${newName}`;
-        showCalculator(); // Torna alla calcolatrice dopo l'aggiornamento
-    } else {
-        alert('Please enter a valid name');
-    }
-}
-
-
-// Event Listeners per la Navigazione
-document.addEventListener('DOMContentLoaded', function() {
-    // Funzione iniziale per assicurarsi che i listener siano aggiunti correttamente
-    const navItems = document.querySelectorAll('.nav-item');
-
-    navItems.forEach(item => {
-        // Aggiungi l'effetto ripple al click
-        item.addEventListener('click', function(e) {
-            createRipple(e);
-            handleNavigation(this);
-        });
-    });
-
-    // Imposta il tab Home come attivo all'avvio
-    const homeNav = document.getElementById('home-nav');
-    if (homeNav) {
-        homeNav.classList.add('active');
-    }
-});
-
-// Calculator Functions
-function openCalculator() {
-    document.getElementById('calculator-modal').style.display = 'flex';
-    document.getElementById('calculator-display').value = '';
-}
-
-function closeCalculator() {
-    document.getElementById('calculator-modal').style.display = 'none';
-}
-
-function appendToCalculator(value) {
-    document.getElementById('calculator-display').value += value;
-}
-
-function clearCalculator() {
-    document.getElementById('calculator-display').value = '';
-}
-
-function backspaceCalculator() {
-    const display = document.getElementById('calculator-display');
-    display.value = display.value.slice(0, -1);
-}
-
-function calculateResult() {
-    const display = document.getElementById('calculator-display');
-    try {
-        // Replace × with * and ÷ with / for evaluation
-        let expression = display.value
-            .replace(/×/g, '*')
-            .replace(/÷/g, '/');
-            
-        // Evaluate the expression
-        const result = eval(expression);
-        
-        // Display the result with 2 decimal places if it's a floating point number
-        if (result !== undefined) {
-            display.value = Number.isInteger(result) ? result : parseFloat(result.toFixed(2));
-        }
-    } catch (error) {
-        display.value = 'Error';
-        setTimeout(() => {
-            display.value = '';
-        }, 1500);
-    }
-}
-
-// Close the calculator when clicking outside of it
-window.addEventListener('click', function(event) {
-    const modal = document.getElementById('calculator-modal');
-    if (event.target === modal) {
-        closeCalculator();
-    }
-});
-
-// Add keyboard support for the calculator
-document.addEventListener('keydown', function(event) {
-    const calcModal = document.getElementById('calculator-modal');
-    
-    // Only process keyboard input if calculator is open
-    if (calcModal.style.display === 'flex') {
-        const key = event.key;
-        
-        // Check if key is a number, operator, decimal point, or parenthesis
-        if (/^[0-9+\-*/.()]$/.test(key)) {
-            appendToCalculator(key);
-            event.preventDefault();
-        } else if (key === 'Enter') {
-            calculateResult();
-            event.preventDefault();
-        } else if (key === 'Backspace') {
-            backspaceCalculator();
-            event.preventDefault();
-        } else if (key === 'Escape') {
-            closeCalculator();
-            event.preventDefault();
-        } else if (key === 'c' || key === 'C') {
-            clearCalculator();
-            event.preventDefault();
-        }
-    }
-});
-
-// Variabile globale per tenere traccia delle informazioni sul pagamento gift card corrente
-let currentGiftCardRequestData = {
-    paymentIndex: null,
-    date: null,
-    amount: 0
-};
-
-// Funzione modificata per mostrare i pagamenti giornalieri includendo il pulsante per richiedere pagamento gift card
-function showDailyPayments(dateString) {
-    document.getElementById('daily-payments-section').style.display = 'block';
-    document.getElementById('selected-date').textContent = formatDate(new Date(dateString));
-    const dailyPaymentsListDiv = document.getElementById('daily-payments-list');
-    dailyPaymentsListDiv.innerHTML = '';
-
-    const paymentsForDate = savedPayments.filter(payment => payment.date === dateString);
-
-    if (paymentsForDate.length === 0) {
-        dailyPaymentsListDiv.innerHTML = '<p>No payments for this date.</p>';
-        return;
-    }
-
-    paymentsForDate.forEach((payment, index) => {
-        const paymentItem = document.createElement('div');
-        paymentItem.className = 'daily-payment-item';
-        paymentItem.dataset.paymentIndex = index;
-
-        const detailsDiv = document.createElement('div');
-        detailsDiv.className = 'payment-details';
-        detailsDiv.innerHTML = `
-            <div>Payment to Center (40%): €${payment.dueAmount.toFixed(2)}</div>
-            <div>Gift Card Payment: €${payment.giftCardAmount.toFixed(2)}</div>
-        `;
-        if (payment.note) {
-            detailsDiv.innerHTML += `<div class="payment-note">Note: ${payment.note}</div>`;
-        }
-        if (payment.giftCardRequestSent) {
-            detailsDiv.innerHTML += `<div class="payment-note success-note">Gift card payment request sent</div>`;
-        }
-        paymentItem.appendChild(detailsDiv);
-
-        const actionsDiv = document.createElement('div');
-        actionsDiv.className = 'payment-actions';
-
-        let noteButton = document.createElement('button');
-        noteButton.textContent = payment.note ? 'Edit Note' : 'Add Note';
-        noteButton.onclick = () => handleNoteForPayment(index, payment.note);
-        actionsDiv.appendChild(noteButton);
-
-        // Aggiungi il pulsante per richiedere il pagamento gift card solo se c'è un importo gift card
-        if (payment.giftCardAmount > 0) {
-            let requestGiftCardButton = document.createElement('button');
-            requestGiftCardButton.className = 'request-giftcard-button';
-            requestGiftCardButton.innerHTML = '<i class="fas fa-credit-card"></i> Request Gift Card Payment';
-            requestGiftCardButton.disabled = payment.giftCardRequestSent || false;
-            
-            if (!payment.giftCardRequestSent) {
-                requestGiftCardButton.onclick = () => openGiftCardRequestModal(index, dateString, payment.giftCardAmount);
-            }
-            
-            actionsDiv.appendChild(requestGiftCardButton);
-        }
-
-        let deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.className = 'delete-button';
-        deleteButton.onclick = () => deletePayment(index, dateString);
-        actionsDiv.appendChild(deleteButton);
-
-        paymentItem.appendChild(actionsDiv);
-        dailyPaymentsListDiv.appendChild(paymentItem);
-    });
-}
-
 // Funzione per aprire il modal di richiesta pagamento gift card
 function openGiftCardRequestModal(paymentIndex, dateString, giftCardAmount) {
     // Salva i dati del pagamento corrente per l'invio successivo
@@ -849,8 +828,6 @@ function closeGiftCardRequestModal() {
 }
 
 // Funzione per inviare la richiesta di pagamento gift card in modo sicuro
-// Modifica alla funzione sendGiftCardPaymentRequest() per correggere il problema del calendario e della persistenza
-
 function sendGiftCardPaymentRequest() {
     const giftCardNumber = document.getElementById('giftcard-number').value.trim();
     const comment = document.getElementById('giftcard-comment').value.trim();
@@ -869,9 +846,13 @@ function sendGiftCardPaymentRequest() {
     sendButton.textContent = 'Sending...';
     
     // Raccogli i dati per l'email
-    const userName = localStorage.getItem('m2m_name');
+    const userData = JSON.parse(localStorage.getItem('m2m_user_data') || '{}');
+    const userName = userData.name;
     const date = currentGiftCardRequestData.date;
     const amount = currentGiftCardRequestData.amount;
+    
+    // Salva la data corrente in una costante per uso successivo
+    const currentDate = date;
     
     // Prepara i dati da inviare alla serverless function
     const requestData = {
@@ -881,9 +862,6 @@ function sendGiftCardPaymentRequest() {
         giftCardNumber,
         comment
     };
-    
-    // Salva la data corrente in una costante per uso successivo
-    const currentDate = date;
     
     // Invia la richiesta alla serverless function invece che direttamente all'API di Brevo
     fetch('/api/send-giftcard-request', {
@@ -950,25 +928,25 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Funzione modificata per salvare i dati del pagamento per includere il flag giftCardRequestSent
-function savePaymentData(date, dueAmount, giftCardAmount) {
-    const paymentData = {
-        date: date,
-        dueAmount: dueAmount,
-        giftCardAmount: giftCardAmount,
-        note: '',
-        giftCardRequestSent: false // Nuovo flag per tenere traccia dello stato della richiesta
-    };
+// Event Listeners per la Navigazione
+document.addEventListener('DOMContentLoaded', function() {
+    // Funzione iniziale per assicurarsi che i listener siano aggiunti correttamente
+    const navItems = document.querySelectorAll('.nav-item');
 
-    savedPayments.push(paymentData);
-    localStorage.setItem('m2m_payments', JSON.stringify(savedPayments));
+    navItems.forEach(item => {
+        // Aggiungi l'effetto ripple al click
+        item.addEventListener('click', function(e) {
+            createRipple(e);
+            handleNavigation(this);
+        });
+    });
 
-    // Se il mese corrente è in corso, aggiorna il calendario
-    const now = new Date();
-    if (currentCalendarMonth === now.getMonth() && currentCalendarYear === now.getFullYear()) {
-        generateCalendar(currentCalendarMonth, currentCalendarYear);
+    // Imposta il tab Home come attivo all'avvio
+    const homeNav = document.getElementById('home-nav');
+    if (homeNav) {
+        homeNav.classList.add('active');
     }
-}
+});
 
 // Calculator Functions
 function openCalculator() {
