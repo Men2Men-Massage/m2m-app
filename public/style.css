@@ -1867,27 +1867,6 @@ button#reset-button:hover {
     margin-bottom: 15px;
 }
 
-/* Estilos para el banner de instalación */
-.install-banner {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 400px;
-    padding: 10px 15px;
-    margin: 0 auto;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f0f4c3;
-    border: 1px solid #e0e0b0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 1100;
-    font-size: 14px;
-}
-
 .share-icon {
     width: 20px;
     height: 20px;
