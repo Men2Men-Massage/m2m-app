@@ -161,17 +161,17 @@ const Home: NextPage = () => {
       <div className="container" style={{ display: 'none' }}>
         <h1>M2M Payment Calculator</h1>
         
-        {/* Android and iOS installation banners */}
-        <div id="android-banner" className="install-banner" style={{ display: 'none' }}>
-          <div>📱 Install this app on your device for easy access</div>
-          <button id="install-button">Install</button>
-          <span className="close-banner">&times;</span>
-        </div>
-        
-        <div id="ios-banner" className="install-banner" style={{ display: 'none' }}>
-          <div>📱 Install this app by tapping <img src="/icons/share-icon.png" alt="Share" className="share-icon" /> and then "Add to Home Screen"</div>
-          <span className="close-banner">&times;</span>
-        </div>
+        {/* Android and iOS installation banners - Positioned outside the main container for fixed bottom positioning */}
+<div id="android-banner" className="install-banner" style={{ display: 'none' }}>
+  <div>📱 Install this app for easy access</div>
+  <button id="install-button">Install</button>
+  <span className="close-banner">&times;</span>
+</div>
+
+<div id="ios-banner" className="install-banner" style={{ display: 'none' }}>
+  <div>📱 Install by tapping <img src="/icons/share-icon.png" alt="Share" className="share-icon" /> and then "Add to Home Screen"</div>
+  <span className="close-banner">&times;</span>
+</div>
         
         <div className="instructions-container">
           <div className="instructions-header">
