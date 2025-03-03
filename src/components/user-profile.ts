@@ -183,6 +183,9 @@ export class UserProfile {
     
     alert('Your account has been deleted successfully');
     
+    // Hide all app UI elements
+    this.hideAllAppElements();
+    
     // Redirect to login
     this.onLogout();
   }
@@ -199,6 +202,54 @@ export class UserProfile {
       accessCodeInput.value = '';
     }
     
+    // Hide all app UI elements
+    this.hideAllAppElements();
+    
     this.onLogout();
+  }
+  
+  /**
+   * Hide all app UI elements
+   */
+  private hideAllAppElements(): void {
+    // Hide navigation bar
+    const navBar = document.querySelector('.bottom-nav') as HTMLElement;
+    if (navBar) {
+      navBar.style.display = 'none';
+    }
+    
+    // Hide main container
+    const container = document.querySelector('.container') as HTMLElement;
+    if (container) {
+      container.style.display = 'none';
+    }
+    
+    // Hide history page
+    const historyPage = document.getElementById('history-page') as HTMLElement;
+    if (historyPage) {
+      historyPage.style.display = 'none';
+    }
+    
+    // Hide profile page
+    if (this.profilePage) {
+      this.profilePage.style.display = 'none';
+    }
+    
+    // Hide user name element
+    const userNameEl = document.getElementById('user-name') as HTMLElement;
+    if (userNameEl) {
+      userNameEl.style.display = 'none';
+    }
+    
+    // Hide banners
+    const androidBanner = document.getElementById('android-banner') as HTMLElement;
+    if (androidBanner) {
+      androidBanner.style.display = 'none';
+    }
+    
+    const iosBanner = document.getElementById('ios-banner') as HTMLElement;
+    if (iosBanner) {
+      iosBanner.style.display = 'none';
+    }
   }
 }
