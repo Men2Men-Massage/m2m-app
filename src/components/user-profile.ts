@@ -56,7 +56,13 @@ export class UserProfile {
     });
     
     // Profile image update
+    const changePhotoBtn = document.getElementById('change-photo-btn') as HTMLElement;
     const profileImageUpdateInput = document.getElementById('profile-image-update-input') as HTMLInputElement;
+    
+    changePhotoBtn.addEventListener('click', () => {
+      profileImageUpdateInput.click();
+    });
+    
     profileImageUpdateInput.addEventListener('change', (e) => this.updateProfileImage(e));
     
     // Close modal when clicking outside
@@ -186,6 +192,13 @@ export class UserProfile {
    */
   private logout(): void {
     StorageService.clearAuthentication();
+    
+    // Reset the access code input
+    const accessCodeInput = document.getElementById('access-code') as HTMLInputElement;
+    if (accessCodeInput) {
+      accessCodeInput.value = '';
+    }
+    
     this.onLogout();
   }
 }
