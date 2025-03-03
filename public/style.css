@@ -218,9 +218,9 @@ button#reset-button:hover {
     font-weight: bold;
 }
 
-/* Corrige el estilo del banner de instalación */
+/* Modify the installation banner styling */
 .install-banner {
-    position: relative; /* Cambiado de fixed a relative */
+    position: relative; /* Changed from fixed to relative */
     top: auto;
     left: auto;
     transform: none;
@@ -235,8 +235,44 @@ button#reset-button:hover {
     background-color: #f0f4c3;
     border: 1px solid #e0e0b0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 100;
+    z-index: 100; /* Lowered z-index */
     font-size: 14px;
+}
+
+/* Fix profile page bottom spacing */
+#profile-box {
+    background: white;
+    padding: 20px 15px 150px; /* Increased bottom padding to allow scrolling past the navigation bar */
+    text-align: left;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+/* Ensure proper spacing for the bottom navigation bar on different devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    #profile-page, #history-page, .container {
+        padding-bottom: calc(115px + env(safe-area-inset-bottom));
+    }
+    
+    #profile-box {
+        padding-bottom: calc(150px + env(safe-area-inset-bottom));
+    }
+}
+
+/* For non-iOS devices or when not in standalone mode */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+    #profile-page, #history-page, .container {
+        padding-bottom: 115px;
+    }
+    
+    #profile-box {
+        padding-bottom: 150px;
+    }
 }
 
 #android-banner {
