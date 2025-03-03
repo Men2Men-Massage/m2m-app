@@ -1,7 +1,4 @@
-/* Import your existing CSS here */
-@import url('../public/style.css');
-
-/* Add any additional global styles */
+/* Base styles */
 html,
 body {
   padding: 0;
@@ -13,7 +10,13 @@ body {
   box-sizing: border-box;
 }
 
-/* Additional responsive tweaks if needed */
+/* Make sure display:none elements are actually hidden */
+[style*="display: none"],
+[style*="display:none"] {
+  display: none !important;
+}
+
+/* Additional responsive tweaks */
 @media (max-width: 600px) {
   body {
     padding: 0;
