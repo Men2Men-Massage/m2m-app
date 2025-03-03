@@ -297,16 +297,16 @@ const Home: NextPage = () => {
       </div>
 
       {/* Installation Banners - Positioned at bottom, outside main container */}
-      <div id="android-banner" className="install-banner" style={{ display: 'none' }}>
-        <div>📱 Install this app for easy access</div>
-        <button id="install-button">Install</button>
-        <span className="close-banner">&times;</span>
-      </div>
-      
-      <div id="ios-banner" className="install-banner" style={{ display: 'none' }}>
-        <div>📱 Install by tapping <img src="/icons/share-icon.png" alt="Share" className="share-icon" /> and then "Add to Home Screen"</div>
-        <span className="close-banner">&times;</span>
-      </div>
+<div id="android-banner" className="install-banner" style={{ display: 'none' }}>
+  <div>📱 Installa questa app per un accesso rapido</div>
+  <button id="install-button">Installa</button>
+  <span className="close-banner">&times;</span>
+</div>
+
+<div id="ios-banner" className="install-banner" style={{ display: 'none' }}>
+  <div>📱 Installa toccando <span style={{ display: 'inline-block', verticalAlign: 'middle', margin: '0 2px' }}>⬆</span> e poi "Aggiungi a Home"</div>
+  <span className="close-banner">&times;</span>
+</div>
 
       {/* Navigation Bar */}
       <div className="bottom-nav" style={{ display: 'none' }}>
