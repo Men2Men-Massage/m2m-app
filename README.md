@@ -16,16 +16,20 @@ This is a TypeScript implementation of the M2M Payment Calculator, a Progressive
 
 ```
 m2m-payment-calculator/
+├── pages/
+│   ├── api/
+│   │   └── send-giftcard-request.ts
+│   ├── _app.tsx
+│   ├── _document.tsx
+│   └── index.tsx
 ├── public/
 │   ├── icons/
 │   │   ├── icon-192x192.png
 │   │   └── icon-512x512.png
-│   ├── index.html
 │   ├── manifest.json
-│   └── service-worker.js
+│   ├── service-worker.js
+│   └── style.css
 ├── src/
-│   ├── api/
-│   │   └── send-giftcard-request.ts
 │   ├── components/
 │   │   ├── auth.ts
 │   │   ├── payment-calculator.ts
@@ -37,8 +41,10 @@ m2m-payment-calculator/
 │   ├── utils/
 │   │   ├── helpers.ts
 │   │   └── storage-service.ts
-│   ├── app.ts
-│   └── style.css
+│   └── app.ts
+├── styles/
+│   └── globals.css
+├── next-env.d.ts
 ├── package.json
 ├── tsconfig.json
 └── README.md
