@@ -133,11 +133,9 @@ class App {
     // Close buttons for banners
     document.querySelectorAll('.close-banner').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const banner = (e.currentTarget as HTMLElement).closest('.install-banner') as HTMLElement;
+        const banner = (e.currentTarget as HTMLElement).parentElement;
         if (banner) {
           banner.style.display = 'none';
-          // Salviamo in localStorage per non mostrare più il banner
-          localStorage.setItem('banner-closed', 'true');
         }
       });
     });
@@ -337,11 +335,6 @@ class App {
     // Only show if available
     if (!this.androidBanner || !this.iosBanner) return;
     
-    // Se l'utente ha già chiuso il banner, non mostrarlo più
-    if (localStorage.getItem('banner-closed') === 'true') {
-      return;
-    }
-    
     let deferredPrompt: any;
 
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -349,13 +342,7 @@ class App {
       deferredPrompt = e;
 
       if (!window.matchMedia('(display-mode: standalone)').matches) {
-        // Assicuriamoci che il banner Android sia correttamente posizionato e formattato
-        this.androidBanner!.style.display = 'flex';
-        this.androidBanner!.style.position = 'fixed';
-        this.androidBanner!.style.bottom = '85px';
-        this.androidBanner!.style.left = '0';
-        this.androidBanner!.style.width = '100%';
-        this.androidBanner!.style.zIndex = '999';
+        this.androidBanner!.style.display = 'block';
       }
     });
 
@@ -374,34 +361,8 @@ class App {
     }
 
     if (isIos() && !isInStandaloneMode()) {
-      // Assicuriamoci che il banner iOS sia correttamente posizionato e formattato
-      this.iosBanner!.style.display = 'flex';
-      this.iosBanner!.style.position = 'fixed';
-      this.iosBanner!.style.bottom = '85px';
-      this.iosBanner!.style.left = '0';
-      this.iosBanner!.style.width = '100%';
-      this.iosBanner!.style.height = 'auto';
-      this.iosBanner!.style.maxHeight = '80px';
-      this.iosBanner!.style.zIndex = '999';
-      this.iosBanner!.style.backgroundColor = '#fff8e1';
-      
-      // Supporto per iOS con notch
-      if (window.CSS && CSS.supports('padding-bottom', 'env(safe-area-inset-bottom)')) {
-        this.iosBanner!.style.bottom = 'calc(85px + env(safe-area-inset-bottom))';
-      }
+      this.iosBanner!.style.display = 'block';
     }
-    
-    // Aggiungiamo gestori eventi per chiudere i banner
-    document.querySelectorAll('.close-banner').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const banner = (e.currentTarget as HTMLElement).closest('.install-banner') as HTMLElement;
-        if (banner) {
-          banner.style.display = 'none';
-          // Salviamo in localStorage per non mostrare più il banner
-          localStorage.setItem('banner-closed', 'true');
-        }
-      });
-    });
   }
   
   /**
