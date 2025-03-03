@@ -39,7 +39,7 @@ export class AuthModule {
   private initEventListeners(): void {
     // Code verification
     const accessCodeInput = document.getElementById('access-code') as HTMLInputElement;
-    const checkCodeButton = accessCodeInput.nextElementSibling as HTMLButtonElement;
+    const checkCodeButton = this.codeSection.querySelector('button') as HTMLButtonElement;
     
     checkCodeButton.addEventListener('click', () => this.checkCode());
     accessCodeInput.addEventListener('keypress', (e) => {
@@ -92,10 +92,23 @@ export class AuthModule {
    * Show the authentication overlay
    */
   private showAuthOverlay(): void {
-    this.authOverlay.style.display = 'flex';
-    this.navBar.style.display = 'none';
+    // Hide all app elements
+    this.hideAppElements();
     
-    // Ensure other elements are not visible
+    // Show auth overlay
+    this.authOverlay.style.display = 'flex';
+  }
+  
+  /**
+   * Hide all app elements
+   */
+  private hideAppElements(): void {
+    // Hide navigation bar
+    if (this.navBar) {
+      this.navBar.style.display = 'none';
+    }
+    
+    // Hide other app elements
     const container = document.querySelector('.container') as HTMLElement;
     if (container) container.style.display = 'none';
     
@@ -107,6 +120,13 @@ export class AuthModule {
     
     const userNameEl = document.getElementById('user-name') as HTMLElement;
     if (userNameEl) userNameEl.style.display = 'none';
+    
+    // Hide banners
+    const androidBanner = document.getElementById('android-banner') as HTMLElement;
+    if (androidBanner) androidBanner.style.display = 'none';
+    
+    const iosBanner = document.getElementById('ios-banner') as HTMLElement;
+    if (iosBanner) iosBanner.style.display = 'none';
   }
   
   /**
