@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src --ext .ts,.tsx",
+    "lint": "eslint src pages --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
@@ -19,6 +19,7 @@
     "@types/node": "^18.15.11",
     "@types/nodemailer": "^6.4.8",
     "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "eslint": "^8.38.0",
