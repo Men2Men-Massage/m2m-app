@@ -19,6 +19,7 @@ class App {
   private navItems: NodeListOf<Element> | null = null;
   private androidBanner: HTMLElement | null = null;
   private iosBanner: HTMLElement | null = null;
+  private navBar: HTMLElement | null = null;
   
   private authModule: AuthModule | null = null;
   private paymentCalculator: PaymentCalculator | null = null;
@@ -72,6 +73,7 @@ class App {
       this.navItems = document.querySelectorAll('.nav-item');
       this.androidBanner = document.getElementById('android-banner');
       this.iosBanner = document.getElementById('ios-banner');
+      this.navBar = document.querySelector('.bottom-nav');
       
       if (!this.container || !this.historyPage || !this.profilePage || !this.userNameEl) {
         console.error('Required DOM elements not found');
@@ -183,9 +185,8 @@ class App {
     this.userNameEl.style.display = 'block';
     
     // Show navigation bar
-    const navBar = document.querySelector('.bottom-nav') as HTMLElement | null;
-    if (navBar) {
-      navBar.style.display = 'flex';
+    if (this.navBar) {
+      this.navBar.style.display = 'flex';
     }
     
     // Set home tab as active
@@ -279,8 +280,52 @@ class App {
    * Handle logout
    */
   private handleLogout(): void {
+    // Hide all app elements
+    this.hideAppElements();
+    
     // Re-check authentication which will show the login screen
     this.checkAuthentication();
+    
+    // Reinitialize event listeners
+    if (this.authModule) {
+      this.authModule.initEventListeners();
+    }
+  }
+  
+  /**
+   * Hide all app elements
+   */
+  private hideAppElements(): void {
+    // Hide navigation bar
+    if (this.navBar) {
+      this.navBar.style.display = 'none';
+    }
+    
+    // Hide other app elements
+    if (this.container) {
+      this.container.style.display = 'none';
+    }
+    
+    if (this.historyPage) {
+      this.historyPage.style.display = 'none';
+    }
+    
+    if (this.profilePage) {
+      this.profilePage.style.display = 'none';
+    }
+    
+    if (this.userNameEl) {
+      this.userNameEl.style.display = 'none';
+    }
+    
+    // Hide banners
+    if (this.androidBanner) {
+      this.androidBanner.style.display = 'none';
+    }
+    
+    if (this.iosBanner) {
+      this.iosBanner.style.display = 'none';
+    }
   }
   
   /**
