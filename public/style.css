@@ -1761,3 +1761,66 @@ button#reset-button:hover {
   line-height: 1.5;
   font-weight: 500;
 }
+
+/* Añade estos estilos al final de tu archivo public/style.css */
+
+/* Fix para los botones de navegación del calendario */
+#prev-month-btn, #next-month-btn {
+    font-size: 16px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: auto;
+    height: auto;
+    min-width: 40px;
+    min-height: 30px;
+    max-width: 40px;
+    max-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+}
+
+#prev-month-btn:hover, #next-month-btn:hover {
+    background-color: #e0e0e0;
+    transform: none;
+}
+
+/* Fix para el modal de Gift Card Payment */
+#giftcard-request-modal .modal-content,
+#giftcard-request-modal .giftcard-request-modal-content {
+    background-color: #ffffff;
+    opacity: 1;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.important-warning {
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9800;
+    color: #e65100;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 0 4px 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.help-text {
+    font-size: 14px;
+    color: #666;
+    margin-top: 8px;
+    background-color: #f8f9fa;
+    border-left: 3px solid #4CAF50;
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
