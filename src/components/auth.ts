@@ -79,6 +79,12 @@ export class AuthModule {
     this.nameSection.style.display = 'none';
     this.codeSection.style.display = 'block';
     
+    // Clear any existing values
+    const accessCodeInput = document.getElementById('access-code') as HTMLInputElement;
+    if (accessCodeInput) {
+      accessCodeInput.value = '';
+    }
+    
     return false;
   }
   
@@ -88,6 +94,19 @@ export class AuthModule {
   private showAuthOverlay(): void {
     this.authOverlay.style.display = 'flex';
     this.navBar.style.display = 'none';
+    
+    // Ensure other elements are not visible
+    const container = document.querySelector('.container') as HTMLElement;
+    if (container) container.style.display = 'none';
+    
+    const historyPage = document.getElementById('history-page') as HTMLElement;
+    if (historyPage) historyPage.style.display = 'none';
+    
+    const profilePage = document.getElementById('profile-page') as HTMLElement;
+    if (profilePage) profilePage.style.display = 'none';
+    
+    const userNameEl = document.getElementById('user-name') as HTMLElement;
+    if (userNameEl) userNameEl.style.display = 'none';
   }
   
   /**
