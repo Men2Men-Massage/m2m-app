@@ -1,0 +1,21 @@
+/* Import your existing CSS here */
+@import url('../public/style.css');
+
+/* Add any additional global styles */
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Additional responsive tweaks if needed */
+@media (max-width: 600px) {
+  body {
+    padding: 0;
+  }
+}
