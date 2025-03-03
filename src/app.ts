@@ -109,8 +109,11 @@ class App {
     this.userNameEl.textContent = `Hello ${userData.name}`;
     this.userNameEl.style.display = 'block';
     
-    // Show navigation bar
-    document.querySelector('.bottom-nav')!.style.display = 'flex';
+    // Show navigation bar - Fix: Cast to HTMLElement
+    const navBar = document.querySelector('.bottom-nav') as HTMLElement;
+    if (navBar) {
+      navBar.style.display = 'flex';
+    }
     
     // Set home tab as active
     const homeNav = document.getElementById('home-nav') as HTMLElement;
@@ -200,8 +203,11 @@ class App {
     this.historyPage.style.display = 'none';
     this.profilePage.style.display = 'none';
     
-    // Hide navigation bar
-    document.querySelector('.bottom-nav')!.style.display = 'none';
+    // Hide navigation bar - Fix: Cast to HTMLElement
+    const navBar = document.querySelector('.bottom-nav') as HTMLElement;
+    if (navBar) {
+      navBar.style.display = 'none';
+    }
     
     this.checkAuthentication();
   }
@@ -217,23 +223,35 @@ class App {
       deferredPrompt = e;
 
       if (!window.matchMedia('(display-mode: standalone)').matches) {
-        (document.getElementById('android-banner') as HTMLElement).style.display = 'flex';
+        const androidBanner = document.getElementById('android-banner') as HTMLElement;
+        if (androidBanner) {
+          androidBanner.style.display = 'flex';
+        }
       }
     });
 
-    (document.getElementById('install-button') as HTMLElement).addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          (document.getElementById('android-banner') as HTMLElement).style.display = 'none';
+    const installButton = document.getElementById('install-button') as HTMLElement;
+    if (installButton) {
+      installButton.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            const androidBanner = document.getElementById('android-banner') as HTMLElement;
+            if (androidBanner) {
+              androidBanner.style.display = 'none';
+            }
+          }
+          deferredPrompt = null;
         }
-        deferredPrompt = null;
-      }
-    });
+      });
+    }
 
     if (isIos() && !isInStandaloneMode()) {
-      (document.getElementById('ios-banner') as HTMLElement).style.display = 'flex';
+      const iosBanner = document.getElementById('ios-banner') as HTMLElement;
+      if (iosBanner) {
+        iosBanner.style.display = 'flex';
+      }
     }
   }
   
