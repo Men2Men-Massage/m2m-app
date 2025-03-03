@@ -219,98 +219,47 @@ button#reset-button:hover {
 }
 
 /* Modify the installation banner styling */
+/* Modify the installation banner styling - positioned at bottom above nav bar */
 .install-banner {
-    position: relative; /* Changed from fixed to relative */
-    top: auto;
-    left: auto;
-    transform: none;
+    position: fixed;
+    bottom: 85px; /* Position above the bottom navigation bar (which is 80px height + 15px bottom) */
+    left: 0;
     width: 100%;
-    max-width: 100%;
     padding: 10px 15px;
-    margin: 10px 0;
-    border-radius: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #f0f4c3;
     border: 1px solid #e0e0b0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 100; /* Lowered z-index */
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.15); /* Shadow casts upward */
+    z-index: 999; /* Below nav bar (1001) but above content */
     font-size: 14px;
 }
 
-/* Fix profile page bottom spacing */
-#profile-box {
-    background: white;
-    padding: 20px 15px 150px; /* Increased bottom padding to allow scrolling past the navigation bar */
-    text-align: left;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    box-sizing: border-box;
-    overflow-x: hidden;
-}
-
-/* Ensure proper spacing for the bottom navigation bar on different devices */
+/* iOS-specific position adjustments */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
-    #profile-page, #history-page, .container {
-        padding-bottom: calc(115px + env(safe-area-inset-bottom));
-    }
-    
-    #profile-box {
-        padding-bottom: calc(150px + env(safe-area-inset-bottom));
+    .install-banner {
+        bottom: calc(85px + env(safe-area-inset-bottom)); /* Adjust for iOS safe area */
     }
 }
 
-/* For non-iOS devices or when not in standalone mode */
-@media (display-mode: standalone), (display-mode: fullscreen) {
-    #profile-page, #history-page, .container {
-        padding-bottom: 115px;
-    }
-    
-    #profile-box {
-        padding-bottom: 150px;
-    }
-}
-
+/* Banner styles for device-specific versions */
 #android-banner {
     background-color: #e8f5e9;
-    border: 2px solid #4CAF50;
+    border-top: 2px solid #4CAF50;
 }
 
 #ios-banner {
     background-color: #fff3e0;
-    border: 2px solid #ff9800;
+    border-top: 2px solid #ff9800;
 }
 
-.install-banner button {
-    background: none;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-#android-banner button {
-    background-color: #376FE9;
-    color: white;
-}
-
-#ios-banner button {
-    background-color: #ff9800;
-    color: white;
-}
-
+/* Close button for banner */
 .close-banner {
-    position: absolute;
-    right: 10px;
-    top: 5px;
     cursor: pointer;
     font-weight: bold;
     color: #666;
+    padding: 0 5px;
 }
 
 /* Calendar */
