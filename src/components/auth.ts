@@ -36,7 +36,7 @@ export class AuthModule {
   /**
    * Initialize event listeners for the authentication UI
    */
-  private initEventListeners(): void {
+  public initEventListeners(): void {
     // Code verification
     const accessCodeInput = document.getElementById('access-code') as HTMLInputElement;
     const checkCodeButton = this.codeSection.querySelector('button') as HTMLButtonElement;
@@ -69,6 +69,8 @@ export class AuthModule {
     const userData = StorageService.getUserData();
     
     if (isAuth && userData.name) {
+      // Ensure auth overlay is hidden if user is authenticated
+      this.hideAuthOverlay();
       this.onAuthenticated(userData);
       return true;
     }
@@ -134,7 +136,6 @@ export class AuthModule {
    */
   private hideAuthOverlay(): void {
     this.authOverlay.style.display = 'none';
-    this.navBar.style.display = 'flex';
   }
   
   /**
@@ -149,6 +150,7 @@ export class AuthModule {
       // If user has a profile, log them in
       if (userData.name) {
         StorageService.setAuthenticated();
+        this.hideAuthOverlay();
         this.onAuthenticated(userData);
       } else {
         // Otherwise show profile creation form
