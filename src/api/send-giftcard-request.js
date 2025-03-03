@@ -1,42 +1,49 @@
-// api/send-giftcard-request.js
-const nodemailer = require('nodemailer');
+import { NextApiRequest, NextApiResponse } from 'next';
+import { createTransport } from 'nodemailer';
+import { GiftCardEmailRequest } from '../types';
 
-export default async function handler(req, res) {
-  // Solo richieste POST
+/**
+ * API endpoint for sending gift card payment requests
+ */
+export default async function handler(
+  req: NextApiRequest, 
+  res: NextApiResponse
+): Promise<void> {
+  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed. Please use POST.' });
   }
 
   try {
-    const { userName, date, amount, giftCardNumber, comment } = req.body;
+    const { userName, date, amount, giftCardNumber, comment } = req.body as GiftCardEmailRequest;
 
-    // Validazione
+    // Validation
     if (!userName || !date || !amount || !comment) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Configura il trasportatore SMTP
-    const transporter = nodemailer.createTransport({
+    // Configure SMTP transporter
+    const transporter = createTransport({
       host: 'smtp-relay.brevo.com',
       port: 587,
-      secure: false, // true per 465, false per altre porte
+      secure: false, // true for 465, false for other ports
       auth: {
         user: 'men2men.center@gmail.com',
         pass: process.env.BREVO_SMTP_KEY,
       },
     });
 
-    // Contenuto dell'email
+    // Email content
     const emailContent = `
       <h2>Gift Card Payment Request</h2>
       <p><strong>Therapist:</strong> ${userName}</p>
       <p><strong>Date:</strong> ${date}</p>
-      <p><strong>Gift Card Amount:</strong> €${parseFloat(amount).toFixed(2)}</p>
+      <p><strong>Gift Card Amount:</strong> €${parseFloat(amount.toString()).toFixed(2)}</p>
       ${giftCardNumber ? `<p><strong>Gift Card Number:</strong> ${giftCardNumber}</p>` : ''}
       <p><strong>Comment:</strong> ${comment}</p>
     `;
 
-    // Opzioni email
+    // Email options
     const mailOptions = {
       from: `"${userName}" <men2men.center@gmail.com>`,
       to: 'info@men2men.center',
@@ -44,7 +51,7 @@ export default async function handler(req, res) {
       html: emailContent
     };
 
-    // Invia email
+    // Send email
     const info = await transporter.sendMail(mailOptions);
     console.log('Email sent: %s', info.messageId);
 
@@ -57,7 +64,7 @@ export default async function handler(req, res) {
     console.error('Email sending error:', error);
     return res.status(500).json({ 
       error: 'Failed to send email', 
-      details: error.message 
+      details: (error as Error).message 
     });
   }
 }
