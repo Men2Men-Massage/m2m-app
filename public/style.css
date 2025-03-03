@@ -220,46 +220,98 @@ button#reset-button:hover {
 
 /* Modify the installation banner styling */
 /* Modify the installation banner styling - positioned at bottom above nav bar */
+/* Correzione per i banner di installazione */
 .install-banner {
     position: fixed;
-    bottom: 85px; /* Position above the bottom navigation bar (which is 80px height + 15px bottom) */
+    bottom: 85px; /* Sopra la barra di navigazione */
     left: 0;
+    right: 0;
     width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 80px; /* Altezza massima limitata */
     padding: 10px 15px;
+    margin: 0;
+    z-index: 999;
+    border-radius: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f0f4c3;
-    border: 1px solid #e0e0b0;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.15); /* Shadow casts upward */
-    z-index: 999; /* Below nav bar (1001) but above content */
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
     font-size: 14px;
+    box-sizing: border-box;
+    overflow: visible; /* Previene il contenuto nascosto */
+    background-color: #fff8e1; /* Colore di sfondo più chiaro e visibile */
 }
 
-/* iOS-specific position adjustments */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-    .install-banner {
-        bottom: calc(85px + env(safe-area-inset-bottom)); /* Adjust for iOS safe area */
-    }
+/* Versione iOS */
+#ios-banner {
+    background-color: #fff8e1;
+    border-top: 2px solid #ff9800;
 }
 
-/* Banner styles for device-specific versions */
+/* Versione Android */
 #android-banner {
     background-color: #e8f5e9;
     border-top: 2px solid #4CAF50;
 }
 
-#ios-banner {
-    background-color: #fff3e0;
-    border-top: 2px solid #ff9800;
+/* Pulsante di installazione */
+.install-banner button {
+    padding: 8px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+    min-width: auto;
+    margin: 0 0 0 10px;
+    flex-shrink: 0;
+    background-color: #ff9800;
+    color: white;
 }
 
-/* Close button for banner */
+/* Testo del banner */
+.install-banner div {
+    flex: 1;
+    font-size: 13px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Pulsante di chiusura */
 .close-banner {
+    position: relative;
+    top: auto;
+    right: auto;
+    padding: 0 5px;
+    margin-left: 5px;
     cursor: pointer;
     font-weight: bold;
     color: #666;
-    padding: 0 5px;
+    flex-shrink: 0;
+    font-size: 16px;
+}
+
+/* Adattamento per iOS */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .install-banner {
+        bottom: calc(85px + env(safe-area-inset-bottom)); /* Adattamento per iPhone con notch */
+    }
+}
+
+/* Adattamento per schermi molto piccoli */
+@media (max-width: 360px) {
+    .install-banner {
+        padding: 8px;
+    }
+    
+    .install-banner div {
+        font-size: 12px;
+    }
+    
+    .install-banner button {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
 }
 
 /* Calendar */
