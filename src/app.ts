@@ -11,48 +11,96 @@ import { UtilityCalculator } from './components/utility-calculator';
  * Main Application Class
  */
 class App {
-  private container: HTMLElement;
-  private historyPage: HTMLElement;
-  private profilePage: HTMLElement;
-  private userNameEl: HTMLElement;
-  private navItems: NodeListOf<Element>;
+  private container: HTMLElement | null;
+  private historyPage: HTMLElement | null;
+  private profilePage: HTMLElement | null;
+  private userNameEl: HTMLElement | null;
+  private navItems: NodeListOf<Element> | null;
   
-  private authModule: AuthModule;
-  private paymentCalculator: PaymentCalculator;
-  private paymentHistory: PaymentHistory;
-  private userProfile: UserProfile;
-  private utilityCalculator: UtilityCalculator;
+  private authModule: AuthModule | null = null;
+  private paymentCalculator: PaymentCalculator | null = null;
+  private paymentHistory: PaymentHistory | null = null;
+  private userProfile: UserProfile | null = null;
+  private utilityCalculator: UtilityCalculator | null = null;
   
   /**
    * Initialize the application
    */
   constructor() {
-    // Main containers
-    this.container = document.querySelector('.container') as HTMLElement;
-    this.historyPage = document.getElementById('history-page') as HTMLElement;
-    this.profilePage = document.getElementById('profile-page') as HTMLElement;
-    this.userNameEl = document.getElementById('user-name') as HTMLElement;
-    this.navItems = document.querySelectorAll('.nav-item');
-    
-    // Initialize modules
-    this.authModule = new AuthModule(this.onAuthenticated.bind(this));
-    this.paymentCalculator = new PaymentCalculator();
-    this.paymentHistory = new PaymentHistory();
-    this.userProfile = new UserProfile(
-      this.handleLogout.bind(this),
-      this.showCalculator.bind(this)
-    );
-    this.utilityCalculator = new UtilityCalculator();
-    
-    this.initEventListeners();
-    this.checkAuthentication();
-    this.registerServiceWorker();
+    console.log('App constructor called');
+    // Ensure the DOM is fully loaded
+    if (typeof document !== 'undefined') {
+      this.initializeApp();
+    } else {
+      console.error('Document not available');
+    }
+  }
+  
+  /**
+   * Initialize app with DOM elements
+   */
+  private initializeApp(): void {
+    console.log('Initializing app with DOM elements');
+    try {
+      // Wait for DOM to be fully loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          this.setupApp();
+        });
+      } else {
+        this.setupApp();
+      }
+    } catch (error) {
+      console.error('Error initializing app:', error);
+    }
+  }
+  
+  /**
+   * Setup application when DOM is ready
+   */
+  private setupApp(): void {
+    console.log('Setting up app');
+    try {
+      // Main containers
+      this.container = document.querySelector('.container');
+      this.historyPage = document.getElementById('history-page');
+      this.profilePage = document.getElementById('profile-page');
+      this.userNameEl = document.getElementById('user-name');
+      this.navItems = document.querySelectorAll('.nav-item');
+      
+      if (!this.container || !this.historyPage || !this.profilePage || !this.userNameEl) {
+        console.error('Required DOM elements not found');
+        return;
+      }
+      
+      console.log('DOM elements found, initializing modules');
+      
+      // Initialize modules
+      this.authModule = new AuthModule(this.onAuthenticated.bind(this));
+      this.paymentCalculator = new PaymentCalculator();
+      this.paymentHistory = new PaymentHistory();
+      this.userProfile = new UserProfile(
+        this.handleLogout.bind(this),
+        this.showCalculator.bind(this)
+      );
+      this.utilityCalculator = new UtilityCalculator();
+      
+      this.initEventListeners();
+      this.checkAuthentication();
+      this.registerServiceWorker();
+      
+      console.log('App setup completed');
+    } catch (error) {
+      console.error('Error setting up app:', error);
+    }
   }
   
   /**
    * Initialize event listeners
    */
   private initEventListeners(): void {
+    if (!this.navItems || !this.userNameEl) return;
+    
     // Navigation
     this.navItems.forEach(item => {
       item.addEventListener('click', (e) => {
@@ -65,22 +113,36 @@ class App {
     this.userNameEl.addEventListener('click', () => this.showUserProfile());
     
     // Fresha button
-    const freshaBtn = document.getElementById('fresha-btn') as HTMLElement;
-    freshaBtn.addEventListener('click', () => {
-      window.open('https://partners.fresha.com/reports/table/appointment-summary?appointment_status=unconfirmed%2Cconfirmed%2Carrived%2Cstarted%2Ccompleted&shortcut=today', '_blank');
-    });
+    const freshaBtn = document.getElementById('fresha-btn');
+    if (freshaBtn) {
+      freshaBtn.addEventListener('click', () => {
+        window.open('https://partners.fresha.com/reports/table/appointment-summary?appointment_status=unconfirmed%2Cconfirmed%2Carrived%2Cstarted%2Ccompleted&shortcut=today', '_blank');
+      });
+    }
     
     // Instructions toggle
     this.initInstructionsToggle();
+    
+    // Close buttons for banners
+    document.querySelectorAll('.close-banner').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const banner = (e.currentTarget as HTMLElement).parentElement;
+        if (banner) {
+          banner.style.display = 'none';
+        }
+      });
+    });
   }
   
   /**
    * Initialize instructions toggle
    */
   private initInstructionsToggle(): void {
-    const toggleBtn = document.getElementById('toggle-instructions-btn') as HTMLElement;
-    const instructionsContent = document.getElementById('instructions-content') as HTMLElement;
-    const instructionsContainer = document.querySelector('.instructions-container') as HTMLElement;
+    const toggleBtn = document.getElementById('toggle-instructions-btn');
+    const instructionsContent = document.getElementById('instructions-content');
+    const instructionsContainer = document.querySelector('.instructions-container');
+
+    if (!toggleBtn || !instructionsContent || !instructionsContainer) return;
 
     // Initial state: instructions visible
     instructionsContent.classList.remove('collapsed');
@@ -98,25 +160,30 @@ class App {
    * Check authentication status
    */
   private checkAuthentication(): void {
-    this.authModule.checkAuth();
+    if (this.authModule) {
+      this.authModule.checkAuth();
+    }
   }
   
   /**
    * Handle authenticated user
    */
   private onAuthenticated(userData: UserData): void {
+    console.log('User authenticated:', userData.name);
+    if (!this.container || !this.userNameEl) return;
+    
     this.container.style.display = 'block';
     this.userNameEl.textContent = `Hello ${userData.name}`;
     this.userNameEl.style.display = 'block';
     
-    // Show navigation bar - Fix: Cast to HTMLElement
-    const navBar = document.querySelector('.bottom-nav') as HTMLElement;
+    // Show navigation bar
+    const navBar = document.querySelector('.bottom-nav') as HTMLElement | null;
     if (navBar) {
       navBar.style.display = 'flex';
     }
     
     // Set home tab as active
-    const homeNav = document.getElementById('home-nav') as HTMLElement;
+    const homeNav = document.getElementById('home-nav');
     if (homeNav) {
       homeNav.classList.add('active');
     }
@@ -128,6 +195,8 @@ class App {
    * Handle navigation between tabs
    */
   private handleNavigation(target: HTMLElement): void {
+    if (!this.navItems) return;
+    
     // Remove active class from all navigation items
     this.navItems.forEach(item => item.classList.remove('active'));
     
@@ -146,12 +215,14 @@ class App {
    * Show calculator view
    */
   public showCalculator(): void {
+    if (!this.container || !this.historyPage || !this.profilePage || !this.navItems) return;
+    
     this.container.style.display = 'block';
     this.historyPage.style.display = 'none';
     this.profilePage.style.display = 'none';
     
     // Set home tab as active
-    const homeNav = document.getElementById('home-nav') as HTMLElement;
+    const homeNav = document.getElementById('home-nav');
     if (homeNav) {
       homeNav.classList.add('active');
       this.navItems.forEach(item => {
@@ -166,12 +237,14 @@ class App {
    * Show payment history view
    */
   public showPaymentHistory(): void {
+    if (!this.container || !this.profilePage || !this.paymentHistory || !this.navItems) return;
+    
     this.container.style.display = 'none';
     this.profilePage.style.display = 'none';
     this.paymentHistory.showPaymentHistory();
     
     // Set history tab as active
-    const historyNav = document.getElementById('history-nav') as HTMLElement;
+    const historyNav = document.getElementById('history-nav');
     if (historyNav) {
       historyNav.classList.add('active');
       this.navItems.forEach(item => {
@@ -186,6 +259,8 @@ class App {
    * Show user profile view
    */
   public showUserProfile(): void {
+    if (!this.container || !this.historyPage || !this.profilePage || !this.userProfile || !this.navItems) return;
+    
     this.container.style.display = 'none';
     this.historyPage.style.display = 'none';
     this.userProfile.showProfile();
@@ -198,13 +273,15 @@ class App {
    * Handle logout
    */
   private handleLogout(): void {
+    if (!this.container || !this.userNameEl || !this.historyPage || !this.profilePage) return;
+    
     this.container.style.display = 'none';
     this.userNameEl.style.display = 'none';
     this.historyPage.style.display = 'none';
     this.profilePage.style.display = 'none';
     
-    // Hide navigation bar - Fix: Cast to HTMLElement
-    const navBar = document.querySelector('.bottom-nav') as HTMLElement;
+    // Hide navigation bar
+    const navBar = document.querySelector('.bottom-nav') as HTMLElement | null;
     if (navBar) {
       navBar.style.display = 'none';
     }
@@ -223,21 +300,21 @@ class App {
       deferredPrompt = e;
 
       if (!window.matchMedia('(display-mode: standalone)').matches) {
-        const androidBanner = document.getElementById('android-banner') as HTMLElement;
+        const androidBanner = document.getElementById('android-banner');
         if (androidBanner) {
           androidBanner.style.display = 'flex';
         }
       }
     });
 
-    const installButton = document.getElementById('install-button') as HTMLElement;
+    const installButton = document.getElementById('install-button');
     if (installButton) {
       installButton.addEventListener('click', async () => {
         if (deferredPrompt) {
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
           if (outcome === 'accepted') {
-            const androidBanner = document.getElementById('android-banner') as HTMLElement;
+            const androidBanner = document.getElementById('android-banner');
             if (androidBanner) {
               androidBanner.style.display = 'none';
             }
@@ -248,7 +325,7 @@ class App {
     }
 
     if (isIos() && !isInStandaloneMode()) {
-      const iosBanner = document.getElementById('ios-banner') as HTMLElement;
+      const iosBanner = document.getElementById('ios-banner');
       if (iosBanner) {
         iosBanner.style.display = 'flex';
       }
@@ -273,7 +350,9 @@ class App {
   }
 }
 
-// Initialize app when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  new App();
-});
+// Create a new app instance
+console.log('Creating App instance');
+const app = new App();
+
+// Export the app instance for debugging
+export default app;
