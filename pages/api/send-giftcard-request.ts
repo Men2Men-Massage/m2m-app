@@ -1,6 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createTransport } from 'nodemailer';
-import { GiftCardEmailRequest } from '../types';
+
+// Define the GiftCardEmailRequest type
+interface GiftCardEmailRequest {
+  userName: string;
+  date: string;
+  amount: number;
+  giftCardNumber?: string;
+  comment: string;
+}
 
 /**
  * API endpoint for sending gift card payment requests
