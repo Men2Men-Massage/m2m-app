@@ -218,20 +218,25 @@ button#reset-button:hover {
     font-weight: bold;
 }
 
-/* Banner installazione (PWA) */
+/* Corrige el estilo del banner de instalación */
 .install-banner {
-    padding: 15px;
-    margin: 15px 0;
+    position: relative; /* Cambiado de fixed a relative */
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 15px;
+    margin: 10px 0;
     border-radius: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
     background-color: #f0f4c3;
     border: 1px solid #e0e0b0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    width: 100%;
-    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 100;
+    font-size: 14px;
 }
 
 #android-banner {
