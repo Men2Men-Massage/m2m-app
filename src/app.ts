@@ -11,11 +11,12 @@ import { UtilityCalculator } from './components/utility-calculator';
  * Main Application Class
  */
 class App {
-  private container: HTMLElement | null;
-  private historyPage: HTMLElement | null;
-  private profilePage: HTMLElement | null;
-  private userNameEl: HTMLElement | null;
-  private navItems: NodeListOf<Element> | null;
+  // Initialize properties with null
+  private container: HTMLElement | null = null;
+  private historyPage: HTMLElement | null = null;
+  private profilePage: HTMLElement | null = null;
+  private userNameEl: HTMLElement | null = null;
+  private navItems: NodeListOf<Element> | null = null;
   
   private authModule: AuthModule | null = null;
   private paymentCalculator: PaymentCalculator | null = null;
