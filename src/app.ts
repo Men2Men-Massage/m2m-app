@@ -17,6 +17,8 @@ class App {
   private profilePage: HTMLElement | null = null;
   private userNameEl: HTMLElement | null = null;
   private navItems: NodeListOf<Element> | null = null;
+  private androidBanner: HTMLElement | null = null;
+  private iosBanner: HTMLElement | null = null;
   
   private authModule: AuthModule | null = null;
   private paymentCalculator: PaymentCalculator | null = null;
@@ -68,6 +70,8 @@ class App {
       this.profilePage = document.getElementById('profile-page');
       this.userNameEl = document.getElementById('user-name');
       this.navItems = document.querySelectorAll('.nav-item');
+      this.androidBanner = document.getElementById('android-banner');
+      this.iosBanner = document.getElementById('ios-banner');
       
       if (!this.container || !this.historyPage || !this.profilePage || !this.userNameEl) {
         console.error('Required DOM elements not found');
@@ -173,6 +177,7 @@ class App {
     console.log('User authenticated:', userData.name);
     if (!this.container || !this.userNameEl) return;
     
+    // Show main app elements
     this.container.style.display = 'block';
     this.userNameEl.textContent = `Hello ${userData.name}`;
     this.userNameEl.style.display = 'block';
@@ -274,19 +279,7 @@ class App {
    * Handle logout
    */
   private handleLogout(): void {
-    if (!this.container || !this.userNameEl || !this.historyPage || !this.profilePage) return;
-    
-    this.container.style.display = 'none';
-    this.userNameEl.style.display = 'none';
-    this.historyPage.style.display = 'none';
-    this.profilePage.style.display = 'none';
-    
-    // Hide navigation bar
-    const navBar = document.querySelector('.bottom-nav') as HTMLElement | null;
-    if (navBar) {
-      navBar.style.display = 'none';
-    }
-    
+    // Re-check authentication which will show the login screen
     this.checkAuthentication();
   }
   
@@ -294,6 +287,9 @@ class App {
    * Show install banners for PWA
    */
   private showInstallBanners(): void {
+    // Only show if available
+    if (!this.androidBanner || !this.iosBanner) return;
+    
     let deferredPrompt: any;
 
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -301,10 +297,7 @@ class App {
       deferredPrompt = e;
 
       if (!window.matchMedia('(display-mode: standalone)').matches) {
-        const androidBanner = document.getElementById('android-banner');
-        if (androidBanner) {
-          androidBanner.style.display = 'flex';
-        }
+        this.androidBanner!.style.display = 'block';
       }
     });
 
@@ -315,10 +308,7 @@ class App {
           deferredPrompt.prompt();
           const { outcome } = await deferredPrompt.userChoice;
           if (outcome === 'accepted') {
-            const androidBanner = document.getElementById('android-banner');
-            if (androidBanner) {
-              androidBanner.style.display = 'none';
-            }
+            this.androidBanner!.style.display = 'none';
           }
           deferredPrompt = null;
         }
@@ -326,10 +316,7 @@ class App {
     }
 
     if (isIos() && !isInStandaloneMode()) {
-      const iosBanner = document.getElementById('ios-banner');
-      if (iosBanner) {
-        iosBanner.style.display = 'flex';
-      }
+      this.iosBanner!.style.display = 'block';
     }
   }
   
