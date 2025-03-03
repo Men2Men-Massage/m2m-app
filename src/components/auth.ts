@@ -49,8 +49,14 @@ export class AuthModule {
     // Profile image preview
     this.profileImageInput.addEventListener('change', (e) => this.previewProfileImage(e));
     
+    // Select image button
+    const selectImageBtn = document.getElementById('select-image-btn') as HTMLButtonElement;
+    selectImageBtn.addEventListener('click', () => {
+      this.profileImageInput.click();
+    });
+    
     // Save profile button
-    const saveProfileButton = this.nameSection.querySelector('button') as HTMLButtonElement;
+    const saveProfileButton = this.nameSection.querySelector('button:last-child') as HTMLButtonElement;
     saveProfileButton.addEventListener('click', () => this.saveUserProfile());
   }
   
@@ -68,6 +74,11 @@ export class AuthModule {
     }
     
     this.showAuthOverlay();
+    
+    // Reset to code section on new auth
+    this.nameSection.style.display = 'none';
+    this.codeSection.style.display = 'block';
+    
     return false;
   }
   
