@@ -1824,3 +1824,97 @@ button#reset-button:hover {
     gap: 8px;
     margin-bottom: 15px;
 }
+
+/* Estilos para el banner de instalación */
+.install-banner {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    padding: 10px 15px;
+    margin: 0 auto;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f4c3;
+    border: 1px solid #e0e0b0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 1100;
+    font-size: 14px;
+}
+
+.share-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin: 0 2px;
+}
+
+/* Modal de Gift Card Payment */
+.giftcard-request-modal-content {
+    max-height: 85vh;
+    overflow-y: auto;
+    padding-bottom: 80px; /* Espacio para asegurar que el botón sea visible */
+}
+
+@media (max-width: 480px) {
+    .giftcard-request-form {
+        font-size: 14px;
+    }
+    
+    .giftcard-request-form input, 
+    .giftcard-request-form textarea,
+    .giftcard-request-form button {
+        font-size: 14px;
+        padding: 8px;
+    }
+    
+    .giftcard-request-form .form-group {
+        margin-bottom: 10px;
+    }
+    
+    .important-warning {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+    
+    .help-text {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+}
+
+/* Fix para la página de perfil */
+.profile-header {
+    position: relative;
+}
+
+.profile-header h2 {
+    margin-top: 0;
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Fix para el popup de autenticación */
+#auth-overlay {
+    background: rgba(0, 0, 0, 0.9); /* Fondo más oscuro */
+}
+
+#code-section input {
+    margin-bottom: 15px;
+}
+
+/* Estilos para asegurar que el botón de envío de gift card sea visible */
+#giftcard-request-modal {
+    padding-bottom: 80px;
+}
+
+#send-giftcard-request-btn {
+    position: relative;
+    margin-top: 20px;
+}
