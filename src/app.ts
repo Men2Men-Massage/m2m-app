@@ -342,7 +342,9 @@ class App {
       deferredPrompt = e;
 
       if (!window.matchMedia('(display-mode: standalone)').matches) {
+        // Position the banner at the bottom of the page above the nav bar
         this.androidBanner!.style.display = 'block';
+        document.body.appendChild(this.androidBanner!); // Move to end of body to ensure proper stacking
       }
     });
 
@@ -362,6 +364,7 @@ class App {
 
     if (isIos() && !isInStandaloneMode()) {
       this.iosBanner!.style.display = 'block';
+      document.body.appendChild(this.iosBanner!); // Move to end of body to ensure proper stacking
     }
   }
   
