@@ -1,8 +1,8 @@
 const CACHE_NAME = 'm2m-calc-v1';
 const ASSETS = [
   '/',
-  '/index.html',
   '/manifest.json',
+  '/style.css',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png'
 ];
