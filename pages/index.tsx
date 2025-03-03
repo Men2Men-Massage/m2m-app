@@ -62,7 +62,7 @@ const Home: NextPage = () => {
             </div>
             <div className="input-group">
               <label htmlFor="user-email-input">Email (optional)</label>
-              <input type="email" id="user-email-input" placeholder="Enter your email" />
+              <input type="email" id="user-email-input" placeholder="Enter your email" inputMode="email" />
             </div>
             <div className="input-group profile-image-group">
               <label htmlFor="profile-image-input">Profile Image (optional)</label>
@@ -87,14 +87,15 @@ const Home: NextPage = () => {
       <div id="profile-page" style={{ display: 'none' }}>
         <div id="profile-box">
           <div className="profile-header">
+            <h2>User Profile</h2>
             <div className="profile-image-large" id="profile-image-large">
               <i className="fas fa-user"></i>
             </div>
             <div className="profile-actions">
-              <button className="change-photo-btn">
+              <button className="change-photo-btn" id="change-photo-btn">
                 <i className="fas fa-camera"></i> Change Photo
-                <input type="file" id="profile-image-update-input" accept="image/*" style={{ display: 'none' }} />
               </button>
+              <input type="file" id="profile-image-update-input" accept="image/*" style={{ display: 'none' }} />
             </div>
           </div>
           <div className="profile-info">
@@ -109,7 +110,7 @@ const Home: NextPage = () => {
             </div>
             <div className="input-group">
               <label htmlFor="edit-email-input">Email (optional)</label>
-              <input type="email" id="edit-email-input" placeholder="Enter your email" />
+              <input type="email" id="edit-email-input" placeholder="Enter your email" inputMode="email" />
             </div>
             <button className="update-btn">Update Profile</button>
           </div>
@@ -297,13 +298,13 @@ const Home: NextPage = () => {
 
       {/* Android and iOS installation banners */}
       <div id="android-banner" className="install-banner" style={{ display: 'none' }}>
-        <div>Install this app on your device for easy access</div>
+        <div>📱 Install this app on your device for easy access</div>
         <button id="install-button">Install</button>
         <span className="close-banner">&times;</span>
       </div>
       
       <div id="ios-banner" className="install-banner" style={{ display: 'none' }}>
-        <div>Install this app by tapping <i className="fas fa-share-square"></i> and then "Add to Home Screen"</div>
+        <div>📱 Install this app by tapping <img src="/icons/share-icon.png" alt="Share" className="share-icon" /> and then "Add to Home Screen"</div>
         <span className="close-banner">&times;</span>
       </div>
 
