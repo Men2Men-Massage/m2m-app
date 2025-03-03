@@ -199,7 +199,7 @@ const Home: NextPage = () => {
               <i className="fas fa-calculator"></i> Calculator
             </button>
             <button id="fresha-btn">
-              <i className="fas fa-calendar-check"></i> Fresha
+              <i className="fas fa-calendar-check"></i> Daily Report
             </button>
           </div>
         </div>
@@ -249,21 +249,23 @@ const Home: NextPage = () => {
           </div>
           <div className="important-warning">
             <i className="fas fa-exclamation-triangle"></i>
-            <p>IMPORTANT: Only request gift card payments AFTER you've completed the center payment (40%).</p>
+            <p>IMPORTANT: Request payment only after adding the gift card correctly in Fresha and paying the rent.</p>
           </div>
           <form className="giftcard-request-form">
             <div className="form-group">
               <label htmlFor="giftcard-number">Gift Card Number (optional)</label>
               <input type="text" id="giftcard-number" placeholder="Enter gift card number if available" />
-              <div className="help-text">
-                <i className="fas fa-info-circle"></i>
-                If you have the gift card number, enter it here.
-              </div>
             </div>
             <div className="form-group">
               <label htmlFor="giftcard-comment">Comment <span className="required">*</span></label>
               <textarea id="giftcard-comment" placeholder="Add details about your shift, etc."></textarea>
             </div>
+            
+            <div className="help-text">
+              <i className="fas fa-info-circle"></i>
+              Enter your payment details including IBAN and your information.
+            </div>
+            
             <div id="giftcard-request-error" className="error-message" style={{ display: 'none' }}></div>
             <div id="giftcard-request-success" className="success-message" style={{ display: 'none' }}>
               Gift card request sent successfully!
