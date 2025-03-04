@@ -4,6 +4,7 @@
 export class UtilityCalculator {
   private calculatorModal: HTMLElement;
   private calculatorDisplay: HTMLInputElement;
+  private calculatorCopyBtn: HTMLElement;
   
   /**
    * Create a UtilityCalculator instance
@@ -11,6 +12,7 @@ export class UtilityCalculator {
   constructor() {
     this.calculatorModal = document.getElementById('calculator-modal') as HTMLElement;
     this.calculatorDisplay = document.getElementById('calculator-display') as HTMLInputElement;
+    this.calculatorCopyBtn = document.getElementById('calculator-copy-btn') as HTMLElement;
     
     this.initEventListeners();
   }
@@ -26,6 +28,12 @@ export class UtilityCalculator {
     // Close calculator button
     const closeCalculatorBtn = document.querySelector('.close-calculator') as HTMLElement;
     closeCalculatorBtn.addEventListener('click', () => this.closeCalculator());
+    
+    // Copy button
+    this.calculatorCopyBtn.addEventListener('click', () => this.copyCalculatorValue());
+    
+    // Update copy button visibility on calculator display input changes
+    this.calculatorDisplay.addEventListener('input', () => this.updateCopyButtonVisibility());
     
     // Calculator buttons
     const calcButtons = document.querySelectorAll('.calc-btn');
@@ -49,6 +57,9 @@ export class UtilityCalculator {
         } else {
           this.appendToCalculator(buttonText);
         }
+        
+        // Update copy button visibility after each operation
+        this.updateCopyButtonVisibility();
       });
     });
     
@@ -69,6 +80,7 @@ export class UtilityCalculator {
   public openCalculator(): void {
     this.calculatorModal.style.display = 'flex';
     this.calculatorDisplay.value = '';
+    this.updateCopyButtonVisibility();
   }
   
   /**
@@ -76,6 +88,39 @@ export class UtilityCalculator {
    */
   public closeCalculator(): void {
     this.calculatorModal.style.display = 'none';
+  }
+  
+  /**
+   * Update copy button visibility based on calculator display content
+   */
+  private updateCopyButtonVisibility(): void {
+    if (this.calculatorDisplay.value.trim()) {
+      this.calculatorCopyBtn.style.display = 'block';
+    } else {
+      this.calculatorCopyBtn.style.display = 'none';
+    }
+  }
+  
+  /**
+   * Copy calculator value to clipboard
+   */
+  private copyCalculatorValue(): void {
+    const textToCopy = this.calculatorDisplay.value;
+    if (textToCopy) {
+      navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+          // Show brief success animation or feedback
+          const originalIcon = this.calculatorCopyBtn.innerHTML;
+          this.calculatorCopyBtn.innerHTML = '<i class="fas fa-check"></i>';
+          setTimeout(() => {
+            this.calculatorCopyBtn.innerHTML = originalIcon;
+          }, 1000);
+        })
+        .catch(err => {
+          console.error('Failed to copy: ', err);
+          alert('Failed to copy value. Please copy manually.');
+        });
+    }
   }
   
   /**
@@ -90,6 +135,7 @@ export class UtilityCalculator {
    */
   private clearCalculator(): void {
     this.calculatorDisplay.value = '';
+    this.updateCopyButtonVisibility();
   }
   
   /**
@@ -97,6 +143,7 @@ export class UtilityCalculator {
    */
   private backspaceCalculator(): void {
     this.calculatorDisplay.value = this.calculatorDisplay.value.slice(0, -1);
+    this.updateCopyButtonVisibility();
   }
   
   /**
@@ -118,11 +165,16 @@ export class UtilityCalculator {
         this.calculatorDisplay.value = Number.isInteger(result) ? 
           result.toString() : 
           parseFloat(result.toFixed(2)).toString();
+        
+        // Update copy button visibility
+        this.updateCopyButtonVisibility();
       }
     } catch (error) {
       this.calculatorDisplay.value = 'Error';
+      this.updateCopyButtonVisibility();
       setTimeout(() => {
         this.calculatorDisplay.value = '';
+        this.updateCopyButtonVisibility();
       }, 1500);
     }
   }
@@ -138,6 +190,7 @@ export class UtilityCalculator {
       // Check if key is a number, operator, decimal point, or parenthesis
       if (/^[0-9+\-*/.()]$/.test(key)) {
         this.appendToCalculator(key);
+        this.updateCopyButtonVisibility();
         event.preventDefault();
       } else if (key === 'Enter') {
         this.calculateResult();
