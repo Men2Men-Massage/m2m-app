@@ -2074,15 +2074,24 @@ input#giftcard-number {
 /* Logo Container */
 .logo-container {
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   width: 100%;
 }
 
 .app-logo {
-  max-width: 120px;
+  max-width: 150px; /* Increased from 120px */
   height: auto;
   margin: 0 auto;
   display: block;
+}
+
+/* Smaller title */
+.calculator-title {
+  font-size: 1.5em; /* Smaller than default h1 size */
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 /* Calculator Copy Button */
@@ -2094,7 +2103,7 @@ input#giftcard-number {
 
 .calculator-copy-btn {
   position: absolute;
-  right: 10px;
+  left: 10px; /* Changed from right to left */
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
@@ -2117,5 +2126,6 @@ input#giftcard-number {
 
 /* Ensure the calculator display has enough padding for the copy button */
 #calculator-display {
-  padding-right: 35px !important;
+  padding-left: 35px !important; /* Changed from padding-right to padding-left */
+  padding-right: 10px;
 }
