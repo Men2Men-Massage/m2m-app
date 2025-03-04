@@ -2153,59 +2153,69 @@ input#giftcard-number {
   padding-right: 10px;
 }
 
-/* --- Stili per la pagina del chatbot --- */
+/* --- Stili per la pagina del chatbot (versione a schermo intero) --- */
 #chatbot-page {
   display: none;
-  width: 100%;
-  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 80px; /* Spazio per la barra di navigazione */
   background-color: #f5f5f5;
-  padding: 20px 10px 120px;
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
-  overflow-x: hidden; /* Previene scrolling orizzontale */
+  overflow: hidden; /* Previene scrolling */
+  z-index: 900; /* Sotto la barra di navigazione ma sopra altri elementi */
+}
+
+/* Per dispositivi iOS con area di sicurezza */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  #chatbot-page {
+    bottom: calc(80px + env(safe-area-inset-bottom)); /* Aggiunta area di sicurezza iOS */
+  }
 }
 
 #chatbot-box {
   background: white;
-  padding: 20px 15px 100px;
-  text-align: left;
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
+  border-radius: 0;
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 #chatbot-box h2 {
   text-align: center;
-  margin-top: 0;
-  margin-bottom: 20px;
+  padding: 15px 0;
+  margin: 0;
   color: #333;
   font-size: 1.5em;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
 }
 
 #chatbot-container {
+  flex-grow: 1;
   width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
+  padding: 0;
   overflow: hidden;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Media query per schermi piccoli */
-@media (max-width: 480px) {
-  #chatbot-page {
-    padding: 10px 5px 100px;
-  }
-  
-  #chatbot-box {
-    padding: 15px 10px 90px;
-  }
-  
-  #chatbot-box h2 {
-    font-size: 1.3em;
-  }
+#chatbot-container iframe {
+  flex-grow: 1;
+  width: 100%;
+  height: 100% !important; /* Forza l'iframe a prendere tutta l'altezza disponibile */
+  border: none;
 }
 
 /* Stile per il pulsante Help nella barra di navigazione */
