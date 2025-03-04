@@ -157,7 +157,7 @@ const Home: NextPage = () => {
         </div>
       </div>
 
-      {/* Chatbot Help Page */}
+      {/* Chatbot Help Page - Versione a schermo intero */}
       <div id="chatbot-page" style={{ display: 'none' }}>
         <div id="chatbot-box">
           <h2>Ask Alex: Employee Consultant</h2>
@@ -165,17 +165,16 @@ const Home: NextPage = () => {
             <iframe 
               id="JotFormIFrame-0195628f8f8773efa4a82b2494c37ae1e427" 
               title="Alex: Employee consultant"
-              onLoad={() => window.parent.scrollTo(0,0)} 
               allowTransparency
               allow="geolocation; microphone; camera; fullscreen"
               src="https://eu.jotform.com/agent/0195628f8f8773efa4a82b2494c37ae1e427?embedMode=iframe&background=1&shadow=1"
               frameBorder="0" 
               style={{
-                minWidth: '100%',
-                maxWidth: '100%',
-                height: '688px',
+                width: '100%',
+                height: '100%',
                 border: 'none',
-                width: '100%'
+                margin: 0,
+                padding: 0
               }}
               scrolling="no"
             ></iframe>
