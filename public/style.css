@@ -1786,6 +1786,16 @@ button#reset-button:hover {
   color: white;
 }
 
+/* Ensure delete confirmation button is red */
+.modal-buttons .delete-confirm-btn {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.modal-buttons .delete-confirm-btn:hover {
+  background-color: #d32f2f !important;
+}
+
 /* Media queries per responsiveness */
 @media (max-width: 480px) {
   .profile-header {
