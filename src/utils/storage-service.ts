@@ -142,8 +142,15 @@ export class StorageService {
    * Clear all application data
    */
   static clearAllData(): void {
+    // Clear all localStorage keys used by the application
     this.clearAuthentication();
     this.clearUserData();
     this.clearPayments();
+    
+    // For any potential session storage items
+    sessionStorage.clear();
+    
+    // Force reload of application state
+    window.location.reload();
   }
 }
