@@ -1,5 +1,6 @@
 import { UserData } from '../types';
 import { StorageService } from '../utils/storage-service';
+import { isValidEmail } from '../utils/helpers';
 
 /**
  * User Profile Module
@@ -71,6 +72,16 @@ export class UserProfile {
         this.deleteAccountModal.style.display = 'none';
       }
     });
+    
+    // Email validation
+    this.editEmailInput.addEventListener('input', () => {
+      const email = this.editEmailInput.value.trim();
+      if (email && !isValidEmail(email)) {
+        this.editEmailInput.setCustomValidity('Please enter a valid email address');
+      } else {
+        this.editEmailInput.setCustomValidity('');
+      }
+    });
   }
   
   /**
@@ -95,6 +106,9 @@ export class UserProfile {
    */
   public showProfile(): void {
     this.profilePage.style.display = 'block';
+    
+    // Reset scroll position
+    window.scrollTo(0, 0);
     
     // Update with latest data
     const userData = StorageService.getUserData();
@@ -141,10 +155,17 @@ export class UserProfile {
       return;
     }
     
+    // Email validation
+    const email = this.editEmailInput.value.trim();
+    if (email && !isValidEmail(email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
+    
     // Collect profile data
     const userData = StorageService.getUserData();
     userData.name = this.editNameInput.value.trim();
-    userData.email = this.editEmailInput.value.trim();
+    userData.email = email;
     
     // Save data to localStorage
     StorageService.saveUserData(userData);
