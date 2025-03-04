@@ -62,7 +62,7 @@ const Home: NextPage = () => {
             </div>
             <div className="input-group">
               <label htmlFor="user-email-input">Email (optional)</label>
-              <input type="email" id="user-email-input" placeholder="Enter your email" inputMode="email" />
+              <input type="email" id="user-email-input" placeholder="Enter your email" inputMode="email" autoComplete="email" />
             </div>
             <div className="input-group profile-image-group">
               <label htmlFor="profile-image-input">Profile Image (optional)</label>
@@ -110,7 +110,7 @@ const Home: NextPage = () => {
             </div>
             <div className="input-group">
               <label htmlFor="edit-email-input">Email (optional)</label>
-              <input type="email" id="edit-email-input" placeholder="Enter your email" inputMode="email" />
+              <input type="email" id="edit-email-input" placeholder="Enter your email" inputMode="email" autoComplete="email" />
             </div>
             <button className="update-btn">Update Profile</button>
           </div>
