@@ -157,6 +157,32 @@ const Home: NextPage = () => {
         </div>
       </div>
 
+      {/* Chatbot Help Page */}
+      <div id="chatbot-page" style={{ display: 'none' }}>
+        <div id="chatbot-box">
+          <h2>Ask Alex: Employee Consultant</h2>
+          <div id="chatbot-container">
+            <iframe 
+              id="JotFormIFrame-0195628f8f8773efa4a82b2494c37ae1e427" 
+              title="Alex: Employee consultant"
+              onLoad={() => window.parent.scrollTo(0,0)} 
+              allowTransparency
+              allow="geolocation; microphone; camera; fullscreen"
+              src="https://eu.jotform.com/agent/0195628f8f8773efa4a82b2494c37ae1e427?embedMode=iframe&background=1&shadow=1"
+              frameBorder="0" 
+              style={{
+                minWidth: '100%',
+                maxWidth: '100%',
+                height: '688px',
+                border: 'none',
+                width: '100%'
+              }}
+              scrolling="no"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
       {/* User Name (top right) */}
       <div id="user-name" style={{ display: 'none' }}></div>
 
@@ -341,6 +367,10 @@ const Home: NextPage = () => {
           <div className="nav-item" id="history-nav">
             <i className="nav-icon fas fa-history"></i>
             <span className="nav-text">Payment</span>
+          </div>
+          <div className="nav-item" id="help-nav">
+            <i className="nav-icon fas fa-question-circle"></i>
+            <span className="nav-text">Help</span>
           </div>
         </div>
       </div>
