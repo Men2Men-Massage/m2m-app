@@ -165,7 +165,7 @@ const Home: NextPage = () => {
         <div className="logo-container">
           <img src="/icons/m2m-app.png" alt="M2M Logo" className="app-logo" />
         </div>
-        <h1>M2M Payment Calculator</h1>
+        <h1 className="calculator-title">Payment Calculator</h1>
         
         <div className="instructions-container">
           <div className="instructions-header">
