@@ -162,6 +162,9 @@ const Home: NextPage = () => {
 
       {/* Main Container (Calculator) */}
       <div className="container" style={{ display: 'none' }}>
+        <div className="logo-container">
+          <img src="/icons/m2m-app.png" alt="M2M Logo" className="app-logo" />
+        </div>
         <h1>M2M Payment Calculator</h1>
         
         <div className="instructions-container">
@@ -218,6 +221,9 @@ const Home: NextPage = () => {
           </div>
           <div className="calculator-screen">
             <input type="text" id="calculator-display" readOnly />
+            <button id="calculator-copy-btn" className="calculator-copy-btn" style={{ display: 'none' }}>
+              <i className="fas fa-copy"></i>
+            </button>
           </div>
           <div className="calculator-buttons">
             <button className="calc-btn">7</button>
