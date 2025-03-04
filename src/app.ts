@@ -188,6 +188,9 @@ class App {
     // Reset session storage for banner on new authentication
     sessionStorage.removeItem('bannerDismissed');
     this.showInstallBanners();
+    
+    // Reset scroll position
+    window.scrollTo(0, 0);
   }
   
   /**
@@ -220,6 +223,9 @@ class App {
     this.historyPage.style.display = 'none';
     this.profilePage.style.display = 'none';
     
+    // Reset scroll position
+    window.scrollTo(0, 0);
+    
     // Set home tab as active
     const homeNav = document.getElementById('home-nav');
     if (homeNav) {
@@ -241,6 +247,9 @@ class App {
     this.container.style.display = 'none';
     this.profilePage.style.display = 'none';
     this.paymentHistory.showPaymentHistory();
+    
+    // Reset scroll position
+    window.scrollTo(0, 0);
     
     // Set history tab as active
     const historyNav = document.getElementById('history-nav');
@@ -264,6 +273,9 @@ class App {
     this.historyPage.style.display = 'none';
     this.userProfile.showProfile();
     
+    // Reset scroll position
+    window.scrollTo(0, 0);
+    
     // Deselect all tabs
     this.navItems.forEach(item => item.classList.remove('active'));
   }
@@ -282,6 +294,9 @@ class App {
     if (this.authModule) {
       this.authModule.initEventListeners();
     }
+    
+    // Reset scroll position
+    window.scrollTo(0, 0);
   }
   
   /**
