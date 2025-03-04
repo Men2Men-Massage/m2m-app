@@ -2070,3 +2070,17 @@ input#giftcard-number {
     padding: 8px;
   }
 }
+
+/* Logo Container */
+.logo-container {
+  text-align: center;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.app-logo {
+  max-width: 120px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
