@@ -68,11 +68,14 @@ body {
 }
 
 /* Nome utente (angolo in alto a destra) */
+/* Nome utente (angolo in alto a destra) - modificato con colore blu e animazioni */
 #user-name {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: #4CAF50;
+    background-color: #376FE9; /* Cambiato da verde a blu */
+    background-image: linear-gradient(45deg, #376FE9, #4e88ff, #376FE9); /* Effetto brillantinato */
+    background-size: 200% 200%;
     color: white;
     padding: 8px 15px;
     border-radius: 24px;
@@ -82,11 +85,27 @@ body {
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
+    animation: wave 2s ease-in-out 1s, sparkle 3s infinite; /* Combinazione di animazioni */
 }
 
 #user-name:hover {
-    background-color: #45a049;
+    background-color: #2A5CD5; /* Blu più scuro */
     box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
+}
+
+/* Animazione di saluto */
+@keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg) scale(1.05); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(5deg) scale(1.05); }
+}
+
+/* Animazione brillantini */
+@keyframes sparkle {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 /* Contenitore principale dell'app (Calculator) */
