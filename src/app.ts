@@ -278,13 +278,13 @@ class App {
   public showChatbot(): void {
     if (!this.container || !this.historyPage || !this.profilePage || !this.chatbotPage || !this.chatbotModule || !this.navItems) return;
     
+    // Hide other pages
     this.container.style.display = 'none';
     this.historyPage.style.display = 'none';
     this.profilePage.style.display = 'none';
-    this.chatbotModule.showChatbot();
     
-    // Reset scroll position
-    window.scrollTo(0, 0);
+    // Show chatbot view (a full screen overlay)
+    this.chatbotModule.showChatbot();
     
     // Set help tab as active
     const helpNav = document.getElementById('help-nav');
