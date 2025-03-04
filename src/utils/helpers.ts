@@ -79,3 +79,14 @@ export function createRipple(event: MouseEvent): void {
     circle.remove();
   }, 600);
 }
+
+/**
+ * Validate an email address
+ * @param email Email to validate
+ * @returns True if the email is valid
+ */
+export function isValidEmail(email: string): boolean {
+  if (!email) return true; // Email vuota è considerata valida (dato che è opzionale)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
