@@ -276,7 +276,7 @@ button#reset-button:hover {
 
 .close-banner {
     position: absolute;
-    top: 5px;
+    top: -10px; /* Modificato da 5px a -10px per posizionare più in alto */
     right: 5px;
     width: 24px;
     height: 24px;
