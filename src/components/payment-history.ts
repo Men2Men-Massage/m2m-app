@@ -74,6 +74,9 @@ export class PaymentHistory {
     this.historyPage.style.display = 'block';
     this.dailyPaymentsSection.style.display = 'none';
     this.generateCalendar(this.currentCalendarMonth, this.currentCalendarYear);
+    
+    // Reset scroll position
+    window.scrollTo(0, 0);
   }
   
   /**
