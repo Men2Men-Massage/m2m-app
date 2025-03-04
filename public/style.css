@@ -218,47 +218,112 @@ button#reset-button:hover {
     font-weight: bold;
 }
 
-/* Modify the installation banner styling - positioned at bottom above nav bar */
+/* Installation Banner (updated) */
 .install-banner {
     position: fixed;
-    bottom: 85px; /* Position above the bottom navigation bar (which is 80px height + 15px bottom) */
-    left: 0;
-    width: 100%;
-    padding: 10px 15px;
+    bottom: 85px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 450px;
+    padding: 15px;
+    border-radius: 12px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f0f4c3;
-    border: 1px solid #e0e0b0;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.15); /* Shadow casts upward */
-    z-index: 999; /* Below nav bar (1001) but above content */
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1010; /* Higher than nav bar (1001) */
     font-size: 14px;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translate(-50%, 20px);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
 }
 
 /* iOS-specific position adjustments */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
     .install-banner {
-        bottom: calc(85px + env(safe-area-inset-bottom)); /* Adjust for iOS safe area */
+        bottom: calc(85px + env(safe-area-inset-bottom));
     }
+}
+
+.install-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.install-banner-text {
+    flex: 1;
+    line-height: 1.5;
+}
+
+.share-icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    margin: 0 2px;
+}
+
+.close-banner {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.close-banner:hover {
+    background-color: #e0e0e0;
+    color: #333;
 }
 
 /* Banner styles for device-specific versions */
 #android-banner {
     background-color: #e8f5e9;
-    border-top: 2px solid #4CAF50;
+    border: 1px solid #4CAF50;
 }
 
 #ios-banner {
     background-color: #fff3e0;
-    border-top: 2px solid #ff9800;
+    border: 1px solid #ff9800;
 }
 
-/* Close button for banner */
-.close-banner {
+/* Install button */
+#install-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
     cursor: pointer;
-    font-weight: bold;
-    color: #666;
-    padding: 0 5px;
+    transition: background-color 0.3s, transform 0.2s;
+    align-self: center;
+}
+
+#install-button:hover {
+    background-color: #3b9d3b;
+    transform: translateY(-2px);
 }
 
 /* Calendar */
