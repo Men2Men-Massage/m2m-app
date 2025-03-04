@@ -1,5 +1,6 @@
 import { UserData } from '../types';
 import { StorageService, AUTH_CODE } from '../utils/storage-service';
+import { isValidEmail } from '../utils/helpers';
 
 /**
  * Authentication module for the application
@@ -58,6 +59,16 @@ export class AuthModule {
     // Save profile button
     const saveProfileButton = this.nameSection.querySelector('button:last-child') as HTMLButtonElement;
     saveProfileButton.addEventListener('click', () => this.saveUserProfile());
+
+    // Email validation for "Create Profile" screen
+    this.userEmailInput.addEventListener('input', () => {
+      const email = this.userEmailInput.value.trim();
+      if (email && !isValidEmail(email)) {
+        this.userEmailInput.setCustomValidity('Please enter a valid email address');
+      } else {
+        this.userEmailInput.setCustomValidity('');
+      }
+    });
   }
   
   /**
@@ -190,10 +201,17 @@ export class AuthModule {
       return;
     }
     
+    // Email validation
+    const email = this.userEmailInput.value.trim();
+    if (email && !isValidEmail(email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
+    
     // Collect profile data
     const userData: UserData = {
       name: this.userNameInput.value.trim(),
-      email: this.userEmailInput.value.trim(),
+      email: email,
       // Save image if present
       profileImage: this.profileImagePreview.querySelector('img') 
         ? (this.profileImagePreview.querySelector('img') as HTMLImageElement).src 
@@ -207,5 +225,8 @@ export class AuthModule {
     // Show the app
     this.hideAuthOverlay();
     this.onAuthenticated(userData);
+    
+    // Reset scroll position
+    window.scrollTo(0, 0);
   }
 }
