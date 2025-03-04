@@ -1,4 +1,3 @@
-/* Modifica nel file public/style.css - Aggiornamento per la posizione del body */
 body {
     font-family: Arial, sans-serif;
     max-width: 800px;
@@ -2045,4 +2044,29 @@ button#reset-button:hover {
 #send-giftcard-request-btn {
     position: relative;
     margin-top: 20px;
+}
+
+/* Aggiungi questa sezione nel file public/style.css */
+
+/* Previene lo zoom automatico su iOS per i campi di input e textarea */
+.note-input-area textarea,
+.giftcard-request-form input, 
+.giftcard-request-form textarea,
+textarea#giftcard-comment,
+input#giftcard-number {
+  font-size: 16px !important; /* Minimo 16px per evitare lo zoom su iOS */
+}
+
+/* Modifica anche le media query per schermi piccoli per mantenere una dimensione font adeguata */
+@media (max-width: 480px) {
+  .giftcard-request-form {
+    font-size: 14px;
+  }
+  
+  .giftcard-request-form input, 
+  .giftcard-request-form textarea,
+  .giftcard-request-form button {
+    /* Non modificare la dimensione del font qui, lasciala a 16px */
+    padding: 8px;
+  }
 }
