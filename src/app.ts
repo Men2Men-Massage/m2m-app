@@ -129,16 +129,6 @@ class App {
     
     // Instructions toggle
     this.initInstructionsToggle();
-    
-    // Close buttons for banners
-    document.querySelectorAll('.close-banner').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const banner = (e.currentTarget as HTMLElement).parentElement;
-        if (banner) {
-          banner.style.display = 'none';
-        }
-      });
-    });
   }
   
   /**
@@ -195,6 +185,8 @@ class App {
       homeNav.classList.add('active');
     }
     
+    // Reset session storage for banner on new authentication
+    sessionStorage.removeItem('bannerDismissed');
     this.showInstallBanners();
   }
   
@@ -335,15 +327,27 @@ class App {
     // Only show if available
     if (!this.androidBanner || !this.iosBanner) return;
     
+    // Always reset banners to hidden first
+    this.androidBanner.style.display = 'none';
+    this.iosBanner.style.display = 'none';
+    
+    // Don't show banners if in standalone mode
+    if (isInStandaloneMode()) return;
+    
     let deferredPrompt: any;
+    let bannerDismissed = sessionStorage.getItem('bannerDismissed') === 'true';
 
+    // If banner was dismissed in this session, don't show it again
+    if (bannerDismissed) return;
+
+    // For Android devices
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
 
       if (!window.matchMedia('(display-mode: standalone)').matches) {
         // Position the banner at the bottom of the page above the nav bar
-        this.androidBanner!.style.display = 'block';
+        this.androidBanner!.style.display = 'flex';
         document.body.appendChild(this.androidBanner!); // Move to end of body to ensure proper stacking
       }
     });
@@ -356,16 +360,29 @@ class App {
           const { outcome } = await deferredPrompt.userChoice;
           if (outcome === 'accepted') {
             this.androidBanner!.style.display = 'none';
+            sessionStorage.setItem('bannerDismissed', 'true');
           }
           deferredPrompt = null;
         }
       });
     }
 
+    // For iOS devices
     if (isIos() && !isInStandaloneMode()) {
-      this.iosBanner!.style.display = 'block';
+      this.iosBanner!.style.display = 'flex';
       document.body.appendChild(this.iosBanner!); // Move to end of body to ensure proper stacking
     }
+    
+    // Add event listeners to close buttons
+    document.querySelectorAll('.close-banner').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const banner = (e.currentTarget as HTMLElement).closest('.install-banner');
+        if (banner) {
+          banner.style.display = 'none';
+          sessionStorage.setItem('bannerDismissed', 'true');
+        }
+      });
+    });
   }
   
   /**
