@@ -349,21 +349,26 @@ export class PaymentHistory {
       let textarea = document.createElement('textarea');
       textarea.placeholder = 'Enter note...';
       textarea.value = existingNote;
+      textarea.style.fontSize = '16px'; // Imposta la dimensione del font a 16px per prevenire lo zoom su iOS
       noteArea.appendChild(textarea);
 
+      let buttonsContainer = document.createElement('div');
+      buttonsContainer.className = 'buttons-container';
+      
       let saveNoteButton = document.createElement('button');
       saveNoteButton.textContent = 'Save Note';
       saveNoteButton.addEventListener('click', () => this.saveNote(paymentIndex, textarea.value, dailyPaymentItem));
-      noteArea.appendChild(saveNoteButton);
+      buttonsContainer.appendChild(saveNoteButton);
 
       if (existingNote) {
         let removeNoteButton = document.createElement('button');
         removeNoteButton.textContent = 'Remove';
         removeNoteButton.className = 'remove-note-button';
         removeNoteButton.addEventListener('click', () => this.removeNote(paymentIndex, dailyPaymentItem));
-        noteArea.appendChild(removeNoteButton);
+        buttonsContainer.appendChild(removeNoteButton);
       }
 
+      noteArea.appendChild(buttonsContainer);
       dailyPaymentItem.appendChild(noteArea);
     }
   }
