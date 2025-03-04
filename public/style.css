@@ -2084,3 +2084,38 @@ input#giftcard-number {
   margin: 0 auto;
   display: block;
 }
+
+/* Calculator Copy Button */
+.calculator-screen {
+  position: relative;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.calculator-copy-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 16px;
+  z-index: 10;
+  transition: color 0.2s;
+}
+
+.calculator-copy-btn:hover {
+  color: #376FE9;
+}
+
+.calculator-copy-btn i {
+  font-size: 18px;
+}
+
+/* Ensure the calculator display has enough padding for the copy button */
+#calculator-display {
+  padding-right: 35px !important;
+}
