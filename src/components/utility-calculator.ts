@@ -32,12 +32,13 @@ export class UtilityCalculator {
     calcButtons.forEach(button => {
       button.addEventListener('click', () => {
         const buttonText = button.textContent || '';
+        const buttonClass = button.className;
         
         if (buttonText === 'C') {
           this.clearCalculator();
         } else if (buttonText === '=') {
           this.calculateResult();
-        } else if (buttonText.includes('backspace')) {
+        } else if (buttonClass.includes('backspace-btn') || button.innerHTML.includes('fa-backspace')) {
           this.backspaceCalculator();
         } else if (buttonText === '×') {
           this.appendToCalculator('*');
