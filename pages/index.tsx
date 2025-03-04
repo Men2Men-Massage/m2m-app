@@ -170,7 +170,7 @@ const Home: NextPage = () => {
             <p>This tool helps you calculate and track payments for M2M.</p>
             <p>Enter the amount of regular payments and any gift card payments to calculate the center fee (40%) and your earnings (60%).</p>
             <p>You can then save the payment and access your payment history.</p>
-            <p className="highlight">Please remember to make the center payment via bank transfer right after each shift.</p>
+            <p className="highlight">Please remember to make the center payment via instant bank transfer right after each shift.</p>
           </div>
         </div>
         
@@ -206,40 +206,40 @@ const Home: NextPage = () => {
         </div>
       </div>
 
-      {/* Calculator Modal */}
-<div id="calculator-modal" className="modal">
-  <div className="calculator-modal-content">
-    <div className="calculator-header">
-      <h2>Calculator</h2>
-      <span className="close-calculator">&times;</span>
-    </div>
-    <div className="calculator-screen">
-      <input type="text" id="calculator-display" readOnly />
-    </div>
-    <div className="calculator-buttons">
-      <button className="calc-btn">7</button>
-      <button className="calc-btn">8</button>
-      <button className="calc-btn">9</button>
-      <button className="calc-btn operator">÷</button>
-      <button className="calc-btn">4</button>
-      <button className="calc-btn">5</button>
-      <button className="calc-btn">6</button>
-      <button className="calc-btn operator">×</button>
-      <button className="calc-btn">1</button>
-      <button className="calc-btn">2</button>
-      <button className="calc-btn">3</button>
-      <button className="calc-btn operator">−</button>
-      <button className="calc-btn">0</button>
-      <button className="calc-btn">.</button>
-      <button className="calc-btn clear-btn">C</button>
-      <button className="calc-btn operator">+</button>
-      <button className="calc-btn backspace-btn" style={{ gridColumn: 'span 2' }}>
-        <i className="fas fa-backspace"></i>
-      </button>
-      <button className="calc-btn equals" style={{ gridColumn: 'span 2' }}>=</button>
-    </div>
-  </div>
-</div>
+      {/* Calculator Modal - Updated */}
+      <div id="calculator-modal" className="modal">
+        <div className="calculator-modal-content">
+          <div className="calculator-header">
+            <h2>Calculator</h2>
+            <span className="close-calculator">&times;</span>
+          </div>
+          <div className="calculator-screen">
+            <input type="text" id="calculator-display" readOnly />
+          </div>
+          <div className="calculator-buttons">
+            <button className="calc-btn">7</button>
+            <button className="calc-btn">8</button>
+            <button className="calc-btn">9</button>
+            <button className="calc-btn operator">÷</button>
+            <button className="calc-btn">4</button>
+            <button className="calc-btn">5</button>
+            <button className="calc-btn">6</button>
+            <button className="calc-btn operator">×</button>
+            <button className="calc-btn">1</button>
+            <button className="calc-btn">2</button>
+            <button className="calc-btn">3</button>
+            <button className="calc-btn operator">−</button>
+            <button className="calc-btn">0</button>
+            <button className="calc-btn">.</button>
+            <button className="calc-btn clear-btn">C</button>
+            <button className="calc-btn operator">+</button>
+            <button className="calc-btn backspace-btn" style={{ gridColumn: 'span 2' }}>
+              <i className="fas fa-backspace"></i>
+            </button>
+            <button className="calc-btn equals" style={{ gridColumn: 'span 2' }}>=</button>
+          </div>
+        </div>
+      </div>
 
       {/* Gift Card Payment Request Modal */}
       <div id="giftcard-request-modal" className="modal">
@@ -276,12 +276,15 @@ const Home: NextPage = () => {
         </div>
       </div>
 
-      {/* Date & Location Modals */}
+      {/* Date & Location Modals - Updated with cancel buttons */}
       <div id="date-modal" className="modal">
         <div className="modal-content">
           <h2>Select Date</h2>
           <select id="shift-date-select"></select>
-          <button>Next</button>
+          <div className="modal-buttons">
+            <button id="date-next-btn">Next</button>
+            <button id="date-cancel-btn" className="cancel-btn">Cancel</button>
+          </div>
         </div>
       </div>
       
@@ -292,7 +295,10 @@ const Home: NextPage = () => {
             <option value="Prenzlauer Berg">Prenzlauer Berg</option>
             <option value="Schoeneberg">Schoeneberg</option>
           </select>
-          <button>Generate Payment</button>
+          <div className="modal-buttons">
+            <button id="location-generate-btn">Generate Payment</button>
+            <button id="location-cancel-btn" className="cancel-btn">Cancel</button>
+          </div>
         </div>
       </div>
 
