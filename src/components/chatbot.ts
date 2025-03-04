@@ -3,6 +3,7 @@
  */
 export class ChatbotModule {
   private chatbotPage: HTMLElement;
+  private chatbotIframe: HTMLIFrameElement | null = null;
   
   /**
    * Create a ChatbotModule instance
@@ -17,6 +18,9 @@ export class ChatbotModule {
    * Initialize the chatbot
    */
   private initChatbot(): void {
+    // Get a reference to the iframe
+    this.chatbotIframe = document.getElementById('JotFormIFrame-0195628f8f8773efa4a82b2494c37ae1e427') as HTMLIFrameElement;
+    
     // Initialize the JotForm embed handler script
     this.loadJotformScript();
   }
@@ -44,16 +48,40 @@ export class ChatbotModule {
    * Show chatbot page
    */
   public showChatbot(): void {
+    // Make sure the body doesn't scroll when chatbot is shown
+    document.body.style.overflow = 'hidden';
+    
+    // Show the chatbot page
     this.chatbotPage.style.display = 'block';
     
-    // Reset scroll position
-    window.scrollTo(0, 0);
+    // Ensure the iframe fits the container
+    if (this.chatbotIframe) {
+      this.adjustIframeHeight();
+    }
   }
   
   /**
    * Hide chatbot page
    */
   public hideChatbot(): void {
+    // Restore normal scrolling when chatbot is hidden
+    document.body.style.overflow = '';
+    
+    // Hide the chatbot page
     this.chatbotPage.style.display = 'none';
+  }
+  
+  /**
+   * Adjust iframe height to fit container
+   */
+  private adjustIframeHeight(): void {
+    if (!this.chatbotIframe) return;
+    
+    const container = document.getElementById('chatbot-container');
+    if (!container) return;
+    
+    // Set the iframe height to match container
+    const containerHeight = container.clientHeight;
+    this.chatbotIframe.style.height = `${containerHeight}px`;
   }
 }
