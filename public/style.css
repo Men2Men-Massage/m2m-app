@@ -1,11 +1,30 @@
+/* Modifica nel file public/style.css - Aggiornamento per la posizione del body */
 body {
     font-family: Arial, sans-serif;
     max-width: 800px;
-    margin: 60px auto 20px;
+    margin: 60px auto 20px; /* Il margine auto già dovrebbe centrare, ma rafforziamo il concetto */
     padding: 20px;
     background-color: #f5f5f5;
     position: relative;
-    overflow-x: hidden; /* Previene scrolling orizzontale a livello di body */
+    overflow-x: hidden;
+    left: 0;
+    right: 0;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Assicuriamoci che tutti i contenitori principali siano centrati */
+.container, #history-box, #profile-box, #auth-box {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Assicuriamoci che il contenuto sia centrato su tutti i dispositivi */
+@media (min-width: 800px) {
+    body {
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
 }
 
 /* Overlay per l'autenticazione */
