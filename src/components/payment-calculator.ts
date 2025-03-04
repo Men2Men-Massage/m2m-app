@@ -57,12 +57,40 @@ export class PaymentCalculator {
     });
     
     // Date modal next button
-    const dateNextButton = this.dateModal.querySelector('button') as HTMLButtonElement;
-    dateNextButton.addEventListener('click', () => this.saveDateAndShowLocation());
+    const dateNextButton = document.getElementById('date-next-btn') as HTMLButtonElement;
+    if (dateNextButton) {
+      dateNextButton.addEventListener('click', () => this.saveDateAndShowLocation());
+    } else {
+      // Fallback for the old button structure
+      const oldDateNextButton = this.dateModal.querySelector('button') as HTMLButtonElement;
+      if (oldDateNextButton) {
+        oldDateNextButton.addEventListener('click', () => this.saveDateAndShowLocation());
+      }
+    }
+    
+    // Date modal cancel button
+    const dateCancelButton = document.getElementById('date-cancel-btn') as HTMLButtonElement;
+    if (dateCancelButton) {
+      dateCancelButton.addEventListener('click', () => this.cancelPaymentGeneration());
+    }
     
     // Location modal generate button
-    const locationGenButton = this.locationModal.querySelector('button') as HTMLButtonElement;
-    locationGenButton.addEventListener('click', () => this.saveLocationAndGeneratePayment());
+    const locationGenButton = document.getElementById('location-generate-btn') as HTMLButtonElement;
+    if (locationGenButton) {
+      locationGenButton.addEventListener('click', () => this.saveLocationAndGeneratePayment());
+    } else {
+      // Fallback for the old button structure
+      const oldLocationGenButton = this.locationModal.querySelector('button') as HTMLButtonElement;
+      if (oldLocationGenButton) {
+        oldLocationGenButton.addEventListener('click', () => this.saveLocationAndGeneratePayment());
+      }
+    }
+    
+    // Location modal cancel button
+    const locationCancelButton = document.getElementById('location-cancel-btn') as HTMLButtonElement;
+    if (locationCancelButton) {
+      locationCancelButton.addEventListener('click', () => this.cancelPaymentGeneration());
+    }
   }
   
   /**
@@ -147,6 +175,19 @@ export class PaymentCalculator {
    */
   private showLocationModal(): void {
     this.locationModal.style.display = 'flex';
+  }
+  
+  /**
+   * Cancel the payment generation process
+   */
+  private cancelPaymentGeneration(): void {
+    // Close both modals
+    this.dateModal.style.display = 'none';
+    this.locationModal.style.display = 'none';
+    
+    // Reset selected values
+    this.selectedShiftDate = '';
+    this.selectedLocation = '';
   }
   
   /**
