@@ -925,10 +925,21 @@ button#reset-button:hover {
     box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
     width: 100%;
     box-sizing: border-box;
+    overflow: hidden; /* Prevent content from showing outside */
 }
 
-.instructions-container:not(.collapsed) .instructions {
-    border-left: none;
+/* Fix for animation: remove left border from instruction content when in container */
+.instructions-container .instructions {
+    border-left: none !important;
+    margin: 0;
+    transition: max-height 0.3s ease;
+}
+
+.instructions-container.collapsed {
+    border: 3px solid #ffca28; /* Keep the same border when collapsed */
+    transition: padding 0.3s ease;
+    padding: 5px 5px 0 5px; /* Adjust padding when collapsed */
+    min-height: 42px; /* Set a minimum height to maintain header visibility */
 }
 
 .instructions-header {
@@ -937,6 +948,8 @@ button#reset-button:hover {
     align-items: center;
     margin-bottom: 0px;
     width: 100%;
+    z-index: 2; /* Ensure it stays above the content during animation */
+    position: relative; /* Required for z-index to work */
 }
 
 .instructions-header span {
@@ -954,6 +967,7 @@ button#reset-button:hover {
     color: #444;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
+    z-index: 3; /* Ensure button stays above other elements */
 }
 
 #toggle-instructions-btn:hover {
@@ -971,10 +985,7 @@ button#reset-button:hover {
 #instructions-content.collapsed {
     max-height: 0;
     padding: 0;
-}
-
-.instructions-container.collapsed .instructions-header{
-    margin-bottom: 0px;
+    visibility: hidden; /* Hide content completely when collapsed */
 }
 
 /* Modals per Data e Location */
