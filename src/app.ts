@@ -6,6 +6,7 @@ import { PaymentCalculator } from './components/payment-calculator';
 import { PaymentHistory } from './components/payment-history';
 import { UserProfile } from './components/user-profile';
 import { UtilityCalculator } from './components/utility-calculator';
+import { ChatbotModule } from './components/chatbot';
 
 /**
  * Main Application Class
@@ -15,6 +16,7 @@ class App {
   private container: HTMLElement | null = null;
   private historyPage: HTMLElement | null = null;
   private profilePage: HTMLElement | null = null;
+  private chatbotPage: HTMLElement | null = null;
   private userNameEl: HTMLElement | null = null;
   private navItems: NodeListOf<Element> | null = null;
   private androidBanner: HTMLElement | null = null;
@@ -26,6 +28,7 @@ class App {
   private paymentHistory: PaymentHistory | null = null;
   private userProfile: UserProfile | null = null;
   private utilityCalculator: UtilityCalculator | null = null;
+  private chatbotModule: ChatbotModule | null = null;
   
   /**
    * Initialize the application
@@ -69,13 +72,14 @@ class App {
       this.container = document.querySelector('.container');
       this.historyPage = document.getElementById('history-page');
       this.profilePage = document.getElementById('profile-page');
+      this.chatbotPage = document.getElementById('chatbot-page');
       this.userNameEl = document.getElementById('user-name');
       this.navItems = document.querySelectorAll('.nav-item');
       this.androidBanner = document.getElementById('android-banner');
       this.iosBanner = document.getElementById('ios-banner');
       this.navBar = document.querySelector('.bottom-nav');
       
-      if (!this.container || !this.historyPage || !this.profilePage || !this.userNameEl) {
+      if (!this.container || !this.historyPage || !this.profilePage || !this.userNameEl || !this.chatbotPage) {
         console.error('Required DOM elements not found');
         return;
       }
@@ -91,6 +95,7 @@ class App {
         this.showCalculator.bind(this)
       );
       this.utilityCalculator = new UtilityCalculator();
+      this.chatbotModule = new ChatbotModule();
       
       this.initEventListeners();
       this.checkAuthentication();
@@ -210,6 +215,8 @@ class App {
       this.showCalculator();
     } else if (target.id === 'history-nav') {
       this.showPaymentHistory();
+    } else if (target.id === 'help-nav') {
+      this.showChatbot();
     }
   }
   
@@ -217,11 +224,12 @@ class App {
    * Show calculator view
    */
   public showCalculator(): void {
-    if (!this.container || !this.historyPage || !this.profilePage || !this.navItems) return;
+    if (!this.container || !this.historyPage || !this.profilePage || !this.chatbotPage || !this.navItems) return;
     
     this.container.style.display = 'block';
     this.historyPage.style.display = 'none';
     this.profilePage.style.display = 'none';
+    this.chatbotPage.style.display = 'none';
     
     // Reset scroll position
     window.scrollTo(0, 0);
@@ -242,10 +250,11 @@ class App {
    * Show payment history view
    */
   public showPaymentHistory(): void {
-    if (!this.container || !this.profilePage || !this.paymentHistory || !this.navItems) return;
+    if (!this.container || !this.profilePage || !this.chatbotPage || !this.paymentHistory || !this.navItems) return;
     
     this.container.style.display = 'none';
     this.profilePage.style.display = 'none';
+    this.chatbotPage.style.display = 'none';
     this.paymentHistory.showPaymentHistory();
     
     // Reset scroll position
@@ -264,13 +273,40 @@ class App {
   }
   
   /**
-   * Show user profile view
+   * Show chatbot help view
    */
-  public showUserProfile(): void {
-    if (!this.container || !this.historyPage || !this.profilePage || !this.userProfile || !this.navItems) return;
+  public showChatbot(): void {
+    if (!this.container || !this.historyPage || !this.profilePage || !this.chatbotPage || !this.chatbotModule || !this.navItems) return;
     
     this.container.style.display = 'none';
     this.historyPage.style.display = 'none';
+    this.profilePage.style.display = 'none';
+    this.chatbotModule.showChatbot();
+    
+    // Reset scroll position
+    window.scrollTo(0, 0);
+    
+    // Set help tab as active
+    const helpNav = document.getElementById('help-nav');
+    if (helpNav) {
+      helpNav.classList.add('active');
+      this.navItems.forEach(item => {
+        if (item.id !== 'help-nav') {
+          item.classList.remove('active');
+        }
+      });
+    }
+  }
+  
+  /**
+   * Show user profile view
+   */
+  public showUserProfile(): void {
+    if (!this.container || !this.historyPage || !this.chatbotPage || !this.profilePage || !this.userProfile || !this.navItems) return;
+    
+    this.container.style.display = 'none';
+    this.historyPage.style.display = 'none';
+    this.chatbotPage.style.display = 'none';
     this.userProfile.showProfile();
     
     // Reset scroll position
@@ -319,6 +355,10 @@ class App {
     
     if (this.profilePage) {
       this.profilePage.style.display = 'none';
+    }
+    
+    if (this.chatbotPage) {
+      this.chatbotPage.style.display = 'none';
     }
     
     if (this.userNameEl) {
