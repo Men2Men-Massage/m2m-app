@@ -178,6 +178,9 @@ export class UserProfile {
     // Delete all user data
     StorageService.clearAllData();
     
+    // Also reset auth form fields to ensure they're empty
+    this.resetAuthFormFields();
+    
     // Close confirmation modal
     this.deleteAccountModal.style.display = 'none';
     
@@ -188,6 +191,40 @@ export class UserProfile {
     
     // Redirect to login
     this.onLogout();
+  }
+  
+  /**
+   * Reset authentication form fields
+   */
+  private resetAuthFormFields(): void {
+    // Reset access code input
+    const accessCodeInput = document.getElementById('access-code') as HTMLInputElement;
+    if (accessCodeInput) {
+      accessCodeInput.value = '';
+    }
+    
+    // Reset name, email inputs in the create profile section
+    const userNameInput = document.getElementById('user-name-input') as HTMLInputElement;
+    if (userNameInput) {
+      userNameInput.value = '';
+    }
+    
+    const userEmailInput = document.getElementById('user-email-input') as HTMLInputElement;
+    if (userEmailInput) {
+      userEmailInput.value = '';
+    }
+    
+    // Reset profile image preview to default icon
+    const profileImagePreview = document.getElementById('profile-image-preview') as HTMLElement;
+    if (profileImagePreview) {
+      profileImagePreview.innerHTML = '<i class="fas fa-user"></i>';
+    }
+    
+    // Reset profile image input
+    const profileImageInput = document.getElementById('profile-image-input') as HTMLInputElement;
+    if (profileImageInput) {
+      profileImageInput.value = '';
+    }
   }
   
   /**
