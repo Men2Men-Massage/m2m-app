@@ -67,30 +67,32 @@ body {
     border-radius: 8px;
 }
 
-/* Nome utente (angolo in alto a destra) */
-/* Nome utente (angolo in alto a destra) - modificato con colore blu e animazioni */
+/* Nome utente (angolo in alto a destra) - modificato con colore blu e animazioni più evidenti */
 #user-name {
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: #376FE9; /* Cambiato da verde a blu */
-    background-image: linear-gradient(45deg, #376FE9, #4e88ff, #376FE9); /* Effetto brillantinato */
-    background-size: 200% 200%;
+    background-color: #376FE9; /* Base blu */
+    background-image: linear-gradient(45deg, #376FE9, #8ab9ff, #2145b0, #8ab9ff, #376FE9); /* Gradiente più contrastato */
+    background-size: 300% 300%;
     color: white;
     padding: 8px 15px;
     border-radius: 24px;
     display: none;
     z-index: 1000;
     font-size: 16px;
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2), 0 0 10px rgba(255, 255, 255, 0.5); /* Aggiunta luce bianca */
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
-    animation: wave 2s ease-in-out 1s, sparkle 3s infinite; /* Combinazione di animazioni */
+    animation: wave 2s ease-in-out 1s, sparkle-enhanced 2.5s infinite; /* Animazione brillantini più veloce */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.7); /* Bagliore attorno al testo */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordo luminoso */
 }
 
 #user-name:hover {
-    background-color: #2A5CD5; /* Blu più scuro */
-    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3);
+    background-color: #2A5CD5;
+    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 255, 255, 0.7);
+    animation: wave 2s ease-in-out, sparkle-enhanced 1.5s infinite; /* Animazione più veloce all'hover */
 }
 
 /* Animazione di saluto */
@@ -101,11 +103,13 @@ body {
     75% { transform: rotate(5deg) scale(1.05); }
 }
 
-/* Animazione brillantini */
-@keyframes sparkle {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+/* Animazione brillantini migliorata */
+@keyframes sparkle-enhanced {
+    0% { background-position: 0% 50%; filter: brightness(1); }
+    25% { background-position: 50% 100%; filter: brightness(1.2); }
+    50% { background-position: 100% 50%; filter: brightness(1); }
+    75% { background-position: 50% 0%; filter: brightness(1.2); }
+    100% { background-position: 0% 50%; filter: brightness(1); }
 }
 
 /* Contenitore principale dell'app (Calculator) */
