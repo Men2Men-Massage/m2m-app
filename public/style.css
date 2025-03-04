@@ -1139,7 +1139,7 @@ button#reset-button:hover {
 
 #profile-box {
     background: white;
-    padding: 20px 15px; /* Ridotto padding laterale su schermi piccoli */
+    padding: 20px 15px 100px; /* Modificato: aggiunto padding-bottom a 100px per mostrare tutti i pulsanti */
     text-align: left;
     width: 100%;
     max-width: 600px;
