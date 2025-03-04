@@ -1822,8 +1822,8 @@ button#reset-button:hover {
 #prev-month-btn, #next-month-btn {
     font-size: 16px;
     padding: 5px 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
+    background-color: #376FE9; /* Modificato da #f0f0f0 a #376FE9 (blu) */
+    border: 1px solid #2A5CD5; /* Modificato da #ddd a #2A5CD5 */
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -1837,10 +1837,11 @@ button#reset-button:hover {
     align-items: center;
     justify-content: center;
     box-shadow: none;
+    color: white; /* Aggiunto per rendere il testo bianco per maggiore contrasto */
 }
 
 #prev-month-btn:hover, #next-month-btn:hover {
-    background-color: #e0e0e0;
+    background-color: #2A5CD5; /* Modificato da #e0e0e0 a #2A5CD5 */
     transform: none;
 }
 
