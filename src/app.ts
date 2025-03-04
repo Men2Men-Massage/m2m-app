@@ -376,7 +376,7 @@ class App {
     // Add event listeners to close buttons
     document.querySelectorAll('.close-banner').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const banner = (e.currentTarget as HTMLElement).closest('.install-banner');
+        const banner = (e.currentTarget as HTMLElement).closest('.install-banner') as HTMLElement;
         if (banner) {
           banner.style.display = 'none';
           sessionStorage.setItem('bannerDismissed', 'true');
