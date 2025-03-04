@@ -150,6 +150,17 @@ class App {
       instructionsContent.classList.toggle('collapsed');
       instructionsContainer.classList.toggle('collapsed');
       toggleBtn.textContent = instructionsContent.classList.contains('collapsed') ? 'Show' : 'Hide';
+      
+      // Wait for animation to complete before showing content when expanding
+      if (!instructionsContent.classList.contains('collapsed')) {
+        // First make sure the container is expanded
+        instructionsContainer.classList.remove('collapsed');
+        
+        // Use setTimeout to wait for the animation to start
+        setTimeout(() => {
+          instructionsContent.style.visibility = 'visible';
+        }, 50);
+      }
     });
   }
   
