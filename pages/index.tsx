@@ -207,39 +207,39 @@ const Home: NextPage = () => {
       </div>
 
       {/* Calculator Modal */}
-      <div id="calculator-modal" className="modal">
-        <div className="calculator-modal-content">
-          <div className="calculator-header">
-            <h2>Calculator</h2>
-            <span className="close-calculator">&times;</span>
-          </div>
-          <div className="calculator-screen">
-            <input type="text" id="calculator-display" readOnly />
-          </div>
-          <div className="calculator-buttons">
-            <button className="calc-btn">7</button>
-            <button className="calc-btn">8</button>
-            <button className="calc-btn">9</button>
-            <button className="calc-btn operator">÷</button>
-            <button className="calc-btn">4</button>
-            <button className="calc-btn">5</button>
-            <button className="calc-btn">6</button>
-            <button className="calc-btn operator">×</button>
-            <button className="calc-btn">1</button>
-            <button className="calc-btn">2</button>
-            <button className="calc-btn">3</button>
-            <button className="calc-btn operator">−</button>
-            <button className="calc-btn">0</button>
-            <button className="calc-btn">.</button>
-            <button className="calc-btn">C</button>
-            <button className="calc-btn operator">+</button>
-            <button className="calc-btn operator" style={{ gridColumn: 'span 2' }}>
-              <i className="fas fa-backspace"></i>
-            </button>
-            <button className="calc-btn equals" style={{ gridColumn: 'span 2' }}>=</button>
-          </div>
-        </div>
-      </div>
+<div id="calculator-modal" className="modal">
+  <div className="calculator-modal-content">
+    <div className="calculator-header">
+      <h2>Calculator</h2>
+      <span className="close-calculator">&times;</span>
+    </div>
+    <div className="calculator-screen">
+      <input type="text" id="calculator-display" readOnly />
+    </div>
+    <div className="calculator-buttons">
+      <button className="calc-btn">7</button>
+      <button className="calc-btn">8</button>
+      <button className="calc-btn">9</button>
+      <button className="calc-btn operator">÷</button>
+      <button className="calc-btn">4</button>
+      <button className="calc-btn">5</button>
+      <button className="calc-btn">6</button>
+      <button className="calc-btn operator">×</button>
+      <button className="calc-btn">1</button>
+      <button className="calc-btn">2</button>
+      <button className="calc-btn">3</button>
+      <button className="calc-btn operator">−</button>
+      <button className="calc-btn">0</button>
+      <button className="calc-btn">.</button>
+      <button className="calc-btn clear-btn">C</button>
+      <button className="calc-btn operator">+</button>
+      <button className="calc-btn backspace-btn" style={{ gridColumn: 'span 2' }}>
+        <i className="fas fa-backspace"></i>
+      </button>
+      <button className="calc-btn equals" style={{ gridColumn: 'span 2' }}>=</button>
+    </div>
+  </div>
+</div>
 
       {/* Gift Card Payment Request Modal */}
       <div id="giftcard-request-modal" className="modal">
