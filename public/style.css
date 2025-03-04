@@ -1132,7 +1132,7 @@ button#reset-button:hover {
     width: 100%;
     min-height: 100vh;
     background-color: #f5f5f5;
-    padding: 20px 10px;  /* Rimossa la parte specifica per il bottom padding */
+    padding: 20px 10px 120px;  /* Modificato: aggiunto padding-bottom a 120px */
     box-sizing: border-box;
     overflow-x: hidden; /* Previene scrolling orizzontale */
 }
