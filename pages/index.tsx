@@ -197,10 +197,9 @@ const Home: NextPage = () => {
             <button id="toggle-instructions-btn">Hide</button>
           </div>
           <div id="instructions-content" className="instructions">
-            <p>This tool helps you calculate and track payments for M2M.</p>
-            <p>Enter the amount of regular payments and any gift card payments to calculate the center fee (40%) and your earnings (60%).</p>
-            <p>You can then save the payment and access your payment history.</p>
-            <p className="highlight">Please remember to make the center payment via instant bank transfer right after each shift.</p>
+            <p>Enter regular payments (cash/card payments handled by the therapist). Enter gift card payments (processed by the center). Click Calculate to see the net amount. Make sure you've checked out all appointments in Fresha and entered any gift cards correctly!</p>
+            <p>You can then generate and save the payment and access your payment history.</p>
+            <p className="highlight">Please remember to make the center payment via instant bank transfer immediately after each shift.</p>
           </div>
         </div>
         
