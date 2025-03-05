@@ -166,7 +166,7 @@ const Home: NextPage = () => {
               title="Alex: Employee consultant"
               allowTransparency
               allow="geolocation; microphone; camera; fullscreen"
-              src="https://eu.jotform.com/agent/0195628f8f8773efa4a82b2494c37ae1e427?embedMode=iframe&background=1&shadow=1&hideFooter=1"
+              src="https://eu.jotform.com/agent/0195628f8f8773efa4a82b2494c37ae1e427?embedMode=iframe&background=1&shadow=1"
               frameBorder="0" 
               style={{
                 width: '100%',
@@ -177,8 +177,6 @@ const Home: NextPage = () => {
               }}
               scrolling="no"
             ></iframe>
-            {/* Elemento di copertura per il disclaimer */}
-            <div id="disclaimer-cover"></div>
           </div>
         </div>
       </div>
