@@ -1,4 +1,4 @@
-const CACHE_NAME = 'm2m-calc-v2'; // Increment this when you deploy new versions
+const CACHE_NAME = 'm2m-calc-v3';
 const ASSETS = [
   '/',
   '/manifest.json',
