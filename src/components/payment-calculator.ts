@@ -22,36 +22,35 @@ export class PaymentCalculator {
       id: 'sparkasse', 
       name: 'Sparkasse', 
       uriScheme: 'bankingapp://paytoiban',
-      webUrl: null
+      webUrl: 'https://www.sparkasse.de/onlinebanking/'
     },
     { 
       id: 'commerz', 
       name: 'Commerzbank', 
       uriScheme: 'commerzbank://',
-      webUrl: null
+      webUrl: 'https://banking.commerzbank.de/iplb/login'
     },
     { 
       id: 'deutschebank', 
       name: 'Deutsche Bank', 
       uriScheme: 'deutschebank://',
-      webUrl: null
+      webUrl: 'https://meine.deutsche-bank.de/trxm/db/'
     },
     { 
       id: 'postbank', 
       name: 'Postbank', 
       uriScheme: 'postbank://',
-      webUrl: null
+      webUrl: 'https://banking.postbank.de/app/login.do'
     },
     { 
       id: 'volksbank', 
       name: 'Volksbank/Raiffeisen', 
       uriScheme: 'vr-banking://',
-      webUrl: null
+      webUrl: 'https://www.volksbanking.de/'
     },
     { 
       id: 'n26', 
       name: 'N26', 
-      // N26 non ha uno schema URI pubblico per i pagamenti
       uriScheme: null,
       webUrl: 'https://app.n26.com/transfer'
     },
@@ -71,13 +70,13 @@ export class PaymentCalculator {
       id: 'comdirect', 
       name: 'Comdirect', 
       uriScheme: 'comdirect://',
-      webUrl: null
+      webUrl: 'https://www.comdirect.de/kontozugang/'
     },
     { 
       id: 'hypovereinsbank', 
       name: 'HypoVereinsbank', 
       uriScheme: 'hvb://',
-      webUrl: null
+      webUrl: 'https://my.hypovereinsbank.de/'
     },
     { 
       id: 'other', 
@@ -294,179 +293,57 @@ export class PaymentCalculator {
     
     // If no bank is selected or "other" is selected, show a message
     if (!selectedBank || bankId === 'other') {
-      this.showBankingModal(iban, amount, purpose);
+      alert('Please copy the payment details and use your banking app to make the transfer.');
       return;
     }
     
     // Clean IBAN by removing spaces
     const cleanIban = iban.replace(/\s+/g, '');
     
-    // If the bank has a web URL, use that instead of an app URI
+    // First try using URI scheme if available
+    if (selectedBank.uriScheme) {
+      let uriToOpen = '';
+      
+      // Try to construct an appropriate URI based on the bank
+      switch (bankId) {
+        case 'sparkasse':
+          // Sparkasse format
+          uriToOpen = `${selectedBank.uriScheme}?name=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&reason=${encodeURIComponent(purpose)}`;
+          break;
+        case 'volksbank':
+          // Volksbank/Raiffeisen format
+          uriToOpen = `${selectedBank.uriScheme}?receiverName=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&purpose=${encodeURIComponent(purpose)}`;
+          break;
+        default:
+          // Generic format for other banks
+          uriToOpen = `${selectedBank.uriScheme}?iban=${cleanIban}&amount=${amount}&description=${encodeURIComponent(purpose)}`;
+          break;
+      }
+      
+      try {
+        // Try to open using URI scheme first
+        window.location.href = uriToOpen;
+        
+        // Set a timeout to open web URL as fallback if URI scheme fails
+        setTimeout(() => {
+          if (selectedBank.webUrl) {
+            window.open(selectedBank.webUrl, '_blank');
+          }
+        }, 1500);
+        
+        return;
+      } catch (e) {
+        console.error('Error opening banking app via URI scheme:', e);
+        // Fall through to web URL approach
+      }
+    }
+    
+    // If URI scheme is not available or failed, use web URL
     if (selectedBank.webUrl) {
-      // For web URLs, open in a new tab
       window.open(selectedBank.webUrl, '_blank');
-      this.showBankingDetailsNotification(cleanIban, amount, purpose);
-      return;
+    } else {
+      alert('Please copy the payment details and use your banking app to make the transfer.');
     }
-    
-    // If the bank doesn't have a URI scheme, show manual instructions
-    if (!selectedBank.uriScheme) {
-      this.showBankingModal(iban, amount, purpose);
-      return;
-    }
-    
-    // Different banks use different URI formats, try some common formats
-    let uriToOpen = '';
-    
-    // Try to construct an appropriate URI based on the bank
-    switch (bankId) {
-      case 'sparkasse':
-        // Sparkasse format
-        uriToOpen = `${selectedBank.uriScheme}?name=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&reason=${encodeURIComponent(purpose)}`;
-        break;
-      case 'volksbank':
-        // Volksbank/Raiffeisen format
-        uriToOpen = `${selectedBank.uriScheme}?receiverName=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&purpose=${encodeURIComponent(purpose)}`;
-        break;
-      default:
-        // Generic format for other banks
-        uriToOpen = `${selectedBank.uriScheme}?iban=${cleanIban}&amount=${amount}&description=${encodeURIComponent(purpose)}`;
-        break;
-    }
-    
-    // Create an invisible anchor element to open the URI
-    const link = document.createElement('a');
-    link.href = uriToOpen;
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    
-    // Try to open the banking app
-    try {
-      link.click();
-      
-      // Set a brief timeout to show instructions in case the app doesn't open
-      setTimeout(() => {
-        // Check if we should show a notification with the banking details
-        this.showBankingDetailsNotification(cleanIban, amount, purpose);
-      }, 2000);
-      
-    } catch (e) {
-      console.error('Error opening banking app:', e);
-      // If direct opening fails, show the banking modal
-      this.showBankingModal(iban, amount, purpose);
-    } finally {
-      // Clean up the link element
-      setTimeout(() => {
-        document.body.removeChild(link);
-      }, 2000);
-    }
-  }
-  
-  /**
-   * Show a notification with banking details
-   */
-  private showBankingDetailsNotification(iban: string, amount: string, purpose: string): void {
-    // Create a simple notification that shows briefly
-    const notification = document.createElement('div');
-    notification.className = 'banking-details-notification';
-    notification.innerHTML = `
-      <div class="notification-content">
-        <h3>Banking Details</h3>
-        <p><strong>IBAN:</strong> ${iban}</p>
-        <p><strong>Amount:</strong> €${amount}</p>
-        <p><strong>Purpose:</strong> ${purpose}</p>
-        <button class="close-notification">OK</button>
-      </div>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Add event listener to close button
-    const closeButton = notification.querySelector('.close-notification');
-    if (closeButton) {
-      closeButton.addEventListener('click', () => {
-        document.body.removeChild(notification);
-      });
-    }
-    
-    // Auto-close after 10 seconds
-    setTimeout(() => {
-      if (document.body.contains(notification)) {
-        document.body.removeChild(notification);
-      }
-    }, 10000);
-  }
-  
-  /**
-   * Show a modal with banking details for manual copy
-   */
-  private showBankingModal(iban: string, amount: string, purpose: string): void {
-    // Create a modal to show the banking details
-    const modalContainer = document.createElement('div');
-    modalContainer.className = 'modal banking-details-modal';
-    modalContainer.style.display = 'flex';
-    
-    modalContainer.innerHTML = `
-      <div class="modal-content">
-        <h2>Banking Details</h2>
-        <p>Please open your banking app manually and enter these details:</p>
-        
-        <div class="banking-details">
-          <div class="banking-detail-row">
-            <span class="banking-label">Recipient:</span>
-            <span class="banking-value">M2M Massagen</span>
-            <button class="copy-button" data-copy="M2M Massagen">Copy</button>
-          </div>
-          
-          <div class="banking-detail-row">
-            <span class="banking-label">IBAN:</span>
-            <span class="banking-value">${iban}</span>
-            <button class="copy-button" data-copy="${iban}">Copy</button>
-          </div>
-          
-          <div class="banking-detail-row">
-            <span class="banking-label">Amount:</span>
-            <span class="banking-value">€${amount}</span>
-            <button class="copy-button" data-copy="${amount}">Copy</button>
-          </div>
-          
-          <div class="banking-detail-row">
-            <span class="banking-label">Purpose:</span>
-            <span class="banking-value">${purpose}</span>
-            <button class="copy-button" data-copy="${purpose}">Copy</button>
-          </div>
-        </div>
-        
-        <button class="close-modal-button">Close</button>
-      </div>
-    `;
-    
-    document.body.appendChild(modalContainer);
-    
-    // Add event listeners to copy buttons
-    const copyButtons = modalContainer.querySelectorAll('.copy-button');
-    copyButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        const target = e.currentTarget as HTMLElement;
-        const textToCopy = target.getAttribute('data-copy') || '';
-        copyToClipboard(textToCopy);
-      });
-    });
-    
-    // Add event listener to close button
-    const closeButton = modalContainer.querySelector('.close-modal-button');
-    if (closeButton) {
-      closeButton.addEventListener('click', () => {
-        document.body.removeChild(modalContainer);
-      });
-    }
-    
-    // Close when clicking outside the modal content
-    modalContainer.addEventListener('click', (e) => {
-      if (e.target === modalContainer) {
-        document.body.removeChild(modalContainer);
-      }
-    });
   }
   
   /**
@@ -507,7 +384,7 @@ export class PaymentCalculator {
           <button id="open-banking-app-btn" class="banking-app-button">
             <i class="fas fa-university"></i> Open in Banking App
           </button>
-          <p class="banking-app-help">Opens your banking app with pre-filled transfer details or guides you with the necessary information</p>
+          <p class="banking-app-help">Opens your banking app or online banking for a quick transfer</p>
         </div>
       </div>
     `;
