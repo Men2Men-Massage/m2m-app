@@ -2392,3 +2392,90 @@ input#giftcard-number {
   background-color: #1976d2;
   transform: translateY(-2px);
 }
+
+/* Banking App Button Styles */
+.banking-app-section {
+  margin-top: 20px;
+  padding: 15px;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.banking-app-button {
+  background-color: #1976d2 !important;
+  color: white !important;
+  padding: 12px 25px !important;
+  margin: 10px auto !important;
+  font-size: 16px !important;
+  border-radius: 8px !important;
+  border: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s, transform 0.3s !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+  width: 100% !important;
+  max-width: 280px !important;
+}
+
+.banking-app-button:hover {
+  background-color: #1565c0 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3) !important;
+}
+
+.banking-app-button i {
+  font-size: 18px !important;
+}
+
+.banking-app-help {
+  font-size: 13px !important;
+  color: #666 !important;
+  margin-top: 8px !important;
+  font-style: italic !important;
+}
+
+/* Bank Selection Styles */
+.bank-selection-container {
+  margin-bottom: 15px;
+}
+
+.bank-selection-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+  text-align: center;
+}
+
+.bank-select {
+  width: 100%;
+  max-width: 280px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: #fff;
+  margin: 0 auto;
+  display: block;
+  cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .banking-app-button {
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+  }
+  
+  .banking-app-help {
+    font-size: 12px !important;
+  }
+  
+  .bank-select {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
