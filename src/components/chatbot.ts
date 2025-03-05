@@ -4,6 +4,7 @@
 export class ChatbotModule {
   private chatbotPage: HTMLElement;
   private chatbotIframe: HTMLIFrameElement | null = null;
+  private disclaimerCover: HTMLElement | null = null;
   private isVisible: boolean = false;
   
   /**
@@ -11,6 +12,8 @@ export class ChatbotModule {
    */
   constructor() {
     this.chatbotPage = document.getElementById('chatbot-page') as HTMLElement;
+    this.chatbotIframe = document.getElementById('JotFormIFrame-0195628f8f8773efa4a82b2494c37ae1e427') as HTMLIFrameElement;
+    this.disclaimerCover = document.getElementById('disclaimer-cover') as HTMLElement;
     
     this.initChatbot();
   }
@@ -19,18 +22,15 @@ export class ChatbotModule {
    * Initialize the chatbot
    */
   private initChatbot(): void {
-    // Get a reference to the iframe
-    this.chatbotIframe = document.getElementById('JotFormIFrame-0195628f8f8773efa4a82b2494c37ae1e427') as HTMLIFrameElement;
-    
     // Initialize the JotForm embed handler script
     this.loadJotformScript();
     
-    // Add event listener for iframe load to inject custom CSS
-    if (this.chatbotIframe) {
-      this.chatbotIframe.addEventListener('load', () => {
-        this.injectCustomCSS();
-      });
-    }
+    // Adjust disclaimer cover on window resize
+    window.addEventListener('resize', () => {
+      if (this.isVisible) {
+        this.adjustCoverPosition();
+      }
+    });
   }
   
   /**
@@ -53,64 +53,18 @@ export class ChatbotModule {
   }
   
   /**
-   * Inject custom CSS into the iframe to hide the disclaimer
+   * Adjust the position of the disclaimer cover
    */
-  private injectCustomCSS(): void {
-    if (!this.chatbotIframe) return;
+  private adjustCoverPosition(): void {
+    if (!this.disclaimerCover) return;
     
-    try {
-      // Get iframe content window
-      const iframeWindow = this.chatbotIframe.contentWindow;
-      if (!iframeWindow) return;
-      
-      // Try to access the iframe document
-      const iframeDocument = iframeWindow.document;
-      if (!iframeDocument) return;
-      
-      // Create a style element
-      const style = iframeDocument.createElement('style');
-      style.textContent = `
-        /* Hide footer disclaimers and terms of use text */
-        div[class*="footer"], 
-        div[class*="terms"], 
-        div[class*="disclaimer"],
-        div[class*="terms-of-use"],
-        div[id*="footer"],
-        div[id*="terms"],
-        div[id*="disclaimer"],
-        p:contains("By chatting"),
-        p:contains("Terms of Use"),
-        div:contains("By chatting"),
-        div:contains("Terms of Use"),
-        .jfFormAgentFooter,
-        [class*="agent-footer"],
-        [class*="jotform-footer"],
-        [class*="jotform-agent-footer"] {
-          display: none !important;
-          opacity: 0 !important;
-          visibility: hidden !important;
-          height: 0 !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          pointer-events: none !important;
-        }
-        
-        /* Increase body container height to fill the space */
-        body, 
-        .jfFormAgentContainer,
-        [class*="agent-container"] {
-          height: 100% !important;
-          padding-bottom: 0 !important;
-          margin-bottom: 0 !important;
-        }
-      `;
-      
-      // Append the style to the iframe document
-      iframeDocument.head.appendChild(style);
-      
-      console.log('Custom CSS injected into chatbot iframe');
-    } catch (error) {
-      console.error('Failed to inject custom CSS into iframe:', error);
+    // On iOS with notch, adjust for safe area
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isIOS) {
+      const safeAreaBottom = window.getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom');
+      if (safeAreaBottom && safeAreaBottom !== '0px') {
+        this.disclaimerCover.style.height = `calc(40px + ${safeAreaBottom})`;
+      }
     }
   }
   
@@ -130,10 +84,10 @@ export class ChatbotModule {
     // Ensure the iframe fits the container
     if (this.chatbotIframe) {
       this.adjustIframeHeight();
-      
-      // Try to inject custom CSS again when showing the chatbot
-      this.injectCustomCSS();
     }
+    
+    // Adjust disclaimer cover position
+    this.adjustCoverPosition();
     
     this.isVisible = true;
   }
