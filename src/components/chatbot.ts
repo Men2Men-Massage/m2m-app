@@ -24,6 +24,13 @@ export class ChatbotModule {
     
     // Initialize the JotForm embed handler script
     this.loadJotformScript();
+    
+    // Add event listener for iframe load to inject custom CSS
+    if (this.chatbotIframe) {
+      this.chatbotIframe.addEventListener('load', () => {
+        this.injectCustomCSS();
+      });
+    }
   }
   
   /**
@@ -46,6 +53,68 @@ export class ChatbotModule {
   }
   
   /**
+   * Inject custom CSS into the iframe to hide the disclaimer
+   */
+  private injectCustomCSS(): void {
+    if (!this.chatbotIframe) return;
+    
+    try {
+      // Get iframe content window
+      const iframeWindow = this.chatbotIframe.contentWindow;
+      if (!iframeWindow) return;
+      
+      // Try to access the iframe document
+      const iframeDocument = iframeWindow.document;
+      if (!iframeDocument) return;
+      
+      // Create a style element
+      const style = iframeDocument.createElement('style');
+      style.textContent = `
+        /* Hide footer disclaimers and terms of use text */
+        div[class*="footer"], 
+        div[class*="terms"], 
+        div[class*="disclaimer"],
+        div[class*="terms-of-use"],
+        div[id*="footer"],
+        div[id*="terms"],
+        div[id*="disclaimer"],
+        p:contains("By chatting"),
+        p:contains("Terms of Use"),
+        div:contains("By chatting"),
+        div:contains("Terms of Use"),
+        .jfFormAgentFooter,
+        [class*="agent-footer"],
+        [class*="jotform-footer"],
+        [class*="jotform-agent-footer"] {
+          display: none !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          height: 0 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          pointer-events: none !important;
+        }
+        
+        /* Increase body container height to fill the space */
+        body, 
+        .jfFormAgentContainer,
+        [class*="agent-container"] {
+          height: 100% !important;
+          padding-bottom: 0 !important;
+          margin-bottom: 0 !important;
+        }
+      `;
+      
+      // Append the style to the iframe document
+      iframeDocument.head.appendChild(style);
+      
+      console.log('Custom CSS injected into chatbot iframe');
+    } catch (error) {
+      console.error('Failed to inject custom CSS into iframe:', error);
+    }
+  }
+  
+  /**
    * Show chatbot page
    */
   public showChatbot(): void {
@@ -61,6 +130,9 @@ export class ChatbotModule {
     // Ensure the iframe fits the container
     if (this.chatbotIframe) {
       this.adjustIframeHeight();
+      
+      // Try to inject custom CSS again when showing the chatbot
+      this.injectCustomCSS();
     }
     
     this.isVisible = true;
