@@ -157,10 +157,9 @@ const Home: NextPage = () => {
         </div>
       </div>
 
-      {/* Chatbot Help Page - Versione a schermo intero */}
+      {/* Chatbot Help Page - Versione a schermo intero senza intestazione */}
       <div id="chatbot-page" style={{ display: 'none' }}>
         <div id="chatbot-box">
-          <h2>Ask Alex: Employee Consultant</h2>
           <div id="chatbot-container">
             <iframe 
               id="JotFormIFrame-0195628f8f8773efa4a82b2494c37ae1e427" 
