@@ -22,6 +22,7 @@ class App {
   private androidBanner: HTMLElement | null = null;
   private iosBanner: HTMLElement | null = null;
   private navBar: HTMLElement | null = null;
+  private updateBanner: HTMLElement | null = null;
   
   private authModule: AuthModule | null = null;
   private paymentCalculator: PaymentCalculator | null = null;
@@ -100,6 +101,7 @@ class App {
       this.initEventListeners();
       this.checkAuthentication();
       this.registerServiceWorker();
+      this.setupServiceWorkerUpdates();
       
       console.log('App setup completed');
     } catch (error) {
@@ -382,6 +384,11 @@ class App {
     if (this.iosBanner) {
       this.iosBanner.style.display = 'none';
     }
+    
+    // Hide update banner if present
+    if (this.updateBanner) {
+      this.updateBanner.style.display = 'none';
+    }
   }
   
   /**
@@ -462,6 +469,115 @@ class App {
           .catch(err => {
             console.log('ServiceWorker registration failed: ', err);
           });
+      });
+    }
+  }
+  
+  /**
+   * Set up service worker update management
+   */
+  private setupServiceWorkerUpdates(): void {
+    if ('serviceWorker' in navigator) {
+      // Track updates
+      let refreshing = false;
+      
+      // Listen for controller change (service worker activated)
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) {
+          refreshing = true;
+          console.log('New service worker activated, refreshing page...');
+          window.location.reload();
+        }
+      });
+      
+      // Create update notification banner
+      this.createUpdateBanner();
+      
+      // Check for updates periodically (every 60 minutes)
+      setInterval(() => {
+        this.checkForUpdates();
+      }, 60 * 60 * 1000);
+      
+      // Also check for updates when the app starts
+      this.checkForUpdates();
+    }
+  }
+  
+  /**
+   * Check for service worker updates
+   */
+  private checkForUpdates(): void {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistration().then(registration => {
+        if (registration) {
+          registration.update().then(() => {
+            if (registration.waiting) {
+              this.showUpdateNotification();
+            }
+          }).catch(err => {
+            console.error('Error updating service worker:', err);
+          });
+        }
+      });
+    }
+  }
+  
+  /**
+   * Create the update notification banner
+   */
+  private createUpdateBanner(): void {
+    const updateBanner = document.createElement('div');
+    updateBanner.className = 'update-banner';
+    updateBanner.id = 'update-banner';
+    updateBanner.style.display = 'none';
+    updateBanner.innerHTML = `
+      <span class="close-banner">&times;</span>
+      <div class="update-banner-content">
+        <div class="update-banner-text">
+          🔄 A new version is available!
+        </div>
+      </div>
+      <button id="update-app-btn">Update Now</button>
+    `;
+    
+    document.body.appendChild(updateBanner);
+    this.updateBanner = updateBanner;
+    
+    // Add event listeners
+    const closeButton = updateBanner.querySelector('.close-banner');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        updateBanner.style.display = 'none';
+      });
+    }
+    
+    const updateButton = document.getElementById('update-app-btn');
+    if (updateButton) {
+      updateButton.addEventListener('click', () => {
+        this.applyUpdate();
+      });
+    }
+  }
+  
+  /**
+   * Show the update notification
+   */
+  private showUpdateNotification(): void {
+    if (this.updateBanner) {
+      this.updateBanner.style.display = 'flex';
+    }
+  }
+  
+  /**
+   * Apply the pending update
+   */
+  private applyUpdate(): void {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistration().then(registration => {
+        if (registration && registration.waiting) {
+          // Send a message to the waiting service worker
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
       });
     }
   }
