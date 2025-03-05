@@ -2232,3 +2232,104 @@ input#giftcard-number {
 #help-nav:hover .nav-text {
   color: #ff9800;
 }
+
+/* Generate Report Button */
+.generate-report-container {
+  margin-top: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.generate-report-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 0.3s, transform 0.3s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  width: 100%;
+  max-width: 300px;
+}
+
+.generate-report-btn:hover:not(:disabled) {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 7px rgba(0,0,0,0.2);
+}
+
+.generate-report-btn:disabled {
+  background-color: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.generate-report-btn i {
+  font-size: 16px;
+}
+
+/* Report Generation Status */
+.report-status {
+  margin-top: 15px;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.report-status.processing {
+  background-color: #e8f4fd;
+  border: 1px solid #2196F3;
+  color: #0d47a1;
+}
+
+.report-status.success {
+  background-color: #e8f5e9;
+  border: 1px solid #4CAF50;
+  color: #2e7d32;
+}
+
+.report-status.error {
+  background-color: #ffebee;
+  border: 1px solid #f44336;
+  color: #c62828;
+}
+
+/* Email Request Modal */
+.email-request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.email-request-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.close-email-request {
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #777;
+  transition: color 0.3s;
+}
+
+.close-email-request:hover {
+  color: #333;
+}
