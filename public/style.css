@@ -2160,7 +2160,7 @@ input#giftcard-number {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 80px; /* Spazio per la barra di navigazione */
+  bottom: 90px; /* Spazio per la barra di navigazione */
   background-color: #f5f5f5;
   padding: 0;
   margin: 0;
@@ -2172,7 +2172,7 @@ input#giftcard-number {
 /* Per dispositivi iOS con area di sicurezza */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   #chatbot-page {
-    bottom: calc(80px + env(safe-area-inset-bottom)); /* Aggiunta area di sicurezza iOS */
+    bottom: calc(90px + env(safe-area-inset-bottom)); /* Aggiunta area di sicurezza iOS */
   }
 }
 
