@@ -2153,7 +2153,7 @@ input#giftcard-number {
   padding-right: 10px;
 }
 
-/* --- Stili per la pagina del chatbot (versione a schermo intero) --- */
+/* --- Stili per la pagina del chatbot (versione a schermo intero senza intestazione) --- */
 #chatbot-page {
   display: none;
   position: fixed;
@@ -2190,20 +2190,10 @@ input#giftcard-number {
   overflow: hidden;
 }
 
-#chatbot-box h2 {
-  text-align: center;
-  padding: 15px 0;
-  margin: 0;
-  color: #333;
-  font-size: 1.5em;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #eee;
-  flex-shrink: 0;
-}
-
 #chatbot-container {
   flex-grow: 1;
   width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
