@@ -57,25 +57,25 @@ export class PaymentCalculator {
     { 
       id: 'dkb', 
       name: 'DKB', 
-      uriScheme: 'dkb://',
+      uriScheme: null,
       webUrl: 'https://banking.dkb.de/banking'
     },
     { 
       id: 'ing', 
       name: 'ING', 
-      uriScheme: 'ing-diba://',
+      uriScheme: null,
       webUrl: 'https://banking.ing.de/app/transfer'
     },
     { 
       id: 'comdirect', 
       name: 'Comdirect', 
-      uriScheme: 'comdirect://',
+      uriScheme: null,
       webUrl: 'https://www.comdirect.de/kontozugang/'
     },
     { 
       id: 'hypovereinsbank', 
       name: 'HypoVereinsbank', 
-      uriScheme: 'hvb://',
+      uriScheme: null,
       webUrl: 'https://my.hypovereinsbank.de/'
     },
     { 
@@ -281,7 +281,7 @@ export class PaymentCalculator {
   }
   
   /**
-   * Open banking app with transfer data
+   * Open banking app or website
    * @param iban Recipient IBAN
    * @param amount Amount to transfer
    * @param purpose Payment purpose/reference
@@ -297,48 +297,7 @@ export class PaymentCalculator {
       return;
     }
     
-    // Clean IBAN by removing spaces
-    const cleanIban = iban.replace(/\s+/g, '');
-    
-    // First try using URI scheme if available
-    if (selectedBank.uriScheme) {
-      let uriToOpen = '';
-      
-      // Try to construct an appropriate URI based on the bank
-      switch (bankId) {
-        case 'sparkasse':
-          // Sparkasse format
-          uriToOpen = `${selectedBank.uriScheme}?name=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&reason=${encodeURIComponent(purpose)}`;
-          break;
-        case 'volksbank':
-          // Volksbank/Raiffeisen format
-          uriToOpen = `${selectedBank.uriScheme}?receiverName=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&purpose=${encodeURIComponent(purpose)}`;
-          break;
-        default:
-          // Generic format for other banks
-          uriToOpen = `${selectedBank.uriScheme}?iban=${cleanIban}&amount=${amount}&description=${encodeURIComponent(purpose)}`;
-          break;
-      }
-      
-      try {
-        // Try to open using URI scheme first
-        window.location.href = uriToOpen;
-        
-        // Set a timeout to open web URL as fallback if URI scheme fails
-        setTimeout(() => {
-          if (selectedBank.webUrl) {
-            window.open(selectedBank.webUrl, '_blank');
-          }
-        }, 1500);
-        
-        return;
-      } catch (e) {
-        console.error('Error opening banking app via URI scheme:', e);
-        // Fall through to web URL approach
-      }
-    }
-    
-    // If URI scheme is not available or failed, use web URL
+    // Andiamo direttamente al sito web dell'online banking
     if (selectedBank.webUrl) {
       window.open(selectedBank.webUrl, '_blank');
     } else {
@@ -382,9 +341,9 @@ export class PaymentCalculator {
         <div class="banking-app-section">
           ${this.createBankSelectionDropdown()}
           <button id="open-banking-app-btn" class="banking-app-button">
-            <i class="fas fa-university"></i> Open in Banking App
+            <i class="fas fa-university"></i> Open Banking Website
           </button>
-          <p class="banking-app-help">Opens your banking app or online banking for a quick transfer</p>
+          <p class="banking-app-help">Opens your bank's online banking site in a new tab</p>
         </div>
       </div>
     `;
