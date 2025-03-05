@@ -16,19 +16,75 @@ export class PaymentCalculator {
   private selectedLocation: string = '';
   private currentGiftCardAmount: number = 0;
   
-  // Lista delle banche tedesche comuni con i loro schemi URI
+  // Lista delle banche tedesche comuni con i loro metodi di apertura
   private bankList: BankInfo[] = [
-    { id: 'sparkasse', name: 'Sparkasse', uriScheme: 'bankingapp://paytoiban' },
-    { id: 'commerz', name: 'Commerzbank', uriScheme: 'commerzbank://' },
-    { id: 'deutschebank', name: 'Deutsche Bank', uriScheme: 'deutschebank://' },
-    { id: 'postbank', name: 'Postbank', uriScheme: 'postbank://' },
-    { id: 'volksbank', name: 'Volksbank', uriScheme: 'vr-banking://' },
-    { id: 'n26', name: 'N26', uriScheme: 'n26://' },
-    { id: 'dkb', name: 'DKB', uriScheme: 'dkb://' },
-    { id: 'ing', name: 'ING', uriScheme: 'ing-diba://' },
-    { id: 'comdirect', name: 'Comdirect', uriScheme: 'comdirect://' },
-    { id: 'hypovereinsbank', name: 'HypoVereinsbank', uriScheme: 'hvb://' },
-    { id: 'other', name: 'Other bank', uriScheme: '' }
+    { 
+      id: 'sparkasse', 
+      name: 'Sparkasse', 
+      uriScheme: 'bankingapp://paytoiban',
+      webUrl: null
+    },
+    { 
+      id: 'commerz', 
+      name: 'Commerzbank', 
+      uriScheme: 'commerzbank://',
+      webUrl: null
+    },
+    { 
+      id: 'deutschebank', 
+      name: 'Deutsche Bank', 
+      uriScheme: 'deutschebank://',
+      webUrl: null
+    },
+    { 
+      id: 'postbank', 
+      name: 'Postbank', 
+      uriScheme: 'postbank://',
+      webUrl: null
+    },
+    { 
+      id: 'volksbank', 
+      name: 'Volksbank/Raiffeisen', 
+      uriScheme: 'vr-banking://',
+      webUrl: null
+    },
+    { 
+      id: 'n26', 
+      name: 'N26', 
+      // N26 non ha uno schema URI pubblico per i pagamenti
+      uriScheme: null,
+      webUrl: 'https://app.n26.com/transfer'
+    },
+    { 
+      id: 'dkb', 
+      name: 'DKB', 
+      uriScheme: 'dkb://',
+      webUrl: 'https://banking.dkb.de/banking'
+    },
+    { 
+      id: 'ing', 
+      name: 'ING', 
+      uriScheme: 'ing-diba://',
+      webUrl: 'https://banking.ing.de/app/transfer'
+    },
+    { 
+      id: 'comdirect', 
+      name: 'Comdirect', 
+      uriScheme: 'comdirect://',
+      webUrl: null
+    },
+    { 
+      id: 'hypovereinsbank', 
+      name: 'HypoVereinsbank', 
+      uriScheme: 'hvb://',
+      webUrl: null
+    },
+    { 
+      id: 'other', 
+      name: 'Other bank', 
+      uriScheme: null,
+      webUrl: null
+    }
   ];
   
   /**
@@ -238,14 +294,28 @@ export class PaymentCalculator {
     
     // If no bank is selected or "other" is selected, show a message
     if (!selectedBank || bankId === 'other') {
-      alert('Please open your banking app manually and enter the transfer details.');
+      this.showBankingModal(iban, amount, purpose);
       return;
     }
     
     // Clean IBAN by removing spaces
     const cleanIban = iban.replace(/\s+/g, '');
     
-    // Different banks use different URI formats, we'll try some common formats
+    // If the bank has a web URL, use that instead of an app URI
+    if (selectedBank.webUrl) {
+      // For web URLs, open in a new tab
+      window.open(selectedBank.webUrl, '_blank');
+      this.showBankingDetailsNotification(cleanIban, amount, purpose);
+      return;
+    }
+    
+    // If the bank doesn't have a URI scheme, show manual instructions
+    if (!selectedBank.uriScheme) {
+      this.showBankingModal(iban, amount, purpose);
+      return;
+    }
+    
+    // Different banks use different URI formats, try some common formats
     let uriToOpen = '';
     
     // Try to construct an appropriate URI based on the bank
@@ -255,12 +325,8 @@ export class PaymentCalculator {
         uriToOpen = `${selectedBank.uriScheme}?name=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&reason=${encodeURIComponent(purpose)}`;
         break;
       case 'volksbank':
-        // Volksbank format
+        // Volksbank/Raiffeisen format
         uriToOpen = `${selectedBank.uriScheme}?receiverName=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&purpose=${encodeURIComponent(purpose)}`;
-        break;
-      case 'n26':
-        // N26 format
-        uriToOpen = `${selectedBank.uriScheme}transfer?recipient=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&reference=${encodeURIComponent(purpose)}`;
         break;
       default:
         // Generic format for other banks
@@ -277,15 +343,130 @@ export class PaymentCalculator {
     // Try to open the banking app
     try {
       link.click();
+      
+      // Set a brief timeout to show instructions in case the app doesn't open
+      setTimeout(() => {
+        // Check if we should show a notification with the banking details
+        this.showBankingDetailsNotification(cleanIban, amount, purpose);
+      }, 2000);
+      
     } catch (e) {
       console.error('Error opening banking app:', e);
-      alert('Unable to open banking app. Please open your banking app manually and enter the transfer details.');
+      // If direct opening fails, show the banking modal
+      this.showBankingModal(iban, amount, purpose);
     } finally {
       // Clean up the link element
       setTimeout(() => {
         document.body.removeChild(link);
       }, 2000);
     }
+  }
+  
+  /**
+   * Show a notification with banking details
+   */
+  private showBankingDetailsNotification(iban: string, amount: string, purpose: string): void {
+    // Create a simple notification that shows briefly
+    const notification = document.createElement('div');
+    notification.className = 'banking-details-notification';
+    notification.innerHTML = `
+      <div class="notification-content">
+        <h3>Banking Details</h3>
+        <p><strong>IBAN:</strong> ${iban}</p>
+        <p><strong>Amount:</strong> €${amount}</p>
+        <p><strong>Purpose:</strong> ${purpose}</p>
+        <button class="close-notification">OK</button>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Add event listener to close button
+    const closeButton = notification.querySelector('.close-notification');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        document.body.removeChild(notification);
+      });
+    }
+    
+    // Auto-close after 10 seconds
+    setTimeout(() => {
+      if (document.body.contains(notification)) {
+        document.body.removeChild(notification);
+      }
+    }, 10000);
+  }
+  
+  /**
+   * Show a modal with banking details for manual copy
+   */
+  private showBankingModal(iban: string, amount: string, purpose: string): void {
+    // Create a modal to show the banking details
+    const modalContainer = document.createElement('div');
+    modalContainer.className = 'modal banking-details-modal';
+    modalContainer.style.display = 'flex';
+    
+    modalContainer.innerHTML = `
+      <div class="modal-content">
+        <h2>Banking Details</h2>
+        <p>Please open your banking app manually and enter these details:</p>
+        
+        <div class="banking-details">
+          <div class="banking-detail-row">
+            <span class="banking-label">Recipient:</span>
+            <span class="banking-value">M2M Massagen</span>
+            <button class="copy-button" data-copy="M2M Massagen">Copy</button>
+          </div>
+          
+          <div class="banking-detail-row">
+            <span class="banking-label">IBAN:</span>
+            <span class="banking-value">${iban}</span>
+            <button class="copy-button" data-copy="${iban}">Copy</button>
+          </div>
+          
+          <div class="banking-detail-row">
+            <span class="banking-label">Amount:</span>
+            <span class="banking-value">€${amount}</span>
+            <button class="copy-button" data-copy="${amount}">Copy</button>
+          </div>
+          
+          <div class="banking-detail-row">
+            <span class="banking-label">Purpose:</span>
+            <span class="banking-value">${purpose}</span>
+            <button class="copy-button" data-copy="${purpose}">Copy</button>
+          </div>
+        </div>
+        
+        <button class="close-modal-button">Close</button>
+      </div>
+    `;
+    
+    document.body.appendChild(modalContainer);
+    
+    // Add event listeners to copy buttons
+    const copyButtons = modalContainer.querySelectorAll('.copy-button');
+    copyButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const textToCopy = target.getAttribute('data-copy') || '';
+        copyToClipboard(textToCopy);
+      });
+    });
+    
+    // Add event listener to close button
+    const closeButton = modalContainer.querySelector('.close-modal-button');
+    if (closeButton) {
+      closeButton.addEventListener('click', () => {
+        document.body.removeChild(modalContainer);
+      });
+    }
+    
+    // Close when clicking outside the modal content
+    modalContainer.addEventListener('click', (e) => {
+      if (e.target === modalContainer) {
+        document.body.removeChild(modalContainer);
+      }
+    });
   }
   
   /**
@@ -326,7 +507,7 @@ export class PaymentCalculator {
           <button id="open-banking-app-btn" class="banking-app-button">
             <i class="fas fa-university"></i> Open in Banking App
           </button>
-          <p class="banking-app-help">Opens your banking app with pre-filled transfer details</p>
+          <p class="banking-app-help">Opens your banking app with pre-filled transfer details or guides you with the necessary information</p>
         </div>
       </div>
     `;
