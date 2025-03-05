@@ -1,6 +1,6 @@
 import { Payment, GiftCardRequest } from '../types';
 import { StorageService } from '../utils/storage-service';
-import { formatDate } from '../utils/helpers';
+import { formatDate, isValidEmail } from '../utils/helpers';
 
 /**
  * Payment History Module
@@ -19,6 +19,8 @@ export class PaymentHistory {
     amount: 0
   };
   private giftCardRequestModal: HTMLElement;
+  private emailRequestModal: HTMLElement;
+  private reportGenerationStatus: HTMLElement;
   
   /**
    * Create a PaymentHistory instance
@@ -30,6 +32,8 @@ export class PaymentHistory {
     this.dailyPaymentsList = document.getElementById('daily-payments-list') as HTMLElement;
     this.selectedDateElement = document.getElementById('selected-date') as HTMLElement;
     this.giftCardRequestModal = document.getElementById('giftcard-request-modal') as HTMLElement;
+    this.emailRequestModal = document.getElementById('email-request-modal') as HTMLElement;
+    this.reportGenerationStatus = document.getElementById('report-generation-status') as HTMLElement;
     
     // Initialize with current month/year
     const now = new Date();
@@ -64,7 +68,22 @@ export class PaymentHistory {
       if (event.target === this.giftCardRequestModal) {
         this.closeGiftCardRequestModal();
       }
+      if (event.target === this.emailRequestModal) {
+        this.closeEmailRequestModal();
+      }
     });
+    
+    // Email Request Modal Close Button
+    const closeEmailRequestBtn = document.querySelector('.close-email-request') as HTMLElement;
+    if (closeEmailRequestBtn) {
+      closeEmailRequestBtn.addEventListener('click', () => this.closeEmailRequestModal());
+    }
+    
+    // Email Request Submit Button
+    const submitEmailBtn = document.getElementById('submit-email-btn') as HTMLButtonElement;
+    if (submitEmailBtn) {
+      submitEmailBtn.addEventListener('click', () => this.submitEmailAndGenerateReport());
+    }
   }
   
   /**
@@ -223,6 +242,31 @@ export class PaymentHistory {
     totalEarningsDiv.className = 'monthly-total total-earnings';
     totalEarningsDiv.textContent = `Total Earnings: €${monthlyEarningsTotal.toFixed(2)}`;
     this.calendarContainer.appendChild(totalEarningsDiv);
+
+    // Add "Generate Report" button
+    const generateReportButtonContainer = document.createElement('div');
+    generateReportButtonContainer.className = 'generate-report-container';
+    
+    const generateReportButton = document.createElement('button');
+    generateReportButton.id = 'generate-report-btn';
+    generateReportButton.className = 'generate-report-btn';
+    generateReportButton.innerHTML = '<i class="fas fa-file-export"></i> Generate Monthly Report';
+    
+    // Set button disabled if no payments in current month
+    const monthlyPayments = this.getMonthlyPayments(month, year);
+    generateReportButton.disabled = monthlyPayments.length === 0;
+    
+    generateReportButton.addEventListener('click', () => this.handleGenerateReport());
+    generateReportButtonContainer.appendChild(generateReportButton);
+    this.calendarContainer.appendChild(generateReportButtonContainer);
+    
+    // Add report generation status element
+    const reportStatusDiv = document.createElement('div');
+    reportStatusDiv.id = 'report-generation-status';
+    reportStatusDiv.className = 'report-status';
+    reportStatusDiv.style.display = 'none';
+    this.calendarContainer.appendChild(reportStatusDiv);
+    this.reportGenerationStatus = reportStatusDiv;
   }
   
   /**
@@ -244,6 +288,17 @@ export class PaymentHistory {
     });
     
     return [dueTotal, giftCardTotal, earningsTotal];
+  }
+  
+  /**
+   * Get all payments for a specific month
+   */
+  private getMonthlyPayments(month: number, year: number): Payment[] {
+    const payments = StorageService.getPayments();
+    return payments.filter(payment => {
+      const [pYear, pMonth] = payment.date.split('-').map(Number);
+      return pYear === year && pMonth - 1 === month;
+    });
   }
   
   /**
@@ -525,6 +580,173 @@ export class PaymentHistory {
       // Re-enable button
       sendButton.disabled = false;
       sendButton.textContent = 'Send Payment Request';
+    }
+  }
+  
+  /**
+   * Handle generate report button click
+   */
+  private handleGenerateReport(): void {
+    const userData = StorageService.getUserData();
+    
+    // Check if user has an email in their profile
+    if (!userData.email) {
+      this.openEmailRequestModal();
+    } else {
+      this.generateAndSendReport(userData.email);
+    }
+  }
+  
+  /**
+   * Open email request modal
+   */
+  private openEmailRequestModal(): void {
+    if (!this.emailRequestModal) {
+      console.error('Email request modal not found');
+      return;
+    }
+    
+    // Reset the email input
+    const emailInput = document.getElementById('email-for-report') as HTMLInputElement;
+    if (emailInput) {
+      emailInput.value = '';
+    }
+    
+    // Reset any error messages
+    const errorElement = document.getElementById('email-request-error') as HTMLElement;
+    if (errorElement) {
+      errorElement.style.display = 'none';
+    }
+    
+    // Show the modal
+    this.emailRequestModal.style.display = 'flex';
+  }
+  
+  /**
+   * Close email request modal
+   */
+  private closeEmailRequestModal(): void {
+    if (this.emailRequestModal) {
+      this.emailRequestModal.style.display = 'none';
+    }
+  }
+  
+  /**
+   * Submit email and generate report
+   */
+  private submitEmailAndGenerateReport(): void {
+    const emailInput = document.getElementById('email-for-report') as HTMLInputElement;
+    const errorElement = document.getElementById('email-request-error') as HTMLElement;
+    const email = emailInput.value.trim();
+    
+    // Validate email
+    if (!email || !isValidEmail(email)) {
+      errorElement.textContent = 'Please enter a valid email address.';
+      errorElement.style.display = 'block';
+      return;
+    }
+    
+    // Update user profile with the email
+    const userData = StorageService.getUserData();
+    userData.email = email;
+    StorageService.saveUserData(userData);
+    
+    // Close the modal
+    this.closeEmailRequestModal();
+    
+    // Generate and send the report
+    this.generateAndSendReport(email);
+  }
+  
+  /**
+   * Generate and send report
+   */
+  private async generateAndSendReport(email: string): Promise<void> {
+    // Update status
+    this.reportGenerationStatus.textContent = 'Generating report...';
+    this.reportGenerationStatus.className = 'report-status processing';
+    this.reportGenerationStatus.style.display = 'block';
+    
+    // Disable the generate report button
+    const generateReportBtn = document.getElementById('generate-report-btn') as HTMLButtonElement;
+    if (generateReportBtn) {
+      generateReportBtn.disabled = true;
+    }
+    
+    try {
+      // Get user data
+      const userData = StorageService.getUserData();
+      const userName = userData.name;
+      
+      // Get all payments for the current month
+      const monthlyPayments = this.getMonthlyPayments(this.currentCalendarMonth, this.currentCalendarYear);
+      
+      // Calculate totals
+      const [totalDue, totalGiftCard, totalEarnings] = this.calculateMonthlyTotals(
+        this.currentCalendarMonth, 
+        this.currentCalendarYear
+      );
+      
+      // Format month string: YYYY-MM
+      const month = `${this.currentCalendarYear}-${String(this.currentCalendarMonth + 1).padStart(2, '0')}`;
+      
+      // Prepare data for API request
+      const requestData = {
+        userName,
+        userEmail: email,
+        month,
+        payments: monthlyPayments.map(p => ({
+          date: p.date,
+          dueAmount: p.dueAmount,
+          giftCardAmount: p.giftCardAmount,
+          note: p.note
+        })),
+        totalDue,
+        totalGiftCard,
+        totalEarnings
+      };
+      
+      // Send request to API
+      const response = await fetch('/api/send-monthly-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to send report');
+      }
+      
+      const data = await response.json();
+      
+      // Update status
+      this.reportGenerationStatus.textContent = `Report sent successfully to ${email}`;
+      this.reportGenerationStatus.className = 'report-status success';
+      
+      // Re-enable the generate report button after a delay
+      setTimeout(() => {
+        if (generateReportBtn) {
+          generateReportBtn.disabled = false;
+        }
+        // Hide the status after some time
+        setTimeout(() => {
+          this.reportGenerationStatus.style.display = 'none';
+        }, 5000);
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Error generating report:', error);
+      
+      // Update status
+      this.reportGenerationStatus.textContent = 'Failed to generate report. Please try again.';
+      this.reportGenerationStatus.className = 'report-status error';
+      
+      // Re-enable the generate report button
+      if (generateReportBtn) {
+        generateReportBtn.disabled = false;
+      }
     }
   }
 }
