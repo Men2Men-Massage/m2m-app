@@ -177,6 +177,8 @@ const Home: NextPage = () => {
               }}
               scrolling="no"
             ></iframe>
+            {/* Elemento di copertura per il disclaimer */}
+            <div id="disclaimer-cover"></div>
           </div>
         </div>
       </div>
