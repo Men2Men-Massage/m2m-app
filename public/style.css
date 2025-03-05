@@ -2232,3 +2232,34 @@ input#giftcard-number {
 #help-nav:hover .nav-text {
   color: #ff9800;
 }
+
+/* Elemento di copertura per il disclaimer del chatbot */
+#disclaimer-cover {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px; /* Altezza sufficiente per coprire il disclaimer */
+  background-color: white; /* Colore di sfondo */
+  z-index: 1000; /* Assicurarsi che sia sopra l'iframe */
+  pointer-events: none; /* Permettere gli eventi di click sottostanti */
+}
+
+/* Versione per dispositivi mobili */
+@media screen and (max-width: 480px) {
+  #disclaimer-cover {
+    height: 40px; /* Più sottile su mobile */
+  }
+}
+
+/* Supporto per dispositivi con notch o home indicator */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  #disclaimer-cover {
+    height: calc(40px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Per assicurarsi che il contenitore del chatbot abbia position: relative */
+#chatbot-container {
+  position: relative !important; /* Per posizionamento assoluto del cover */
+}
