@@ -71,5 +71,6 @@ export enum Location {
 export interface BankInfo {
   id: string;
   name: string;
-  uriScheme: string;
+  uriScheme: string | null;
+  webUrl: string | null;
 }
