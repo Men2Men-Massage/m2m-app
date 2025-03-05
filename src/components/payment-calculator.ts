@@ -1,4 +1,4 @@
-import { Payment, Location } from '../types';
+import { Payment, Location, BankInfo } from '../types';
 import { StorageService } from '../utils/storage-service';
 import { formatDate, copyToClipboard } from '../utils/helpers';
 
@@ -15,6 +15,21 @@ export class PaymentCalculator {
   private selectedShiftDate: string = '';
   private selectedLocation: string = '';
   private currentGiftCardAmount: number = 0;
+  
+  // Lista delle banche tedesche comuni con i loro schemi URI
+  private bankList: BankInfo[] = [
+    { id: 'sparkasse', name: 'Sparkasse', uriScheme: 'bankingapp://paytoiban' },
+    { id: 'commerz', name: 'Commerzbank', uriScheme: 'commerzbank://' },
+    { id: 'deutschebank', name: 'Deutsche Bank', uriScheme: 'deutschebank://' },
+    { id: 'postbank', name: 'Postbank', uriScheme: 'postbank://' },
+    { id: 'volksbank', name: 'Volksbank', uriScheme: 'vr-banking://' },
+    { id: 'n26', name: 'N26', uriScheme: 'n26://' },
+    { id: 'dkb', name: 'DKB', uriScheme: 'dkb://' },
+    { id: 'ing', name: 'ING', uriScheme: 'ing-diba://' },
+    { id: 'comdirect', name: 'Comdirect', uriScheme: 'comdirect://' },
+    { id: 'hypovereinsbank', name: 'HypoVereinsbank', uriScheme: 'hvb://' },
+    { id: 'other', name: 'Other bank', uriScheme: '' }
+  ];
   
   /**
    * Create a PaymentCalculator instance
@@ -191,6 +206,89 @@ export class PaymentCalculator {
   }
   
   /**
+   * Create bank selection dropdown
+   * @returns HTML string for the bank selection dropdown
+   */
+  private createBankSelectionDropdown(): string {
+    let bankOptions = '';
+    this.bankList.forEach(bank => {
+      bankOptions += `<option value="${bank.id}">${bank.name}</option>`;
+    });
+    
+    return `
+      <div class="bank-selection-container">
+        <label for="bank-select">Select your bank:</label>
+        <select id="bank-select" class="bank-select">
+          ${bankOptions}
+        </select>
+      </div>
+    `;
+  }
+  
+  /**
+   * Open banking app with transfer data
+   * @param iban Recipient IBAN
+   * @param amount Amount to transfer
+   * @param purpose Payment purpose/reference
+   * @param bankId Bank ID selected by user
+   */
+  private openBankingApp(iban: string, amount: string, purpose: string, bankId: string): void {
+    // Get the selected bank info
+    const selectedBank = this.bankList.find(bank => bank.id === bankId);
+    
+    // If no bank is selected or "other" is selected, show a message
+    if (!selectedBank || bankId === 'other') {
+      alert('Please open your banking app manually and enter the transfer details.');
+      return;
+    }
+    
+    // Clean IBAN by removing spaces
+    const cleanIban = iban.replace(/\s+/g, '');
+    
+    // Different banks use different URI formats, we'll try some common formats
+    let uriToOpen = '';
+    
+    // Try to construct an appropriate URI based on the bank
+    switch (bankId) {
+      case 'sparkasse':
+        // Sparkasse format
+        uriToOpen = `${selectedBank.uriScheme}?name=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&reason=${encodeURIComponent(purpose)}`;
+        break;
+      case 'volksbank':
+        // Volksbank format
+        uriToOpen = `${selectedBank.uriScheme}?receiverName=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&purpose=${encodeURIComponent(purpose)}`;
+        break;
+      case 'n26':
+        // N26 format
+        uriToOpen = `${selectedBank.uriScheme}transfer?recipient=M2M%20Massagen&iban=${cleanIban}&amount=${amount}&reference=${encodeURIComponent(purpose)}`;
+        break;
+      default:
+        // Generic format for other banks
+        uriToOpen = `${selectedBank.uriScheme}?iban=${cleanIban}&amount=${amount}&description=${encodeURIComponent(purpose)}`;
+        break;
+    }
+    
+    // Create an invisible anchor element to open the URI
+    const link = document.createElement('a');
+    link.href = uriToOpen;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    
+    // Try to open the banking app
+    try {
+      link.click();
+    } catch (e) {
+      console.error('Error opening banking app:', e);
+      alert('Unable to open banking app. Please open your banking app manually and enter the transfer details.');
+    } finally {
+      // Clean up the link element
+      setTimeout(() => {
+        document.body.removeChild(link);
+      }, 2000);
+    }
+  }
+  
+  /**
    * Save location and generate payment
    */
   private saveLocationAndGeneratePayment(): void {
@@ -223,6 +321,13 @@ export class PaymentCalculator {
         <p><strong>IBAN:</strong> <span>${iban}</span> <button class="copy-button" onclick="copyToClipboard('${iban}')">Copy</button></p>
         <p><strong>Amount:</strong> <span>€${dueAmount.toFixed(2)}</span> <button class="copy-button" onclick="copyToClipboard('${dueAmount.toFixed(2)}')">Copy</button></p>
         <p><strong>Purpose:</strong> <span>${purpose}</span> <button class="copy-button" onclick="copyToClipboard('${purpose}')">Copy</button></p>
+        <div class="banking-app-section">
+          ${this.createBankSelectionDropdown()}
+          <button id="open-banking-app-btn" class="banking-app-button">
+            <i class="fas fa-university"></i> Open in Banking App
+          </button>
+          <p class="banking-app-help">Opens your banking app with pre-filled transfer details</p>
+        </div>
       </div>
     `;
     
@@ -235,6 +340,16 @@ export class PaymentCalculator {
         copyToClipboard(textToCopy);
       });
     });
+    
+    // Add event listener to the banking app button
+    const bankingAppButton = document.getElementById('open-banking-app-btn');
+    if (bankingAppButton) {
+      bankingAppButton.addEventListener('click', () => {
+        const bankSelect = document.getElementById('bank-select') as HTMLSelectElement;
+        const selectedBankId = bankSelect.value;
+        this.openBankingApp(iban, dueAmount.toFixed(2), purpose, selectedBankId);
+      });
+    }
     
     this.resultDiv.style.display = 'block';
   }
