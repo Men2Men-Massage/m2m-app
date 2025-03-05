@@ -4,6 +4,7 @@
 export class ChatbotModule {
   private chatbotPage: HTMLElement;
   private chatbotIframe: HTMLIFrameElement | null = null;
+  private isVisible: boolean = false;
   
   /**
    * Create a ChatbotModule instance
@@ -48,6 +49,9 @@ export class ChatbotModule {
    * Show chatbot page
    */
   public showChatbot(): void {
+    // Solo se il chatbot non è già visibile
+    if (this.isVisible) return;
+    
     // Make sure the body doesn't scroll when chatbot is shown
     document.body.style.overflow = 'hidden';
     
@@ -58,17 +62,24 @@ export class ChatbotModule {
     if (this.chatbotIframe) {
       this.adjustIframeHeight();
     }
+    
+    this.isVisible = true;
   }
   
   /**
    * Hide chatbot page
    */
   public hideChatbot(): void {
+    // Solo se il chatbot è attualmente visibile
+    if (!this.isVisible) return;
+    
     // Restore normal scrolling when chatbot is hidden
     document.body.style.overflow = '';
     
     // Hide the chatbot page
     this.chatbotPage.style.display = 'none';
+    
+    this.isVisible = false;
   }
   
   /**
@@ -83,5 +94,12 @@ export class ChatbotModule {
     // Set the iframe height to match container
     const containerHeight = container.clientHeight;
     this.chatbotIframe.style.height = `${containerHeight}px`;
+  }
+  
+  /**
+   * Check if chatbot is currently visible
+   */
+  public isCurrentlyVisible(): boolean {
+    return this.isVisible;
   }
 }
