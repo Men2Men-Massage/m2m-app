@@ -64,3 +64,12 @@ export enum Location {
   PrenzlauerBerg = "Prenzlauer Berg",
   Schoeneberg = "Schoeneberg"
 }
+
+/**
+ * Bank information structure
+ */
+export interface BankInfo {
+  id: string;
+  name: string;
+  uriScheme: string;
+}
