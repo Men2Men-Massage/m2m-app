@@ -2333,3 +2333,60 @@ input#giftcard-number {
 .close-email-request:hover {
   color: #333;
 }
+
+/* Update Banner */
+.update-banner {
+  position: fixed;
+  bottom: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 450px;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  background-color: #e3f2fd;
+  border: 1px solid #2196f3;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1010; /* Higher than nav bar */
+  font-size: 14px;
+  animation: slideUp 0.3s ease-out;
+}
+
+/* iOS-specific position adjustments */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .update-banner {
+    bottom: calc(85px + env(safe-area-inset-bottom));
+  }
+}
+
+.update-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.update-banner-text {
+  flex: 1;
+  line-height: 1.5;
+  color: #0d47a1;
+}
+
+#update-app-btn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  align-self: center;
+}
+
+#update-app-btn:hover {
+  background-color: #1976d2;
+  transform: translateY(-2px);
+}
