@@ -224,12 +224,15 @@ class App {
    * Show calculator view
    */
   public showCalculator(): void {
-    if (!this.container || !this.historyPage || !this.profilePage || !this.chatbotPage || !this.navItems) return;
+    if (!this.container || !this.historyPage || !this.profilePage || !this.chatbotPage || !this.chatbotModule || !this.navItems) return;
     
+    // Nascondi il chatbot e ripristina lo scrolling
+    this.chatbotModule.hideChatbot();
+    
+    // Mostra la pagina corretta
     this.container.style.display = 'block';
     this.historyPage.style.display = 'none';
     this.profilePage.style.display = 'none';
-    this.chatbotPage.style.display = 'none';
     
     // Reset scroll position
     window.scrollTo(0, 0);
@@ -250,11 +253,14 @@ class App {
    * Show payment history view
    */
   public showPaymentHistory(): void {
-    if (!this.container || !this.profilePage || !this.chatbotPage || !this.paymentHistory || !this.navItems) return;
+    if (!this.container || !this.profilePage || !this.chatbotPage || !this.paymentHistory || !this.chatbotModule || !this.navItems) return;
     
+    // Nascondi il chatbot e ripristina lo scrolling
+    this.chatbotModule.hideChatbot();
+    
+    // Mostra la pagina corretta
     this.container.style.display = 'none';
     this.profilePage.style.display = 'none';
-    this.chatbotPage.style.display = 'none';
     this.paymentHistory.showPaymentHistory();
     
     // Reset scroll position
@@ -302,11 +308,14 @@ class App {
    * Show user profile view
    */
   public showUserProfile(): void {
-    if (!this.container || !this.historyPage || !this.chatbotPage || !this.profilePage || !this.userProfile || !this.navItems) return;
+    if (!this.container || !this.historyPage || !this.chatbotPage || !this.profilePage || !this.userProfile || !this.chatbotModule || !this.navItems) return;
     
+    // Nascondi il chatbot e ripristina lo scrolling
+    this.chatbotModule.hideChatbot();
+    
+    // Mostra la pagina corretta
     this.container.style.display = 'none';
     this.historyPage.style.display = 'none';
-    this.chatbotPage.style.display = 'none';
     this.userProfile.showProfile();
     
     // Reset scroll position
