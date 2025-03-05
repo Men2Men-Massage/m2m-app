@@ -4,7 +4,6 @@
 export class ChatbotModule {
   private chatbotPage: HTMLElement;
   private chatbotIframe: HTMLIFrameElement | null = null;
-  private disclaimerCover: HTMLElement | null = null;
   private isVisible: boolean = false;
   
   /**
@@ -12,8 +11,6 @@ export class ChatbotModule {
    */
   constructor() {
     this.chatbotPage = document.getElementById('chatbot-page') as HTMLElement;
-    this.chatbotIframe = document.getElementById('JotFormIFrame-0195628f8f8773efa4a82b2494c37ae1e427') as HTMLIFrameElement;
-    this.disclaimerCover = document.getElementById('disclaimer-cover') as HTMLElement;
     
     this.initChatbot();
   }
@@ -22,6 +19,9 @@ export class ChatbotModule {
    * Initialize the chatbot
    */
   private initChatbot(): void {
+    // Get a reference to the iframe
+    this.chatbotIframe = document.getElementById('JotFormIFrame-0195628f8f8773efa4a82b2494c37ae1e427') as HTMLIFrameElement;
+    
     // Initialize the JotForm embed handler script
     this.loadJotformScript();
   }
