@@ -6,7 +6,6 @@ export class ChatbotModule {
   private chatbotIframe: HTMLIFrameElement | null = null;
   private disclaimerCover: HTMLElement | null = null;
   private isVisible: boolean = false;
-  private isKeyboardVisible: boolean = false;
   
   /**
    * Create a ChatbotModule instance
@@ -25,86 +24,6 @@ export class ChatbotModule {
   private initChatbot(): void {
     // Initialize the JotForm embed handler script
     this.loadJotformScript();
-    
-    // Monitor resize events for keyboard visibility
-    this.setupKeyboardDetection();
-    
-    // Adjust disclaimer cover on window resize
-    window.addEventListener('resize', () => {
-      if (this.isVisible) {
-        this.adjustCoverPosition();
-      }
-    });
-  }
-  
-  /**
-   * Set up keyboard detection
-   */
-  private setupKeyboardDetection(): void {
-    // Initial window height
-    let windowHeight = window.innerHeight;
-    
-    // Listen for resize events (keyboard opening causes resize)
-    window.addEventListener('resize', () => {
-      // If the new height is significantly smaller, keyboard is likely visible
-      const newWindowHeight = window.innerHeight;
-      
-      if (newWindowHeight < windowHeight * 0.75) {
-        // Keyboard is likely visible
-        this.isKeyboardVisible = true;
-        this.updateCoverVisibility();
-      } else {
-        // Keyboard is likely hidden
-        this.isKeyboardVisible = false;
-        this.updateCoverVisibility();
-      }
-      
-      // Update the reference height
-      windowHeight = newWindowHeight;
-    });
-    
-    // Also listen for focus/blur events on the document
-    document.addEventListener('focusin', () => {
-      // Input element has received focus - might be keyboard showing
-      setTimeout(() => {
-        this.isKeyboardVisible = true;
-        this.updateCoverVisibility();
-      }, 300);
-    });
-    
-    document.addEventListener('focusout', () => {
-      // Input element has lost focus - might be keyboard hiding
-      setTimeout(() => {
-        this.isKeyboardVisible = false;
-        this.updateCoverVisibility();
-      }, 300);
-    });
-    
-    // Additional handling for touch events (tapping on input fields)
-    document.addEventListener('touchstart', () => {
-      // User touched screen - might be tapping on input field
-      setTimeout(() => {
-        if (window.innerHeight < windowHeight * 0.75) {
-          this.isKeyboardVisible = true;
-          this.updateCoverVisibility();
-        }
-      }, 500);
-    });
-  }
-  
-  /**
-   * Update cover visibility based on keyboard state
-   */
-  private updateCoverVisibility(): void {
-    if (!this.disclaimerCover) return;
-    
-    if (this.isKeyboardVisible) {
-      // Keyboard is visible, hide the cover
-      this.disclaimerCover.style.display = 'none';
-    } else {
-      // Keyboard is hidden, show the cover
-      this.disclaimerCover.style.display = 'block';
-    }
   }
   
   /**
@@ -127,25 +46,6 @@ export class ChatbotModule {
   }
   
   /**
-   * Adjust the position of the disclaimer cover
-   */
-  private adjustCoverPosition(): void {
-    if (!this.disclaimerCover) return;
-    
-    // On iOS with notch, adjust for safe area
-    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (isIOS) {
-      const safeAreaBottom = window.getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom');
-      if (safeAreaBottom && safeAreaBottom !== '0px') {
-        this.disclaimerCover.style.height = `calc(40px + ${safeAreaBottom})`;
-      }
-    }
-    
-    // Update visibility based on keyboard state
-    this.updateCoverVisibility();
-  }
-  
-  /**
    * Show chatbot page
    */
   public showChatbot(): void {
@@ -162,9 +62,6 @@ export class ChatbotModule {
     if (this.chatbotIframe) {
       this.adjustIframeHeight();
     }
-    
-    // Adjust disclaimer cover position
-    this.adjustCoverPosition();
     
     this.isVisible = true;
   }
