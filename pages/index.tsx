@@ -308,6 +308,32 @@ const Home: NextPage = () => {
         </div>
       </div>
 
+      {/* Email Request Modal */}
+      <div id="email-request-modal" className="modal">
+        <div className="modal-content">
+          <div className="email-request-header">
+            <h2>Email Required</h2>
+            <span className="close-email-request">&times;</span>
+          </div>
+          <p>Please provide your email address to receive the monthly report.</p>
+          <div className="form-group">
+            <label htmlFor="email-for-report">Email <span className="required">*</span></label>
+            <input 
+              type="email" 
+              id="email-for-report" 
+              placeholder="Enter your email" 
+              inputMode="email" 
+              autoComplete="email" 
+            />
+          </div>
+          <div id="email-request-error" className="error-message" style={{ display: 'none' }}></div>
+          <div className="modal-buttons">
+            <button id="submit-email-btn">Submit</button>
+            <button className="cancel-btn close-email-request">Cancel</button>
+          </div>
+        </div>
+      </div>
+
       {/* Date & Location Modals - Updated with cancel buttons */}
       <div id="date-modal" className="modal">
         <div className="modal-content">
