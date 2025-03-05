@@ -2124,11 +2124,13 @@ input#giftcard-number {
   width: 100%;
 }
 
+/* Calculator Copy Button */
 .calculator-copy-btn {
   position: absolute;
-  left: 10px; /* Changed from right to left */
-  top: 50%;
-  transform: translateY(-50%);
+  left: 10px; /* Left positioning is correct */
+  top: 50%; /* Keep at 50% for base centering */
+  transform: translateY(-50%); /* This centers it vertically */
+  margin-top: -2px; /* Add a slight upward shift */
   background: transparent;
   border: none;
   color: #555;
