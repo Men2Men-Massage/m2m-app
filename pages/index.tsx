@@ -105,6 +105,20 @@ const Home: NextPage = () => {
             <p><strong>Name:</strong> <span id="profile-name"></span></p>
             <p><strong>Email:</strong> <span id="profile-email"></span></p>
           </div>
+          
+          {/* New Fresha Tools Section */}
+          <div className="profile-tools">
+            <h3>Fresha Tools</h3>
+            <div className="profile-tools-buttons">
+              <button id="scheduled-shifts-btn">
+                <i className="fas fa-calendar-alt"></i> Scheduled Shifts
+              </button>
+              <button id="reviews-btn">
+                <i className="fas fa-star"></i> Reviews
+              </button>
+            </div>
+          </div>
+          
           <div className="profile-edit">
             <h3>Edit Profile</h3>
             <div className="input-group">
