@@ -2651,7 +2651,7 @@ input#giftcard-number {
 }
 
 #scheduled-shifts-btn {
-  background-color: #5e17eb; /* Viola di Fresha */
+  background-color: #5e17eb !important; /* Viola di Fresha */
 }
 
 #scheduled-shifts-btn:hover {
@@ -2661,7 +2661,7 @@ input#giftcard-number {
 }
 
 #reviews-btn {
-  background-color: #ffc107; /* Giallo per le stelle recensioni */
+  background-color: #ffc107 !important; /* Giallo per le stelle recensioni */
 }
 
 #reviews-btn:hover {
