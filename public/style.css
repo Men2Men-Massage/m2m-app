@@ -2678,3 +2678,81 @@ input#giftcard-number {
     height: 42px; /* Leggermente più basso su schermi piccoli */
   }
 }
+
+/* iOS Pre-Login Banner Styles */
+#ios-pre-login-banner {
+  background-color: rgba(255, 152, 0, 0.9);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease-out;
+  color: white;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.ios-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.ios-banner-icon {
+  font-size: 32px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.ios-banner-text {
+  flex: 1;
+}
+
+.ios-banner-text p {
+  margin: 5px 0;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+.ios-banner-text strong {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.close-pre-login-banner {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 20px;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.close-pre-login-banner:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+#ios-pre-login-banner .share-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin: 0 2px;
+  filter: brightness(0) invert(1);
+}
