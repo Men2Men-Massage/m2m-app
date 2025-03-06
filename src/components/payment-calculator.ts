@@ -28,7 +28,7 @@ export class PaymentCalculator {
       id: 'commerz', 
       name: 'Commerzbank', 
       uriScheme: 'commerzbank://',
-      webUrl: 'https://banking.commerzbank.de/iplb/login'
+      webUrl: 'https://kunden.commerzbank.de/lp/login?language=de_DE'
     },
     { 
       id: 'deutschebank', 
@@ -40,7 +40,7 @@ export class PaymentCalculator {
       id: 'postbank', 
       name: 'Postbank', 
       uriScheme: 'postbank://',
-      webUrl: 'https://banking.postbank.de/app/login.do'
+      webUrl: 'https://banking.postbank.de/#/login'
     },
     { 
       id: 'volksbank', 
@@ -64,7 +64,7 @@ export class PaymentCalculator {
       id: 'ing', 
       name: 'ING', 
       uriScheme: null,
-      webUrl: 'https://banking.ing.de/app/transfer'
+      webUrl: 'https://banking.ing.de/app/obligo'
     },
     { 
       id: 'comdirect', 
