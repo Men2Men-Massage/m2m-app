@@ -2765,6 +2765,10 @@ input#giftcard-number {
   border-radius: 12px;
   background-color: #fff;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  max-height: 90vh; /* Limita l'altezza al 90% della viewport */
+  overflow-y: auto; /* Abilita lo scrolling verticale */
+  display: flex;
+  flex-direction: column;
 }
 
 .checklist-header {
@@ -2773,6 +2777,11 @@ input#giftcard-number {
   align-items: center;
   margin-bottom: 20px;
   width: 100%;
+  position: sticky; /* Mantiene l'header visibile durante lo scroll */
+  top: 0;
+  background-color: #fff;
+  z-index: 10;
+  padding-bottom: 10px;
 }
 
 .checklist-header h2 {
@@ -2802,6 +2811,7 @@ input#giftcard-number {
 
 .checklist-items {
   margin-bottom: 20px;
+  overflow-y: auto; /* Garantisce che questa sezione sia scrollabile */
 }
 
 .checklist-item {
@@ -2887,6 +2897,12 @@ input#giftcard-number {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  position: sticky; /* Mantiene i pulsanti visibili durante lo scroll */
+  bottom: 0;
+  background-color: #fff;
+  padding-top: 10px;
+  z-index: 10;
+  margin-top: auto; /* Spinge i pulsanti in fondo quando c'è spazio */
 }
 
 .confirm-checklist-btn {
@@ -2921,15 +2937,19 @@ input#giftcard-number {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-bottom: 10px; /* Assicura che ci sia spazio sotto il pulsante */
 }
 
 .remind-later-btn:hover {
   background-color: #e0e0e0;
 }
 
+/* Adattamento per schermi molto piccoli */
 @media (max-width: 480px) {
   .checklist-modal-content {
     padding: 15px;
+    width: 95%; /* Aumenta la larghezza su schermi piccoli */
+    max-height: 85vh; /* Riduce leggermente l'altezza su schermi piccoli */
   }
   
   .checklist-header h2 {
@@ -2945,4 +2965,12 @@ input#giftcard-number {
     padding: 10px;
     font-size: 14px;
   }
+}
+
+/* Assicura che la modalità sia centrata e scrollabile */
+#shift-checklist-modal {
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 15px 0;
 }
