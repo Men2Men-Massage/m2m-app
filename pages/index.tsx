@@ -53,6 +53,21 @@ const Home: NextPage = () => {
       <div id="auth-overlay">
         <div id="auth-box">
           <h2>Welcome to M2M Calculator</h2>
+          
+          {/* iOS Pre-Login Banner */}
+          <div id="ios-pre-login-banner" style={{display: 'none'}}>
+            <span className="close-pre-login-banner">&times;</span>
+            <div className="ios-banner-content">
+              <div className="ios-banner-icon">
+                <i className="fas fa-mobile-alt"></i>
+              </div>
+              <div className="ios-banner-text">
+                <p><strong>Install the app before logging in!</strong></p>
+                <p>To save your data on this device, tap <img src="/icons/share-icon.png" alt="Share" className="share-icon" /> and then "Add to Home Screen"</p>
+              </div>
+            </div>
+          </div>
+          
           <div id="code-section">
             <input type="password" id="access-code" placeholder="Enter access code" />
             <button>Continue</button>
