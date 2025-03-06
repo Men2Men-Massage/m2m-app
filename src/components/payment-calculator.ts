@@ -1,6 +1,6 @@
 import { Payment, Location, BankInfo } from '../types';
 import { StorageService } from '../utils/storage-service';
-import { formatDate, copyToClipboard, isIos, isInStandaloneMode } from '../utils/helpers';
+import { formatDate, copyToClipboard } from '../utils/helpers';
 
 /**
  * Payment Calculator Module
@@ -21,31 +21,31 @@ export class PaymentCalculator {
     { 
       id: 'sparkasse', 
       name: 'Sparkasse', 
-      uriScheme: null,
+      uriScheme: 'bankingapp://paytoiban',
       webUrl: 'https://www.sparkasse.de/onlinebanking/'
     },
     { 
       id: 'commerz', 
       name: 'Commerzbank', 
-      uriScheme: null,
+      uriScheme: 'commerzbank://',
       webUrl: 'https://banking.commerzbank.de/iplb/login'
     },
     { 
       id: 'deutschebank', 
       name: 'Deutsche Bank', 
-      uriScheme: null,
+      uriScheme: 'deutschebank://',
       webUrl: 'https://meine.deutsche-bank.de/trxm/db/'
     },
     { 
       id: 'postbank', 
       name: 'Postbank', 
-      uriScheme: null,
+      uriScheme: 'postbank://',
       webUrl: 'https://banking.postbank.de/app/login.do'
     },
     { 
       id: 'volksbank', 
       name: 'Volksbank/Raiffeisen', 
-      uriScheme: null,
+      uriScheme: 'vr-banking://',
       webUrl: 'https://www.volksbanking.de/'
     },
     { 
@@ -281,7 +281,7 @@ export class PaymentCalculator {
   }
   
   /**
-   * Open banking website in external browser for iOS or normal browser for others
+   * Open banking app or website
    * @param iban Recipient IBAN
    * @param amount Amount to transfer
    * @param purpose Payment purpose/reference
@@ -297,17 +297,9 @@ export class PaymentCalculator {
       return;
     }
     
-    // Se abbiamo un URL per la banca
+    // Andiamo direttamente al sito web dell'online banking
     if (selectedBank.webUrl) {
-      // Controlla se siamo su iOS e in modalità standalone (PWA)
-      if (isIos() && isInStandaloneMode()) {
-        // Per iOS in modalità standalone (PWA), apri in Safari esterno
-        // Utilizziamo lo schema 'https://' per aprire in Safari
-        window.location.href = selectedBank.webUrl;
-      } else {
-        // Per tutti gli altri casi, apriamo in una nuova scheda
-        window.open(selectedBank.webUrl, '_blank');
-      }
+      window.open(selectedBank.webUrl, '_blank');
     } else {
       alert('Please copy the payment details and use your banking app to make the transfer.');
     }
@@ -351,7 +343,7 @@ export class PaymentCalculator {
           <button id="open-banking-app-btn" class="banking-app-button">
             <i class="fas fa-university"></i> Open Banking Website
           </button>
-          <p class="banking-app-help">Opens your bank's online banking site${isIos() && isInStandaloneMode() ? ' in Safari' : ''}</p>
+          <p class="banking-app-help">Opens your bank's online banking site in a new tab</p>
         </div>
       </div>
     `;
