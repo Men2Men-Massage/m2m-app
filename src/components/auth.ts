@@ -1,6 +1,6 @@
 import { UserData } from '../types';
 import { StorageService, AUTH_CODE } from '../utils/storage-service';
-import { isValidEmail } from '../utils/helpers';
+import { isValidEmail, isIos, isInStandaloneMode } from '../utils/helpers';
 
 /**
  * Authentication module for the application
@@ -14,6 +14,7 @@ export class AuthModule {
   private profileImagePreview: HTMLElement;
   private profileImageInput: HTMLInputElement;
   private navBar: HTMLElement;
+  private iosPreLoginBanner: HTMLElement | null;
   private onAuthenticated: (userData: UserData) => void;
   
   /**
@@ -29,9 +30,26 @@ export class AuthModule {
     this.profileImagePreview = document.getElementById('profile-image-preview') as HTMLElement;
     this.profileImageInput = document.getElementById('profile-image-input') as HTMLInputElement;
     this.navBar = document.querySelector('.bottom-nav') as HTMLElement;
+    this.iosPreLoginBanner = document.getElementById('ios-pre-login-banner');
     this.onAuthenticated = onAuthenticated;
     
     this.initEventListeners();
+    this.checkIOSPreLoginBanner();
+  }
+  
+  /**
+   * Check if we should show the iOS pre-login banner
+   */
+  private checkIOSPreLoginBanner(): void {
+    // Only show on iOS devices that are not in standalone mode
+    if (this.iosPreLoginBanner && isIos() && !isInStandaloneMode()) {
+      // Check if banner was dismissed before
+      const bannerDismissed = sessionStorage.getItem('preLoginBannerDismissed') === 'true';
+      
+      if (!bannerDismissed) {
+        this.iosPreLoginBanner.style.display = 'block';
+      }
+    }
   }
   
   /**
@@ -69,6 +87,18 @@ export class AuthModule {
         this.userEmailInput.setCustomValidity('');
       }
     });
+    
+    // Close iOS pre-login banner
+    const closePreLoginBanner = document.querySelector('.close-pre-login-banner');
+    if (closePreLoginBanner) {
+      closePreLoginBanner.addEventListener('click', () => {
+        if (this.iosPreLoginBanner) {
+          this.iosPreLoginBanner.style.display = 'none';
+          // Remember that the banner was dismissed
+          sessionStorage.setItem('preLoginBannerDismissed', 'true');
+        }
+      });
+    }
   }
   
   /**
@@ -91,6 +121,9 @@ export class AuthModule {
     // Reset to code section on new auth
     this.nameSection.style.display = 'none';
     this.codeSection.style.display = 'block';
+    
+    // Check if we should show the iOS pre-login banner
+    this.checkIOSPreLoginBanner();
     
     // Clear any existing values
     const accessCodeInput = document.getElementById('access-code') as HTMLInputElement;
