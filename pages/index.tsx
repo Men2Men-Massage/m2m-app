@@ -111,7 +111,7 @@ const Home: NextPage = () => {
             <h3>Fresha Tools</h3>
             <div className="profile-tools-buttons">
               <button id="scheduled-shifts-btn">
-                <i className="fas fa-calendar-alt"></i> Scheduled Shifts
+                <i className="fas fa-calendar-alt"></i> Shifts
               </button>
               <button id="reviews-btn">
                 <i className="fas fa-star"></i> Reviews
