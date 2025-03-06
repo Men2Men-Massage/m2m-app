@@ -2756,3 +2756,193 @@ input#giftcard-number {
   margin: 0 2px;
   filter: brightness(0) invert(1);
 }
+
+/* Shift Checklist Modal Styles */
+.checklist-modal-content {
+  width: 90%;
+  max-width: 500px;
+  padding: 25px;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.checklist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.checklist-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #333;
+  font-weight: 600;
+}
+
+.close-checklist {
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #777;
+  transition: color 0.3s;
+}
+
+.close-checklist:hover {
+  color: #333;
+}
+
+.checklist-subheader {
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #555;
+}
+
+.checklist-items {
+  margin-bottom: 20px;
+}
+
+.checklist-item {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.checklist-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  padding-left: 35px;
+  position: relative;
+}
+
+.checklist-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.checklist-label:hover input ~ .checkmark {
+  background-color: #e0e0e0;
+}
+
+.checklist-label input:checked ~ .checkmark {
+  background-color: #376FE9;
+  border-color: #376FE9;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checklist-label input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checklist-label .checkmark:after {
+  left: 7px;
+  top: 3px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checklist-text {
+  flex: 1;
+  font-size: 16px;
+  line-height: 1.5;
+  padding-top: 1px;
+}
+
+.checklist-note {
+  background-color: #fffde7;
+  border-left: 4px solid #ffca28;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border-radius: 0 4px 4px 0;
+  line-height: 1.4;
+  font-size: 14px;
+  color: #666;
+}
+
+.checklist-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.confirm-checklist-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.confirm-checklist-btn:hover:not(:disabled) {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.confirm-checklist-btn:disabled {
+  background-color: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.remind-later-btn {
+  background-color: #f0f0f0;
+  color: #555;
+  padding: 12px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.remind-later-btn:hover {
+  background-color: #e0e0e0;
+}
+
+@media (max-width: 480px) {
+  .checklist-modal-content {
+    padding: 15px;
+  }
+  
+  .checklist-header h2 {
+    font-size: 1.3em;
+  }
+  
+  .checklist-text {
+    font-size: 14px;
+  }
+  
+  .confirm-checklist-btn,
+  .remind-later-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
