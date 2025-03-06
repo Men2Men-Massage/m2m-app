@@ -1,4 +1,5 @@
 import { UserData, Payment } from '../types';
+import { ChecklistType } from '../components/shift-checklist';
 
 /**
  * Storage keys for localStorage
@@ -7,6 +8,7 @@ const STORAGE_KEYS = {
   AUTH_CODE: 'm2m_access',
   USER_DATA: 'm2m_user_data',
   PAYMENTS: 'm2m_payments',
+  CHECKLIST_SHOWN: 'm2m_checklist_shown',
 };
 
 /**
@@ -139,6 +141,33 @@ export class StorageService {
   }
 
   /**
+   * Get the last date when a specific checklist was shown
+   */
+  static getLastShownDate(checklistType: ChecklistType): Date | null {
+    const key = `${STORAGE_KEYS.CHECKLIST_SHOWN}_${checklistType}`;
+    const dateStr = localStorage.getItem(key);
+    
+    if (!dateStr) {
+      return null;
+    }
+    
+    try {
+      return new Date(JSON.parse(dateStr));
+    } catch (error) {
+      console.error('Error parsing date from localStorage', error);
+      return null;
+    }
+  }
+
+  /**
+   * Save the current date as the last shown date for a specific checklist
+   */
+  static saveLastShownDate(checklistType: ChecklistType): void {
+    const key = `${STORAGE_KEYS.CHECKLIST_SHOWN}_${checklistType}`;
+    localStorage.setItem(key, JSON.stringify(new Date().toISOString()));
+  }
+
+  /**
    * Clear all application data
    */
   static clearAllData(): void {
@@ -146,6 +175,10 @@ export class StorageService {
     this.clearAuthentication();
     this.clearUserData();
     this.clearPayments();
+    
+    // Clear checklist data
+    localStorage.removeItem(`${STORAGE_KEYS.CHECKLIST_SHOWN}_${ChecklistType.Evening}`);
+    localStorage.removeItem(`${STORAGE_KEYS.CHECKLIST_SHOWN}_${ChecklistType.Night}`);
     
     // For any potential session storage items
     sessionStorage.clear();
