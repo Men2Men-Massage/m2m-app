@@ -82,6 +82,22 @@ export class UserProfile {
         this.editEmailInput.setCustomValidity('');
       }
     });
+    
+    // Scheduled Shifts button
+    const scheduledShiftsBtn = document.getElementById('scheduled-shifts-btn') as HTMLButtonElement;
+    if (scheduledShiftsBtn) {
+      scheduledShiftsBtn.addEventListener('click', () => {
+        window.open('https://partners.fresha.com/reports/table/scheduled-shifts?shortcut=next_30_days', '_blank');
+      });
+    }
+    
+    // Reviews button
+    const reviewsBtn = document.getElementById('reviews-btn') as HTMLButtonElement;
+    if (reviewsBtn) {
+      reviewsBtn.addEventListener('click', () => {
+        window.open('https://partners.fresha.com/user-account/reviews', '_blank');
+      });
+    }
   }
   
   /**
