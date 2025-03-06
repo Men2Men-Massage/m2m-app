@@ -174,6 +174,13 @@ export class ShiftChecklist {
       return;
     }
     
+    // Reset all checklist items to unchecked
+    if (this.checklistType === ChecklistType.Evening) {
+      this.eveningChecklist.forEach(item => item.checked = false);
+    } else {
+      this.nightChecklist.forEach(item => item.checked = false);
+    }
+    
     // Set title based on type
     const headerElement = this.checklistModal.querySelector('.checklist-header h2') as HTMLElement;
     if (headerElement) {
@@ -186,6 +193,9 @@ export class ShiftChecklist {
     
     // Show modal
     this.checklistModal.style.display = 'flex';
+    
+    // Assicura che la modale sia scrollabile quando mostrata
+    document.body.style.overflow = 'hidden';
   }
   
   /**
@@ -194,6 +204,9 @@ export class ShiftChecklist {
   private closeChecklist(): void {
     if (this.checklistModal) {
       this.checklistModal.style.display = 'none';
+      
+      // Ripristina lo scrolling normale del body
+      document.body.style.overflow = '';
     }
   }
   
