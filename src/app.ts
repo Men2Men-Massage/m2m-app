@@ -7,6 +7,7 @@ import { PaymentHistory } from './components/payment-history';
 import { UserProfile } from './components/user-profile';
 import { UtilityCalculator } from './components/utility-calculator';
 import { ChatbotModule } from './components/chatbot';
+import { ShiftChecklist } from './components/shift-checklist';
 
 /**
  * Main Application Class
@@ -30,6 +31,10 @@ class App {
   private userProfile: UserProfile | null = null;
   private utilityCalculator: UtilityCalculator | null = null;
   private chatbotModule: ChatbotModule | null = null;
+  private shiftChecklist: ShiftChecklist | null = null;
+  
+  // Timer for checking checklist
+  private checklistTimer: number | null = null;
   
   /**
    * Initialize the application
@@ -97,6 +102,7 @@ class App {
       );
       this.utilityCalculator = new UtilityCalculator();
       this.chatbotModule = new ChatbotModule();
+      this.shiftChecklist = new ShiftChecklist();
       
       this.initEventListeners();
       this.checkAuthentication();
@@ -170,6 +176,38 @@ class App {
   }
   
   /**
+   * Start periodic checklist check
+   */
+  private startChecklistTimer(): void {
+    // Check every 5 minutes
+    this.checklistTimer = window.setInterval(() => {
+      this.checkForShiftChecklist();
+    }, 5 * 60 * 1000);
+    
+    // Also run immediately
+    this.checkForShiftChecklist();
+  }
+  
+  /**
+   * Stop periodic checklist check
+   */
+  private stopChecklistTimer(): void {
+    if (this.checklistTimer !== null) {
+      clearInterval(this.checklistTimer);
+      this.checklistTimer = null;
+    }
+  }
+  
+  /**
+   * Check if shift checklist should be shown
+   */
+  private checkForShiftChecklist(): void {
+    if (this.shiftChecklist && this.shiftChecklist.shouldShowChecklist()) {
+      this.shiftChecklist.showChecklist();
+    }
+  }
+  
+  /**
    * Handle authenticated user
    */
   private onAuthenticated(userData: UserData): void {
@@ -195,6 +233,12 @@ class App {
     // Reset session storage for banner on new authentication
     sessionStorage.removeItem('bannerDismissed');
     this.showInstallBanners();
+    
+    // Check if shift checklist should be shown
+    this.checkForShiftChecklist();
+    
+    // Start periodic checklist check
+    this.startChecklistTimer();
     
     // Reset scroll position
     window.scrollTo(0, 0);
@@ -331,6 +375,9 @@ class App {
    * Handle logout
    */
   private handleLogout(): void {
+    // Stop checklist timer
+    this.stopChecklistTimer();
+    
     // Hide all app elements
     this.hideAppElements();
     
