@@ -2607,3 +2607,71 @@ input#giftcard-number {
     padding: 8px;
   }
 }
+
+/* Profile Tools Section Styles */
+.profile-tools {
+  margin: 20px 0;
+  padding: 15px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-tools h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #555;
+  font-size: 18px;
+}
+
+.profile-tools-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.profile-tools-buttons button {
+  padding: 12px 15px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 130px;
+  max-width: 45%;
+  background-color: #5c6bc0;
+  color: white;
+}
+
+.profile-tools-buttons button:hover {
+  background-color: #3f51b5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#scheduled-shifts-btn {
+  background-color: #26a69a;
+}
+
+#scheduled-shifts-btn:hover {
+  background-color: #00897b;
+}
+
+#reviews-btn {
+  background-color: #ffa726;
+}
+
+#reviews-btn:hover {
+  background-color: #fb8c00;
+}
+
+/* Media query for small screens */
+@media (max-width: 480px) {
+  .profile-tools-buttons button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
