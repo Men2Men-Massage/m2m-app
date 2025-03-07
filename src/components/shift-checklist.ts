@@ -255,6 +255,15 @@ export class ShiftChecklist {
   }
   
   /**
+   * Show a checklist manually (not based on time or location)
+   * @param type Type of checklist to show
+   */
+  public showManualChecklist(type: ChecklistType): void {
+    this.checklistType = type;
+    this.showChecklist();
+  }
+  
+  /**
    * Show checklist modal
    */
   public showChecklist(): void {
