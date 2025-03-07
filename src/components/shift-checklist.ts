@@ -7,8 +7,9 @@ export interface ChecklistItem {
 }
 
 export enum ChecklistType {
-  Evening = 'evening', // 17:30-18:30
-  Night = 'night'      // 23:30-00:30
+  Morning = 'morning',  // 10:45-12:15 (apertura)
+  Evening = 'evening',  // 17:30-18:30
+  Night = 'night'       // 23:30-00:30
 }
 
 /**
@@ -19,21 +20,37 @@ export class ShiftChecklist {
   private checklistItems: HTMLElement | null = null;
   private checklistType: ChecklistType | null = null;
   
-  // Checklists for different times
+  // Morning checklist (opening 10:45-12:15)
+  private morningChecklist: ChecklistItem[] = [
+    { id: 'signs', text: 'Bring out the sign and bench', checked: false },
+    { id: 'lights', text: 'Turn on all lights (Note: "Open" light works automatically, DO NOT turn it off)', checked: false },
+    { id: 'massage-room', text: 'Set up massage room: oils, towels and essentials', checked: false },
+    { id: 'table-height', text: 'Adjust massage table height to correct position', checked: false },
+    { id: 'laundry', text: 'Check, fold, and change any laundry items', checked: false },
+    { id: 'water', text: 'Change water in glasses or replace with clean ones', checked: false },
+    { id: 'dishwasher', text: 'Check dishwasher: run and empty if needed', checked: false },
+    { id: 'clean-floor', text: 'Run Roomba or vacuum floor (especially if dirty)', checked: false },
+    { id: 'bathroom', text: 'Check and clean shower and toilet if necessary', checked: false },
+    { id: 'candles', text: 'Charge candle batteries if low', checked: false },
+    { id: 'ambiance', text: 'Ensure all candles and ambiance elements are properly set up', checked: false }
+  ];
+  
+  // Evening checklist (17:30-18:30)
   private eveningChecklist: ChecklistItem[] = [
     { id: 'checkout', text: 'Checked out all appointments in Fresha', checked: false },
     { id: 'towels', text: 'Washed towels and put them to dry', checked: false },
     { id: 'dishwasher', text: 'Run the dishwasher', checked: false },
-    { id: 'cleaning', text: 'Cleaned the store and left it tidy for colleagues', checked: false },
+    { id: 'cleaning', text: 'Cleaned the apartment and left it tidy for colleagues', checked: false },
     { id: 'payment', text: 'Made instant bank transfer for rent payment', checked: false },
     { id: 'handover', text: 'Completed handover with colleague to communicate any information', checked: false }
   ];
   
+  // Night checklist (23:30-00:30)
   private nightChecklist: ChecklistItem[] = [
     { id: 'checkout', text: 'Checked out all appointments in Fresha', checked: false },
     { id: 'towels', text: 'Washed towels and put them to dry', checked: false },
     { id: 'dishwasher', text: 'Run the dishwasher', checked: false },
-    { id: 'cleaning', text: 'Cleaned the store and left it tidy for colleagues', checked: false },
+    { id: 'cleaning', text: 'Cleaned the apartment and left it tidy for colleagues', checked: false },
     { id: 'payment', text: 'Made instant bank transfer for rent payment', checked: false },
     { id: 'lights', text: 'Turned off all lights, heating, moved bench and signs inside', checked: false },
     { id: 'lock', text: 'Locked the shop via Nuki app and verified it\'s locked', checked: false }
@@ -131,10 +148,24 @@ export class ShiftChecklist {
     const currentTime = currentHour * 60 + currentMinute; // Convert to minutes since midnight
     
     // Convert time ranges to minutes since midnight
+    const morningStartTime = 10 * 60 + 45; // 10:45
+    const morningEndTime = 12 * 60 + 15;   // 12:15
     const eveningStartTime = 17 * 60 + 30; // 17:30
     const eveningEndTime = 18 * 60 + 30;   // 18:30
     const nightStartTime = 23 * 60 + 30;   // 23:30
     const nightEndTime = 0 * 60 + 30;      // 00:30 (next day)
+    
+    // Check if current time is within morning range (opening)
+    if (currentTime >= morningStartTime && currentTime <= morningEndTime) {
+      // Check if checklist was already shown today during morning time
+      const lastShownDate = StorageService.getLastShownDate(ChecklistType.Morning);
+      if (this.isSameDay(lastShownDate, now)) {
+        return false;
+      }
+      
+      this.checklistType = ChecklistType.Morning;
+      return true;
+    }
     
     // Check if current time is within evening range
     if (currentTime >= eveningStartTime && currentTime <= eveningEndTime) {
@@ -174,8 +205,10 @@ export class ShiftChecklist {
       return;
     }
     
-    // Reset all checklist items to unchecked
-    if (this.checklistType === ChecklistType.Evening) {
+    // Reset all checklist items to unchecked based on type
+    if (this.checklistType === ChecklistType.Morning) {
+      this.morningChecklist.forEach(item => item.checked = false);
+    } else if (this.checklistType === ChecklistType.Evening) {
       this.eveningChecklist.forEach(item => item.checked = false);
     } else {
       this.nightChecklist.forEach(item => item.checked = false);
@@ -184,8 +217,13 @@ export class ShiftChecklist {
     // Set title based on type
     const headerElement = this.checklistModal.querySelector('.checklist-header h2') as HTMLElement;
     if (headerElement) {
-      headerElement.textContent = this.checklistType === ChecklistType.Evening ? 
-        'Evening Shift Checklist' : 'Night Shift Checklist';
+      if (this.checklistType === ChecklistType.Morning) {
+        headerElement.textContent = 'Opening Checklist';
+      } else if (this.checklistType === ChecklistType.Evening) {
+        headerElement.textContent = 'Evening Shift Checklist';
+      } else {
+        headerElement.textContent = 'Night Shift Checklist';
+      }
     }
     
     // Populate checklist items
@@ -218,9 +256,15 @@ export class ShiftChecklist {
     // Clear existing items
     this.checklistItems.innerHTML = '';
     
-    // Get appropriate checklist
-    const items = this.checklistType === ChecklistType.Evening ? 
-      this.eveningChecklist : this.nightChecklist;
+    // Get appropriate checklist based on type
+    let items: ChecklistItem[];
+    if (this.checklistType === ChecklistType.Morning) {
+      items = this.morningChecklist;
+    } else if (this.checklistType === ChecklistType.Evening) {
+      items = this.eveningChecklist;
+    } else {
+      items = this.nightChecklist;
+    }
     
     // Create checklist items
     items.forEach(item => {
@@ -260,8 +304,15 @@ export class ShiftChecklist {
     const confirmButton = document.getElementById('confirm-checklist-btn') as HTMLButtonElement;
     if (!confirmButton) return;
     
-    const items = this.checklistType === ChecklistType.Evening ? 
-      this.eveningChecklist : this.nightChecklist;
+    // Get appropriate checklist based on type
+    let items: ChecklistItem[];
+    if (this.checklistType === ChecklistType.Morning) {
+      items = this.morningChecklist;
+    } else if (this.checklistType === ChecklistType.Evening) {
+      items = this.eveningChecklist;
+    } else {
+      items = this.nightChecklist;
+    }
     
     // Check if all items are checked
     const allChecked = items.every(item => item.checked);
