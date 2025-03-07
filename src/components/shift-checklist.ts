@@ -1,4 +1,5 @@
 import { StorageService } from '../utils/storage-service';
+import { getCurrentPosition, isNearStore } from '../utils/helpers';
 
 export interface ChecklistItem {
   id: string;
@@ -19,6 +20,9 @@ export class ShiftChecklist {
   private checklistModal: HTMLElement | null = null;
   private checklistItems: HTMLElement | null = null;
   private checklistType: ChecklistType | null = null;
+  private isCheckingLocation: boolean = false;
+  private lastLocationCheck: Date | null = null;
+  private lastKnownNearStore: boolean = false;
   
   // Morning checklist (opening 10:45-12:15)
   private morningChecklist: ChecklistItem[] = [
@@ -138,10 +142,59 @@ export class ShiftChecklist {
   }
   
   /**
-   * Check if checklist should be shown
-   * @returns {boolean} True if checklist should be shown
+   * Check if user is near a store using geolocation
+   * @returns Promise<boolean> True if user is near a store, false otherwise
    */
-  public shouldShowChecklist(): boolean {
+  private async checkIfNearStore(): Promise<boolean> {
+    // Prevent multiple location checks at the same time
+    if (this.isCheckingLocation) {
+      console.log('Already checking location, returning last known result');
+      return this.lastKnownNearStore;
+    }
+    
+    // If we checked the location in the last 5 minutes, use cached result
+    const now = new Date();
+    if (this.lastLocationCheck && 
+        (now.getTime() - this.lastLocationCheck.getTime() < 5 * 60 * 1000)) {
+      console.log('Using cached location check result');
+      return this.lastKnownNearStore;
+    }
+    
+    this.isCheckingLocation = true;
+    
+    try {
+      console.log('Getting current position...');
+      const position = await getCurrentPosition();
+      const { latitude, longitude } = position.coords;
+      
+      console.log(`Position obtained: ${latitude}, ${longitude}`);
+      
+      // Check if near any store
+      const nearStore = await isNearStore(latitude, longitude);
+      
+      // Update cache
+      this.lastLocationCheck = new Date();
+      this.lastKnownNearStore = nearStore;
+      
+      console.log(`User is ${nearStore ? 'near' : 'not near'} a store`);
+      
+      return nearStore;
+    } catch (error) {
+      console.error('Error getting location:', error);
+      
+      // If we can't get the location, assume the user is at the store
+      // This prevents the checklist from not showing up due to location errors
+      return true;
+    } finally {
+      this.isCheckingLocation = false;
+    }
+  }
+  
+  /**
+   * Check if checklist should be shown
+   * @returns {Promise<boolean>} True if checklist should be shown
+   */
+  public async shouldShowChecklist(): Promise<boolean> {
     const now = new Date();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
@@ -155,46 +208,50 @@ export class ShiftChecklist {
     const nightStartTime = 23 * 60 + 30;   // 23:30
     const nightEndTime = 0 * 60 + 30;      // 00:30 (next day)
     
-    // Check if current time is within morning range (opening)
+    // Check if time is within any of the ranges
+    let isValidTime = false;
+    
+    // Check if current time is within morning range
     if (currentTime >= morningStartTime && currentTime <= morningEndTime) {
-      // Check if checklist was already shown today during morning time
-      const lastShownDate = StorageService.getLastShownDate(ChecklistType.Morning);
-      if (this.isSameDay(lastShownDate, now)) {
-        return false;
-      }
-      
       this.checklistType = ChecklistType.Morning;
-      return true;
+      isValidTime = true;
     }
-    
     // Check if current time is within evening range
-    if (currentTime >= eveningStartTime && currentTime <= eveningEndTime) {
-      // Check if checklist was already shown today during evening time
-      const lastShownDate = StorageService.getLastShownDate(ChecklistType.Evening);
-      if (this.isSameDay(lastShownDate, now)) {
-        return false;
-      }
-      
+    else if (currentTime >= eveningStartTime && currentTime <= eveningEndTime) {
       this.checklistType = ChecklistType.Evening;
-      return true;
+      isValidTime = true;
     }
-    
     // Check if current time is within night range (spanning midnight)
-    if ((currentTime >= nightStartTime) || (currentTime <= nightEndTime)) {
-      // Check if checklist was already shown today during night time
-      const lastShownDate = StorageService.getLastShownDate(ChecklistType.Night);
-      // If it's after midnight, compare with yesterday's date
-      const compareDate = currentHour < 1 ? new Date(now.getTime() - 24 * 60 * 60 * 1000) : now;
-      
-      if (this.isSameDay(lastShownDate, compareDate)) {
-        return false;
-      }
-      
+    else if ((currentTime >= nightStartTime) || (currentTime <= nightEndTime)) {
       this.checklistType = ChecklistType.Night;
-      return true;
+      isValidTime = true;
     }
     
-    return false;
+    // If not in any time range, return false
+    if (!isValidTime || !this.checklistType) {
+      return false;
+    }
+    
+    // Check if already shown today
+    const lastShownDate = StorageService.getLastShownDate(this.checklistType);
+    
+    // For night checklist, if it's after midnight, compare with yesterday's date
+    const compareDate = (this.checklistType === ChecklistType.Night && currentHour < 1) ?
+      new Date(now.getTime() - 24 * 60 * 60 * 1000) : now;
+    
+    if (this.isSameDay(lastShownDate, compareDate)) {
+      return false;
+    }
+    
+    // Check if user is near a store
+    const nearStore = await this.checkIfNearStore();
+    if (!nearStore) {
+      console.log('User is not near a store, not showing checklist.');
+      return false;
+    }
+    
+    // All conditions met, show checklist
+    return true;
   }
   
   /**
