@@ -3080,3 +3080,194 @@ input#giftcard-number {
     font-size: 14px;
   }
 }
+
+/* Help FAQ Page Styles */
+#help-faq-page {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px 10px 120px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+#help-faq-box {
+  background: white;
+  padding: 20px 15px 100px;
+  text-align: left;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.help-faq-header {
+  text-align: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.help-faq-header h2 {
+  font-size: 1.8em;
+  color: #376FE9;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.help-faq-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.help-faq-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.help-faq-section h3 {
+  font-size: 1.3em;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.checklist-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checklist-btn {
+  padding: 14px 16px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  color: #333;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.checklist-btn i {
+  margin-right: 12px;
+  font-size: 20px;
+}
+
+.checklist-btn:hover {
+  background-color: #e9ecef;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#morning-checklist-btn i {
+  color: #ffc107; /* Yellow for sun/morning */
+}
+
+#evening-checklist-btn i {
+  color: #6f42c1; /* Purple for evening */
+}
+
+#night-checklist-btn i {
+  color: #343a40; /* Dark for night */
+}
+
+.store-info-box {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.store-info-box i {
+  font-size: 24px;
+  color: #2196f3;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.store-info-box p {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.help-faq-section p {
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.open-chatbot-btn {
+  padding: 15px 20px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+.open-chatbot-btn i {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.open-chatbot-btn:hover {
+  background-color: #43a047;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .help-faq-header h2 {
+    font-size: 1.5em;
+  }
+  
+  .help-faq-section h3 {
+    font-size: 1.2em;
+  }
+  
+  .checklist-btn, .open-chatbot-btn {
+    font-size: 14px;
+    padding: 12px;
+  }
+  
+  .checklist-btn i, .open-chatbot-btn i {
+    font-size: 18px;
+  }
+  
+  .store-info-box {
+    padding: 12px;
+  }
+  
+  .store-info-box i {
+    font-size: 20px;
+  }
+  
+  .store-info-box p {
+    font-size: 14px;
+  }
+}
