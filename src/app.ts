@@ -7,7 +7,7 @@ import { PaymentHistory } from './components/payment-history';
 import { UserProfile } from './components/user-profile';
 import { UtilityCalculator } from './components/utility-calculator';
 import { ChatbotModule } from './components/chatbot';
-import { ShiftChecklist } from './components/shift-checklist';
+import { ShiftChecklist, ChecklistType } from './components/shift-checklist';
 
 /**
  * Main Application Class
@@ -18,6 +18,7 @@ class App {
   private historyPage: HTMLElement | null = null;
   private profilePage: HTMLElement | null = null;
   private chatbotPage: HTMLElement | null = null;
+  private helpFAQPage: HTMLElement | null = null; // New Help FAQ page
   private userNameEl: HTMLElement | null = null;
   private navItems: NodeListOf<Element> | null = null;
   private androidBanner: HTMLElement | null = null;
@@ -80,6 +81,7 @@ class App {
       this.historyPage = document.getElementById('history-page');
       this.profilePage = document.getElementById('profile-page');
       this.chatbotPage = document.getElementById('chatbot-page');
+      this.helpFAQPage = document.getElementById('help-faq-page'); // New Help FAQ page
       this.userNameEl = document.getElementById('user-name');
       this.navItems = document.querySelectorAll('.nav-item');
       this.androidBanner = document.getElementById('android-banner');
@@ -143,6 +145,47 @@ class App {
     
     // Instructions toggle
     this.initInstructionsToggle();
+    
+    // Help FAQ page buttons
+    this.initHelpFAQButtons();
+  }
+  
+  /**
+   * Initialize Help FAQ page buttons
+   */
+  private initHelpFAQButtons(): void {
+    // Open chatbot button
+    const openChatbotBtn = document.getElementById('open-chatbot-btn');
+    if (openChatbotBtn) {
+      openChatbotBtn.addEventListener('click', () => this.showChatbot());
+    }
+    
+    // Checklist buttons
+    if (this.shiftChecklist) {
+      // Morning checklist button
+      const morningChecklistBtn = document.getElementById('morning-checklist-btn');
+      if (morningChecklistBtn) {
+        morningChecklistBtn.addEventListener('click', () => {
+          this.shiftChecklist?.showManualChecklist(ChecklistType.Morning);
+        });
+      }
+      
+      // Evening checklist button
+      const eveningChecklistBtn = document.getElementById('evening-checklist-btn');
+      if (eveningChecklistBtn) {
+        eveningChecklistBtn.addEventListener('click', () => {
+          this.shiftChecklist?.showManualChecklist(ChecklistType.Evening);
+        });
+      }
+      
+      // Night checklist button
+      const nightChecklistBtn = document.getElementById('night-checklist-btn');
+      if (nightChecklistBtn) {
+        nightChecklistBtn.addEventListener('click', () => {
+          this.shiftChecklist?.showManualChecklist(ChecklistType.Night);
+        });
+      }
+    }
   }
   
   /**
@@ -282,7 +325,7 @@ class App {
     } else if (target.id === 'history-nav') {
       this.showPaymentHistory();
     } else if (target.id === 'help-nav') {
-      this.showChatbot();
+      this.showHelpFAQ(); // Modified to show Help FAQ page instead of chatbot directly
     }
   }
   
@@ -290,7 +333,7 @@ class App {
    * Show calculator view
    */
   public showCalculator(): void {
-    if (!this.container || !this.historyPage || !this.profilePage || !this.chatbotPage || !this.chatbotModule || !this.navItems) return;
+    if (!this.container || !this.historyPage || !this.profilePage || !this.chatbotPage || !this.helpFAQPage || !this.chatbotModule || !this.navItems) return;
     
     // Nascondi il chatbot e ripristina lo scrolling
     this.chatbotModule.hideChatbot();
@@ -299,6 +342,8 @@ class App {
     this.container.style.display = 'block';
     this.historyPage.style.display = 'none';
     this.profilePage.style.display = 'none';
+    this.chatbotPage.style.display = 'none';
+    this.helpFAQPage.style.display = 'none';
     
     // Reset scroll position
     window.scrollTo(0, 0);
@@ -319,7 +364,7 @@ class App {
    * Show payment history view
    */
   public showPaymentHistory(): void {
-    if (!this.container || !this.profilePage || !this.chatbotPage || !this.paymentHistory || !this.chatbotModule || !this.navItems) return;
+    if (!this.container || !this.profilePage || !this.chatbotPage || !this.helpFAQPage || !this.paymentHistory || !this.chatbotModule || !this.navItems) return;
     
     // Nascondi il chatbot e ripristina lo scrolling
     this.chatbotModule.hideChatbot();
@@ -327,6 +372,8 @@ class App {
     // Mostra la pagina corretta
     this.container.style.display = 'none';
     this.profilePage.style.display = 'none';
+    this.chatbotPage.style.display = 'none';
+    this.helpFAQPage.style.display = 'none';
     this.paymentHistory.showPaymentHistory();
     
     // Reset scroll position
@@ -345,15 +392,49 @@ class App {
   }
   
   /**
-   * Show chatbot help view
+   * Show Help FAQ page
    */
-  public showChatbot(): void {
-    if (!this.container || !this.historyPage || !this.profilePage || !this.chatbotPage || !this.chatbotModule || !this.navItems) return;
+  public showHelpFAQ(): void {
+    if (!this.container || !this.historyPage || !this.profilePage || !this.chatbotPage || !this.helpFAQPage || !this.chatbotModule || !this.navItems) return;
+    
+    // Nascondi il chatbot e ripristina lo scrolling
+    this.chatbotModule.hideChatbot();
     
     // Hide other pages
     this.container.style.display = 'none';
     this.historyPage.style.display = 'none';
     this.profilePage.style.display = 'none';
+    this.chatbotPage.style.display = 'none';
+    
+    // Show Help FAQ page
+    this.helpFAQPage.style.display = 'block';
+    
+    // Set help tab as active
+    const helpNav = document.getElementById('help-nav');
+    if (helpNav) {
+      helpNav.classList.add('active');
+      this.navItems.forEach(item => {
+        if (item.id !== 'help-nav') {
+          item.classList.remove('active');
+        }
+      });
+    }
+    
+    // Reset scroll position
+    window.scrollTo(0, 0);
+  }
+  
+  /**
+   * Show chatbot help view
+   */
+  public showChatbot(): void {
+    if (!this.container || !this.historyPage || !this.profilePage || !this.chatbotPage || !this.helpFAQPage || !this.chatbotModule || !this.navItems) return;
+    
+    // Hide other pages
+    this.container.style.display = 'none';
+    this.historyPage.style.display = 'none';
+    this.profilePage.style.display = 'none';
+    this.helpFAQPage.style.display = 'none';
     
     // Show chatbot view (a full screen overlay)
     this.chatbotModule.showChatbot();
@@ -374,7 +455,7 @@ class App {
    * Show user profile view
    */
   public showUserProfile(): void {
-    if (!this.container || !this.historyPage || !this.chatbotPage || !this.profilePage || !this.userProfile || !this.chatbotModule || !this.navItems) return;
+    if (!this.container || !this.historyPage || !this.chatbotPage || !this.helpFAQPage || !this.profilePage || !this.userProfile || !this.chatbotModule || !this.navItems) return;
     
     // Nascondi il chatbot e ripristina lo scrolling
     this.chatbotModule.hideChatbot();
@@ -382,6 +463,8 @@ class App {
     // Mostra la pagina corretta
     this.container.style.display = 'none';
     this.historyPage.style.display = 'none';
+    this.chatbotPage.style.display = 'none';
+    this.helpFAQPage.style.display = 'none';
     this.userProfile.showProfile();
     
     // Reset scroll position
@@ -437,6 +520,10 @@ class App {
     
     if (this.chatbotPage) {
       this.chatbotPage.style.display = 'none';
+    }
+    
+    if (this.helpFAQPage) {
+      this.helpFAQPage.style.display = 'none';
     }
     
     if (this.userNameEl) {
