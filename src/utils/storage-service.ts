@@ -176,7 +176,8 @@ export class StorageService {
     this.clearUserData();
     this.clearPayments();
     
-    // Clear checklist data
+    // Clear checklist data for all types
+    localStorage.removeItem(`${STORAGE_KEYS.CHECKLIST_SHOWN}_${ChecklistType.Morning}`);
     localStorage.removeItem(`${STORAGE_KEYS.CHECKLIST_SHOWN}_${ChecklistType.Evening}`);
     localStorage.removeItem(`${STORAGE_KEYS.CHECKLIST_SHOWN}_${ChecklistType.Night}`);
     
