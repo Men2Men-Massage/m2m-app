@@ -2982,3 +2982,101 @@ input#giftcard-number {
     margin-bottom: 10px;
   }
 }
+
+/* Geolocation Information Overlay */
+#geolocation-info-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.geolocation-info-content {
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.geolocation-info-content h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.geolocation-info-content p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.geolocation-info-content .highlight {
+  color: #376FE9;
+  font-weight: bold;
+}
+
+.geolocation-info-content .info-icon {
+  font-size: 48px;
+  color: #376FE9;
+  margin-bottom: 15px;
+}
+
+.geolocation-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.geolocation-buttons button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.allow-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.allow-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.deny-button {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.deny-button:hover {
+  background-color: #e0e0e0;
+}
+
+@media (max-width: 480px) {
+  .geolocation-info-content {
+    padding: 20px;
+  }
+  
+  .geolocation-info-content h2 {
+    font-size: 1.3rem;
+  }
+  
+  .geolocation-buttons button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}
