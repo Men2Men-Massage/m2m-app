@@ -35,6 +35,7 @@ class App {
   
   // Timer for checking checklist
   private checklistTimer: number | null = null;
+  private isCheckingForChecklist: boolean = false;
   
   /**
    * Initialize the application
@@ -201,9 +202,28 @@ class App {
   /**
    * Check if shift checklist should be shown
    */
-  private checkForShiftChecklist(): void {
-    if (this.shiftChecklist && this.shiftChecklist.shouldShowChecklist()) {
-      this.shiftChecklist.showChecklist();
+  private async checkForShiftChecklist(): Promise<void> {
+    if (!this.shiftChecklist || this.isCheckingForChecklist) {
+      return;
+    }
+    
+    try {
+      // Set flag to prevent multiple checks at once
+      this.isCheckingForChecklist = true;
+      
+      // Check if checklist should be shown
+      const shouldShow = await this.shiftChecklist.shouldShowChecklist();
+      
+      // If checklist should be shown, show it
+      if (shouldShow) {
+        console.log('Showing shift checklist');
+        this.shiftChecklist.showChecklist();
+      }
+    } catch (error) {
+      console.error('Error checking for shift checklist:', error);
+    } finally {
+      // Reset flag
+      this.isCheckingForChecklist = false;
     }
   }
   
