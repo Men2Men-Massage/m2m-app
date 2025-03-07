@@ -149,7 +149,7 @@ export function showGeolocationInfoOverlay(): Promise<boolean> {
             <p>M2M Payment Calculator needs to check your location to show shift checklists when you're at the shop.</p>
             <p>Your location is <span class="highlight">only checked during shift change times</span> and is <span class="highlight">never stored or shared</span>.</p>
             <div class="geolocation-buttons">
-              <button class="allow-button">Allow Location</button>
+              <button class="allow-button">Allow</button>
               <button class="deny-button">No Thanks</button>
             </div>
           </div>
