@@ -2768,7 +2768,7 @@ input#giftcard-number {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   
-  /* Change from overflow-y: auto to display: flex for better centering */
+  /* Display flex for better centering */
   display: none; /* Will be changed to flex when shown */
   align-items: flex-start;
   justify-content: center;
@@ -2784,19 +2784,16 @@ input#giftcard-number {
 .checklist-modal-content {
   width: 90%;
   max-width: 500px;
-  margin: 20px auto; /* Keep auto margin for horizontal centering */
-  padding: 25px;
-  padding-bottom: 100px; /* Add extra padding at bottom to ensure buttons are fully visible when scrolled */
+  margin: 20px auto;
+  padding: 15px; /* Reduced side padding */
+  padding-bottom: 90px; /* Extra padding for buttons */
   border-radius: 12px;
   background-color: #fff;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  
-  /* Change overflow from 'visible' to 'hidden' to prevent content from spilling out */
   overflow: hidden;
-  
-  /* Ensure proper height calculation */
-  max-height: none; /* Let it expand to content size */
-  position: relative; /* Required for absolute positioning of actions */
+  max-height: none;
+  position: relative;
+  box-sizing: border-box;
 }
 
 .checklist-header {
@@ -2916,8 +2913,7 @@ input#giftcard-number {
   color: #666;
 }
 
-/* Make the checklist actions (buttons) sticky at the bottom */
-/* Improved button styling to prevent overflow */
+/* Button container with sticky positioning */
 .checklist-actions {
   display: flex;
   flex-direction: column;
@@ -2931,78 +2927,70 @@ input#giftcard-number {
   padding: 15px 0 10px;
   z-index: 10;
   box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-  /* Added max-width to ensure buttons don't overflow */
   max-width: 100%;
   width: 100%;
   box-sizing: border-box;
 }
 
+/* Shared button styles */
 .confirm-checklist-btn,
 .remind-later-btn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px 8px; /* Reduced horizontal padding */
-  font-size: 15px; /* Slightly smaller font size */
+  padding: 12px 8px;
+  font-size: 15px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
   margin-bottom: 10px;
-  width: 94%; /* Reduced from 100% to leave some margin */
+  width: 94%;
   min-height: 44px;
-  /* Center the button */
   margin-left: auto;
   margin-right: auto;
-  /* Ensure text wraps if needed */
   white-space: normal;
   word-wrap: break-word;
   max-width: 100%;
   box-sizing: border-box;
 }
 
-/* Ensure the checklist modal content has proper padding and sizing */
-.checklist-modal-content {
-  width: 90%;
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 15px; /* Reduced side padding */
-  padding-bottom: 90px; /* Keep bottom padding */
-  border-radius: 12px;
-  background-color: #fff;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  overflow: hidden;
-  max-height: none;
-  position: relative;
-  box-sizing: border-box;
+/* Confirm button specific styles */
+.confirm-checklist-btn {
+  background-color: #4CAF50;
+  color: white;
 }
 
-/* Adjustments for very small screens */
-@media (max-width: 480px) {
-  .confirm-checklist-btn,
-  .remind-later-btn {
-    width: 92%; /* Even smaller on mobile */
-    padding: 10px 5px;
-    font-size: 14px;
-  }
-  
-  .checklist-modal-content {
-    width: 96%; /* Slightly wider on mobile */
-    padding: 12px;
-    padding-bottom: 80px;
-  }
+.confirm-checklist-btn:hover:not(:disabled) {
+  background-color: #45a049;
+  transform: translateY(-2px);
 }
 
-/* Show modal with flex display to fix centering */
+.confirm-checklist-btn:disabled {
+  background-color: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Remind later button specific styles */
+.remind-later-btn {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.remind-later-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* Force flex display when modal is shown */
 #shift-checklist-modal[style*="display: flex"] {
   display: flex !important;
 }
 
-/* Adattamento per schermi molto piccoli */
+/* Media query for small screens */
 @media (max-width: 480px) {
   .checklist-modal-content {
-    padding: 15px;
-    padding-bottom: 80px; /* Smaller padding for small screens */
-    width: 95%; /* Aumenta la larghezza su schermi piccoli */
+    width: 96%;
+    padding: 12px;
+    padding-bottom: 80px;
   }
   
   .checklist-header h2 {
@@ -3015,12 +3003,13 @@ input#giftcard-number {
   
   .confirm-checklist-btn,
   .remind-later-btn {
-    padding: 12px;
+    width: 92%;
+    padding: 10px 5px;
     font-size: 14px;
   }
 }
 
-/* Fix per dispositivi mobili con barre browser variabili */
+/* Media query for devices with smaller height */
 @media (max-height: 600px) {
   #shift-checklist-modal {
     align-items: flex-start;
@@ -3030,8 +3019,8 @@ input#giftcard-number {
   .checklist-modal-content {
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 20px;
-    padding-bottom: 80px; /* Smaller padding for small screens */
+    padding: 12px;
+    padding-bottom: 70px;
   }
   
   .checklist-header h2 {
@@ -3039,14 +3028,12 @@ input#giftcard-number {
     margin-top: 0;
   }
   
-  /* Reduce spacing between elements */
   .checklist-subheader,
   .checklist-items,
   .checklist-note {
     margin-bottom: 10px;
   }
   
-  /* Make buttons more compact */
   .confirm-checklist-btn,
   .remind-later-btn {
     padding: 10px;
