@@ -24,7 +24,7 @@ export class ShiftChecklist {
     { id: 'checkout', text: 'Checked out all appointments in Fresha', checked: false },
     { id: 'towels', text: 'Washed towels and put them to dry', checked: false },
     { id: 'dishwasher', text: 'Run the dishwasher', checked: false },
-    { id: 'cleaning', text: 'Cleaned the apartment and left it tidy for colleagues', checked: false },
+    { id: 'cleaning', text: 'Cleaned the store and left it tidy for colleagues', checked: false },
     { id: 'payment', text: 'Made instant bank transfer for rent payment', checked: false },
     { id: 'handover', text: 'Completed handover with colleague to communicate any information', checked: false }
   ];
@@ -33,7 +33,7 @@ export class ShiftChecklist {
     { id: 'checkout', text: 'Checked out all appointments in Fresha', checked: false },
     { id: 'towels', text: 'Washed towels and put them to dry', checked: false },
     { id: 'dishwasher', text: 'Run the dishwasher', checked: false },
-    { id: 'cleaning', text: 'Cleaned the apartment and left it tidy for colleagues', checked: false },
+    { id: 'cleaning', text: 'Cleaned the store and left it tidy for colleagues', checked: false },
     { id: 'payment', text: 'Made instant bank transfer for rent payment', checked: false },
     { id: 'lights', text: 'Turned off all lights, heating, moved bench and signs inside', checked: false },
     { id: 'lock', text: 'Locked the shop via Nuki app and verified it\'s locked', checked: false }
@@ -191,11 +191,13 @@ export class ShiftChecklist {
     // Populate checklist items
     this.populateChecklist();
     
-    // Show modal
+    // Remove modale display:none e imposta display:flex
     this.checklistModal.style.display = 'flex';
     
-    // Assicura che la modale sia scrollabile quando mostrata
-    document.body.style.overflow = 'hidden';
+    // Scroll all'inizio della modale
+    if (this.checklistModal.scrollTo) {
+      this.checklistModal.scrollTo(0, 0);
+    }
   }
   
   /**
@@ -204,9 +206,6 @@ export class ShiftChecklist {
   private closeChecklist(): void {
     if (this.checklistModal) {
       this.checklistModal.style.display = 'none';
-      
-      // Ripristina lo scrolling normale del body
-      document.body.style.overflow = '';
     }
   }
   
