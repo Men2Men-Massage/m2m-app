@@ -2758,6 +2758,19 @@ input#giftcard-number {
 }
 
 /* Shift Checklist Modal Styles */
+#shift-checklist-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  overflow-y: auto; /* Importante: abilita lo scrolling a livello di modal */
+  padding: 20px 0;
+}
+
 .checklist-modal-content {
   width: 90%;
   max-width: 500px;
@@ -2765,10 +2778,8 @@ input#giftcard-number {
   border-radius: 12px;
   background-color: #fff;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  max-height: 90vh; /* Limita l'altezza al 90% della viewport */
-  overflow-y: auto; /* Abilita lo scrolling verticale */
-  display: flex;
-  flex-direction: column;
+  margin: auto; /* Centra il contenuto */
+  overflow: visible; /* Garantisce che il contenuto possa scorrere senza tagliarlo */
 }
 
 .checklist-header {
@@ -2777,11 +2788,6 @@ input#giftcard-number {
   align-items: center;
   margin-bottom: 20px;
   width: 100%;
-  position: sticky; /* Mantiene l'header visibile durante lo scroll */
-  top: 0;
-  background-color: #fff;
-  z-index: 10;
-  padding-bottom: 10px;
 }
 
 .checklist-header h2 {
@@ -2797,6 +2803,7 @@ input#giftcard-number {
   cursor: pointer;
   color: #777;
   transition: color 0.3s;
+  padding: 5px;
 }
 
 .close-checklist:hover {
@@ -2811,7 +2818,6 @@ input#giftcard-number {
 
 .checklist-items {
   margin-bottom: 20px;
-  overflow-y: auto; /* Garantisce che questa sezione sia scrollabile */
 }
 
 .checklist-item {
@@ -2897,23 +2903,20 @@ input#giftcard-number {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: sticky; /* Mantiene i pulsanti visibili durante lo scroll */
-  bottom: 0;
-  background-color: #fff;
-  padding-top: 10px;
-  z-index: 10;
-  margin-top: auto; /* Spinge i pulsanti in fondo quando c'è spazio */
+  margin-top: 20px;
 }
 
 .confirm-checklist-btn {
   background-color: #4CAF50;
   color: white;
-  padding: 12px 15px;
+  padding: 15px;
   font-size: 16px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
+  margin-bottom: 10px;
+  width: 100%;
 }
 
 .confirm-checklist-btn:hover:not(:disabled) {
@@ -2931,13 +2934,14 @@ input#giftcard-number {
 .remind-later-btn {
   background-color: #f0f0f0;
   color: #555;
-  padding: 12px 15px;
+  padding: 15px;
   font-size: 16px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-bottom: 10px; /* Assicura che ci sia spazio sotto il pulsante */
+  margin-bottom: 10px;
+  width: 100%;
 }
 
 .remind-later-btn:hover {
@@ -2949,7 +2953,6 @@ input#giftcard-number {
   .checklist-modal-content {
     padding: 15px;
     width: 95%; /* Aumenta la larghezza su schermi piccoli */
-    max-height: 85vh; /* Riduce leggermente l'altezza su schermi piccoli */
   }
   
   .checklist-header h2 {
@@ -2962,15 +2965,20 @@ input#giftcard-number {
   
   .confirm-checklist-btn,
   .remind-later-btn {
-    padding: 10px;
+    padding: 12px;
     font-size: 14px;
   }
 }
 
-/* Assicura che la modalità sia centrata e scrollabile */
-#shift-checklist-modal {
-  align-items: center;
-  justify-content: center;
-  overflow-y: auto;
-  padding: 15px 0;
+/* Fix per dispositivi mobili con barre browser variabili */
+@media (max-height: 600px) {
+  #shift-checklist-modal {
+    align-items: flex-start;
+    padding-top: 10px;
+  }
+  
+  .checklist-modal-content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }
