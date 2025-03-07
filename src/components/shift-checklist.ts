@@ -44,7 +44,7 @@ export class ShiftChecklist {
     { id: 'checkout', text: 'Checked out all appointments in Fresha', checked: false },
     { id: 'towels', text: 'Washed towels and put them to dry', checked: false },
     { id: 'dishwasher', text: 'Run the dishwasher', checked: false },
-    { id: 'cleaning', text: 'Cleaned the apartment and left it tidy for colleagues', checked: false },
+    { id: 'cleaning', text: 'Cleaned the store and left it tidy for colleagues', checked: false },
     { id: 'payment', text: 'Made instant bank transfer for rent payment', checked: false },
     { id: 'handover', text: 'Completed handover with colleague to communicate any information', checked: false }
   ];
@@ -54,7 +54,7 @@ export class ShiftChecklist {
     { id: 'checkout', text: 'Checked out all appointments in Fresha', checked: false },
     { id: 'towels', text: 'Washed towels and put them to dry', checked: false },
     { id: 'dishwasher', text: 'Run the dishwasher', checked: false },
-    { id: 'cleaning', text: 'Cleaned the apartment and left it tidy for colleagues', checked: false },
+    { id: 'cleaning', text: 'Cleaned the store and left it tidy for colleagues', checked: false },
     { id: 'payment', text: 'Made instant bank transfer for rent payment', checked: false },
     { id: 'lights', text: 'Turned off all lights, heating, moved bench and signs inside', checked: false },
     { id: 'lock', text: 'Locked the shop via Nuki app and verified it\'s locked', checked: false }
@@ -85,15 +85,20 @@ export class ShiftChecklist {
               <h2>End of Shift Checklist</h2>
               <span class="close-checklist">&times;</span>
             </div>
+            
             <div class="checklist-subheader">
               Please confirm you've completed all these tasks:
             </div>
+            
             <div id="checklist-items" class="checklist-items">
               <!-- Checklist items will be inserted here -->
             </div>
+            
             <div class="checklist-note">
               <p>Completing all tasks is essential for a smooth transition between shifts.</p>
             </div>
+            
+            <!-- Sticky action buttons container moved to the bottom -->
             <div class="checklist-actions">
               <button id="confirm-checklist-btn" class="confirm-checklist-btn">Confirm Completion</button>
               <button id="remind-later-btn" class="remind-later-btn">Remind Me Later</button>
@@ -298,9 +303,24 @@ export class ShiftChecklist {
     // Remove modale display:none e imposta display:flex
     this.checklistModal.style.display = 'flex';
     
-    // Scroll all'inizio della modale
-    if (this.checklistModal.scrollTo) {
-      this.checklistModal.scrollTo(0, 0);
+    // Make sure modal is scrolled to the top when opened
+    this.checklistModal.scrollTop = 0;
+    
+    // Ensure the body doesn't scroll while modal is open
+    document.body.style.overflow = 'hidden';
+    
+    // Add extra handling for iOS devices which can have scroll issues
+    if (typeof window !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      
+      // Add top position to simulate fixed positioning
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      
+      // Store scroll position for later restoration
+      this.checklistModal.dataset.scrollY = String(scrollY);
     }
   }
   
@@ -310,6 +330,20 @@ export class ShiftChecklist {
   private closeChecklist(): void {
     if (this.checklistModal) {
       this.checklistModal.style.display = 'none';
+      
+      // Restore body scrolling
+      document.body.style.overflow = '';
+      
+      // Special handling for iOS
+      if (typeof window !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        // Restore previous scroll position
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        
+        const scrollY = this.checklistModal.dataset.scrollY || '0';
+        window.scrollTo(0, parseInt(scrollY));
+      }
     }
   }
   
