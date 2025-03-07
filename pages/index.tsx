@@ -209,6 +209,45 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
+      
+      {/* Help FAQ Page */}
+      <div id="help-faq-page" style={{ display: 'none' }}>
+        <div id="help-faq-box">
+          <div className="help-faq-header">
+            <h2>Help & FAQ</h2>
+          </div>
+          <div className="help-faq-content">
+            <div className="help-faq-section">
+              <h3>Checklists</h3>
+              <div className="checklist-buttons">
+                <button id="morning-checklist-btn" className="checklist-btn">
+                  <i className="fas fa-sun"></i> Opening Checklist
+                </button>
+                <button id="evening-checklist-btn" className="checklist-btn">
+                  <i className="fas fa-exchange-alt"></i> Shift Change Checklist
+                </button>
+                <button id="night-checklist-btn" className="checklist-btn">
+                  <i className="fas fa-moon"></i> Closing Checklist
+                </button>
+              </div>
+            </div>
+            <div className="help-faq-section">
+              <h3>Store Information</h3>
+              <div className="store-info-box">
+                <i className="fas fa-info-circle"></i>
+                <p>Always open HUQZ on the store tablet.</p>
+              </div>
+            </div>
+            <div className="help-faq-section">
+              <h3>Need more help?</h3>
+              <p>For any general information about M2M, use our chat:</p>
+              <button id="open-chatbot-btn" className="open-chatbot-btn">
+                <i className="fas fa-comments"></i> Open Chat
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* User Name (top right) */}
       <div id="user-name" style={{ display: 'none' }}></div>
