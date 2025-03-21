@@ -3266,7 +3266,7 @@ input#giftcard-number {
 .store-info-list {
   margin: 0;
   padding: 0 0 0 5px;
-  list-style-position: inside;
+  list-style-type: none; /* Remove default bullets */
   flex: 1;
 }
 
