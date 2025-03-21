@@ -41,6 +41,17 @@ export interface GiftCardEmailRequest {
 }
 
 /**
+ * Holiday request data structure
+ */
+export interface HolidayRequest {
+  userName: string;
+  userEmail: string;
+  startDate: string;
+  endDate: string;
+  notes?: string;
+}
+
+/**
  * API error response structure
  */
 export interface ApiErrorResponse {
@@ -52,6 +63,15 @@ export interface ApiErrorResponse {
  * API success response structure for gift card request
  */
 export interface GiftCardSuccessResponse {
+  success: boolean;
+  message: string;
+  messageId: string;
+}
+
+/**
+ * API success response structure for holiday request
+ */
+export interface HolidayRequestSuccessResponse {
   success: boolean;
   message: string;
   messageId: string;
