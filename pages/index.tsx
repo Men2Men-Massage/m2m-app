@@ -146,6 +146,34 @@ const Home: NextPage = () => {
             </div>
             <button className="update-btn">Update Profile</button>
           </div>
+          
+          {/* Holiday Request Section */}
+          <div className="profile-holiday-request">
+            <h3>Request Holiday</h3>
+            <p className="holiday-info">
+              <i className="fas fa-info-circle"></i> Holidays must be requested at least 31 days in advance.
+            </p>
+            <div className="input-group">
+              <label htmlFor="holiday-start-date">Start Date <span className="required">*</span></label>
+              <input type="date" id="holiday-start-date" required />
+            </div>
+            <div className="input-group">
+              <label htmlFor="holiday-end-date">End Date <span className="required">*</span></label>
+              <input type="date" id="holiday-end-date" required />
+            </div>
+            <div className="input-group">
+              <label htmlFor="holiday-notes">Notes (optional)</label>
+              <textarea id="holiday-notes" placeholder="Any additional information..."></textarea>
+            </div>
+            <button className="request-holiday-btn">
+              <i className="fas fa-calendar-alt"></i> Request Holiday
+            </button>
+            <div id="holiday-request-success" className="success-message" style={{ display: 'none' }}>
+              Holiday request sent successfully!
+            </div>
+            <div id="holiday-request-error" className="error-message" style={{ display: 'none' }}></div>
+          </div>
+          
           <div className="profile-actions-footer">
             <button className="logout-btn">
               <i className="fas fa-sign-out-alt"></i> Logout
@@ -232,18 +260,18 @@ const Home: NextPage = () => {
               </div>
             </div>
             <div className="help-faq-section">
-  <h3>Store Information</h3>
-  <div className="store-info-box">
-    <i className="fas fa-info-circle"></i>
-    <ul className="store-info-list">
-      <li>Always open HUQZ on the store tablet.</li>
-      <li>Tablet PIN and safe PIN in all stores is 1228.</li>
-      <li>Wash towels at 60 degrees.</li>
-      <li>Remember to empty the water from the tank before starting the dryer.</li>
-      <li>Check that the doorbell outside is working.</li>
-    </ul>
-  </div>
-</div>
+              <h3>Store Information</h3>
+              <div className="store-info-box">
+                <i className="fas fa-info-circle"></i>
+                <ul className="store-info-list">
+                  <li>Always open HUQZ on the store tablet.</li>
+                  <li>Tablet PIN and safe PIN in all stores is 1228.</li>
+                  <li>Wash towels at 60 degrees.</li>
+                  <li>Remember to empty the water from the tank before starting the dryer.</li>
+                  <li>Check that the doorbell outside is working.</li>
+                </ul>
+              </div>
+            </div>
             <div className="help-faq-section">
               <h3>Need more help?</h3>
               <p>For any general information about M2M, use our chat:</p>
