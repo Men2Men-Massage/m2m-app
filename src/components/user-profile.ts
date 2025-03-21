@@ -1,4 +1,4 @@
-import { UserData } from '../types';
+import { UserData, HolidayRequest } from '../types';
 import { StorageService } from '../utils/storage-service';
 import { isValidEmail } from '../utils/helpers';
 
@@ -14,6 +14,14 @@ export class UserProfile {
   private profileImageLarge: HTMLElement;
   private deleteAccountModal: HTMLElement;
   
+  // Holiday request elements
+  private holidayStartDateInput: HTMLInputElement;
+  private holidayEndDateInput: HTMLInputElement;
+  private holidayNotesInput: HTMLTextAreaElement;
+  private requestHolidayBtn: HTMLButtonElement;
+  private holidayRequestSuccess: HTMLElement;
+  private holidayRequestError: HTMLElement;
+  
   /**
    * Create a UserProfile instance
    * @param onLogout Callback when user logs out
@@ -26,6 +34,14 @@ export class UserProfile {
     this.editEmailInput = document.getElementById('edit-email-input') as HTMLInputElement;
     this.profileImageLarge = document.getElementById('profile-image-large') as HTMLElement;
     this.deleteAccountModal = document.getElementById('delete-account-modal') as HTMLElement;
+    
+    // Initialize holiday request elements
+    this.holidayStartDateInput = document.getElementById('holiday-start-date') as HTMLInputElement;
+    this.holidayEndDateInput = document.getElementById('holiday-end-date') as HTMLInputElement;
+    this.holidayNotesInput = document.getElementById('holiday-notes') as HTMLTextAreaElement;
+    this.requestHolidayBtn = document.querySelector('.request-holiday-btn') as HTMLButtonElement;
+    this.holidayRequestSuccess = document.getElementById('holiday-request-success') as HTMLElement;
+    this.holidayRequestError = document.getElementById('holiday-request-error') as HTMLElement;
     
     this.initEventListeners();
   }
@@ -98,6 +114,186 @@ export class UserProfile {
         window.open('https://partners.fresha.com/user-account/reviews', '_blank');
       });
     }
+    
+    // Initialize Holiday Request event listeners
+    this.initHolidayRequestEventListeners();
+  }
+  
+  /**
+   * Initialize holiday request event listeners
+   */
+  private initHolidayRequestEventListeners(): void {
+    if (!this.holidayStartDateInput || !this.holidayEndDateInput || !this.requestHolidayBtn) {
+      console.error('Holiday request elements not found');
+      return;
+    }
+    
+    // Set minimum date (31 days from now)
+    this.setMinimumHolidayDate();
+    
+    // Date change validation
+    this.holidayStartDateInput.addEventListener('change', () => {
+      // Update end date min value when start date changes
+      if (this.holidayStartDateInput.value) {
+        this.holidayEndDateInput.min = this.holidayStartDateInput.value;
+      }
+      this.validateHolidayDates();
+    });
+    
+    this.holidayEndDateInput.addEventListener('change', () => {
+      this.validateHolidayDates();
+    });
+    
+    // Submit holiday request
+    this.requestHolidayBtn.addEventListener('click', () => {
+      this.sendHolidayRequest();
+    });
+  }
+  
+  /**
+   * Set the minimum date for holiday requests (31 days from now)
+   */
+  private setMinimumHolidayDate(): void {
+    const today = new Date();
+    const minDate = new Date(today);
+    minDate.setDate(minDate.getDate() + 31); // 31 days in the future
+    
+    const minDateStr = minDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    
+    if (this.holidayStartDateInput) {
+      this.holidayStartDateInput.min = minDateStr;
+      
+      // Set a placeholder that shows the minimum date
+      const minDateDisplay = minDate.toLocaleDateString('en-GB');
+      this.holidayStartDateInput.placeholder = `Min: ${minDateDisplay}`;
+    }
+    
+    if (this.holidayEndDateInput) {
+      this.holidayEndDateInput.min = minDateStr;
+    }
+  }
+  
+  /**
+   * Validate the selected holiday dates
+   */
+  private validateHolidayDates(): void {
+    if (!this.holidayStartDateInput || !this.holidayEndDateInput || !this.holidayRequestError || !this.requestHolidayBtn) {
+      return;
+    }
+    
+    const startDate = this.holidayStartDateInput.value;
+    const endDate = this.holidayEndDateInput.value;
+    
+    // Hide previous error messages
+    this.holidayRequestError.style.display = 'none';
+    
+    // If both dates are selected
+    if (startDate && endDate) {
+      const startDateObj = new Date(startDate);
+      const endDateObj = new Date(endDate);
+      
+      // Check if end date is before start date
+      if (endDateObj < startDateObj) {
+        this.holidayRequestError.textContent = 'End date cannot be before start date';
+        this.holidayRequestError.style.display = 'block';
+        this.requestHolidayBtn.disabled = true;
+        return;
+      }
+      
+      // Check if start date is at least 31 days in the future
+      const today = new Date();
+      const minDate = new Date(today);
+      minDate.setDate(minDate.getDate() + 31);
+      
+      if (startDateObj < minDate) {
+        this.holidayRequestError.textContent = 'Holiday requests must be made at least 31 days in advance';
+        this.holidayRequestError.style.display = 'block';
+        this.requestHolidayBtn.disabled = true;
+        return;
+      }
+    }
+    
+    // If all validations pass, enable the button
+    this.requestHolidayBtn.disabled = false;
+  }
+  
+  /**
+   * Send holiday request
+   */
+  private async sendHolidayRequest(): Promise<void> {
+    if (!this.holidayStartDateInput || !this.holidayEndDateInput) {
+      return;
+    }
+    
+    const startDate = this.holidayStartDateInput.value;
+    const endDate = this.holidayEndDateInput.value;
+    const notes = this.holidayNotesInput.value.trim();
+    
+    // Basic validation
+    if (!startDate || !endDate) {
+      this.holidayRequestError.textContent = 'Please select both start and end dates';
+      this.holidayRequestError.style.display = 'block';
+      return;
+    }
+    
+    // Disable button while sending
+    this.requestHolidayBtn.disabled = true;
+    this.requestHolidayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    
+    try {
+      // Get user data
+      const userData = StorageService.getUserData();
+      
+      // Create request payload
+      const holidayRequest: HolidayRequest = {
+        userName: userData.name,
+        userEmail: userData.email || '',
+        startDate,
+        endDate,
+        notes: notes || undefined
+      };
+      
+      // Send API request
+      const response = await fetch('/api/send-holiday-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(holidayRequest)
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send holiday request');
+      }
+      
+      // Show success message
+      this.holidayRequestSuccess.style.display = 'block';
+      this.holidayRequestError.style.display = 'none';
+      
+      // Reset form
+      this.holidayStartDateInput.value = '';
+      this.holidayEndDateInput.value = '';
+      this.holidayNotesInput.value = '';
+      
+      // Hide success message after 3 seconds
+      setTimeout(() => {
+        this.holidayRequestSuccess.style.display = 'none';
+      }, 3000);
+    } catch (error) {
+      // Show error message
+      this.holidayRequestError.textContent = (error as Error).message;
+      this.holidayRequestError.style.display = 'block';
+      this.holidayRequestSuccess.style.display = 'none';
+    } finally {
+      // Re-enable button
+      this.requestHolidayBtn.disabled = false;
+      this.requestHolidayBtn.innerHTML = '<i class="fas fa-calendar-alt"></i> Request Holiday';
+      
+      // Reset validation
+      this.setMinimumHolidayDate();
+    }
   }
   
   /**
@@ -129,6 +325,16 @@ export class UserProfile {
     // Update with latest data
     const userData = StorageService.getUserData();
     this.updateProfile(userData);
+    
+    // Reset holiday request form and validation
+    if (this.holidayStartDateInput && this.holidayEndDateInput && this.holidayNotesInput) {
+      this.holidayStartDateInput.value = '';
+      this.holidayEndDateInput.value = '';
+      this.holidayNotesInput.value = '';
+      this.holidayRequestSuccess.style.display = 'none';
+      this.holidayRequestError.style.display = 'none';
+      this.setMinimumHolidayDate();
+    }
   }
   
   /**
