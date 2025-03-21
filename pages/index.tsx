@@ -236,6 +236,10 @@ const Home: NextPage = () => {
               <div className="store-info-box">
                 <i className="fas fa-info-circle"></i>
                 <p>Always open HUQZ on the store tablet.</p>
+                <p>Tablet PIN and safe PIN in the stores is 1228.</p>
+                <p>Wash towels at 60 degrees.</p>
+                <p>Remember to empty the water from the tank before starting the dryer.</p>
+                <p>Check that the doorbell outside is working.</p>
               </div>
             </div>
             <div className="help-faq-section">
