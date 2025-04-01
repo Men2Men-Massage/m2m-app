@@ -324,8 +324,8 @@ export class PaymentCalculator {
     // Generate bank transfer data
     const userData = StorageService.getUserData();
     const userName = userData.name;
-    const iban = "DE12 3456 7890 1234 5678 90"; // Example IBAN
-    const accountHolder = "M2M Massagen"; // Account holder
+    const iban = "DE97202208000027780388"; 
+    const accountHolder = "M2M"; 
     const purpose = `Rent Payment ${userName}, ${this.selectedShiftDate}, ${this.selectedLocation}`;
 
     // Update the result div with payment instructions
