@@ -1,4 +1,4 @@
-const CACHE_NAME = 'm2m-calc-v18';
+const CACHE_NAME = 'm2m-calc-v19';
 const ASSETS = [
   '/',
   '/manifest.json',
