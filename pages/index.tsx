@@ -153,6 +153,9 @@ const Home: NextPage = () => {
             <p className="holiday-info">
               <i className="fas fa-info-circle"></i> Holidays must be requested at least 31 days in advance.
             </p>
+            <p className="holiday-warning">
+              <i className="fas fa-exclamation-triangle"></i> Make sure to arrange a replacement for your shift if it hasn't been notified at least 31 days in advance. If you don't find a replacement, you will be responsible for paying the €50 shift fee.
+            </p>
             <div className="input-group">
               <label htmlFor="holiday-start-date">Start Date <span className="required">*</span></label>
               <input type="date" id="holiday-start-date" required />
