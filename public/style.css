@@ -3468,3 +3468,30 @@ input#giftcard-number {
     font-size: 14px !important;
   }
 }
+
+/* Style for holiday warning message */
+.holiday-warning {
+  background-color: #ffebee; /* Light red background */
+  border-left: 4px solid #f44336; /* Red left border */
+  padding: 10px 15px;
+  border-radius: 0 4px 4px 0;
+  margin-bottom: 20px;
+  font-size: 13px; /* Small text size */
+  color: #c62828; /* Dark red text */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.holiday-warning i {
+  font-size: 16px;
+  color: #f44336; /* Red icon */
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .holiday-warning {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+}
